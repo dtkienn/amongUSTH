@@ -21,8 +21,17 @@
 
 **3. TECHNOLOGY**
 
-This needs further research. However there are options:
-* Build things from scratch (HTML, CSS, JS, PHP, SQL... )
-* Use created templates: Ex: Wordpress, ..
-* Replicate well-known websites using their technologies.
+	Python with Framework Flask
+
+	Languages included:
+
+* Python
+* HTML, CSS, JS
+* MySQL
+
+**4. USAGE**
+
+	pip install virtualenv
+	python app.py then follow route on browser
+
 
