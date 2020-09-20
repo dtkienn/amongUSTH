@@ -7,20 +7,22 @@
 
 {% block body %}
 
-<div class= "row" id = "block_homepage">
-    <div class='col-sm-3'>
-        <h2>test1</h2>
-    </div>
-    <div class='col-sm-3'>
-        <h2>test2</h2>
-    </div>
-    <div class='col-sm-3'>
-        <h2>test3</h2>
-    </div>
-    <div class='col-sm-3'>
-        <h2>test4</h2>
+<div class= "row" id = "undernav-row">
+        <h2 class= "col-sm-12">Homepage</h2>
+</div>
+<div class= "row">
+    <div id= "message">
+        <h5 class= "col-sm-12">Welcome to amongUSTH</h5>
+        <p class= "col-sm-12">USTH introduction goes here</p>    
     </div>
 </div>
-<div class= "row">baaaaa</div>
-<div class= "row">caaaaaaa</div>
+
+{% endblock %}
+
+{% block page_content %} 
+MAIN PAGE CONTENT GOES HERE
+{% endblock %}
+
+{% block sidebar_content %}
+SIDEBAR CONTENT GOES HERE
 {% endblock %}

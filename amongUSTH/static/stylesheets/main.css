@@ -2,7 +2,21 @@ body{
     background-color: red;
 }
 
-.col-sm-3{
-    background-color: black;
-    color:white;
+#undernav-row{
+    background-color:  black;
+    text-align: center;
+    color: white;
+}
+#row1{
+    text-align: center;
+    padding-top: 50px;
+}
+
+#main, #sticky-sidebar{
+    text-align: center;
+}
+
+#message{
+    text-align: center;
+    margin: auto;
 }

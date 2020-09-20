@@ -12,5 +12,19 @@
       {% include 'navbar.html' %}
     
       {% block body %} {% endblock %}
+
+      <div class= "row" id = "page-content">
+        <div class= "col-9" id= "main">
+            <div class= "row" id= "row1">
+              {% block page_content %} {% endblock %}
+            </div>
+        </div>
+        <div class= "col-3" id="sticky-sidebar">
+            <div class="sticky-top">
+              {% block sidebar_content %} {% endblock %}
+            </div>
+        </div>
+    </div>
+    
 </body>
 </html>
