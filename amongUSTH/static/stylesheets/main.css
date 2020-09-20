@@ -1,3 +1,8 @@
 body{
     background-color: red;
 }
+
+.col-sm-3{
+    background-color: black;
+    color:white;
+}
