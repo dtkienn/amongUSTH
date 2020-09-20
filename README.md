@@ -1,8 +1,8 @@
-# khtnPROject
+# amongUSTH
 
 **1. INTRODUCTION**
 
-(UNNAMED) is a question and answer site to help USTH students with their academic study. 
+Among USTH is a question and answer site to help USTH students with their academic study. 
 
 **2. FEATURES**
 
