@@ -18,7 +18,6 @@ import requests
 import login.Db as logDb
 import login.User as logUsr
 
-
 # Configuration
 GOOGLE_CLIENT_ID='754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET='7TMNNst1I5ueVjacoQDa1sJg'
@@ -60,7 +59,10 @@ def load_user(user_id):
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
-        return render_template("myprofile.html")
+        name = user.getName()
+        email = user.getEmail()
+
+        return render_template("myprofile.html", name = name, email=email)
     else:
         return render_template("login.html")
 
@@ -128,6 +130,8 @@ def callback():
 
     # Create a user in our db with the information provided
     # by Google
+    
+    global user
     user = logUsr.user(
         id_=unique_id, name=users_name, email=users_email, profile_pic=picture
     )

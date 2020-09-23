@@ -33,3 +33,8 @@ class user(UserMixin):
             (id_, name, email, profile_pic),
         )
         db.commit()
+
+    def getName(self):
+        return self.name
+    def getEmail(self):
+        return self.email
