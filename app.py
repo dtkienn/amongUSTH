@@ -18,7 +18,6 @@ import requests
 from login.Db import init_db_command
 from login.User import user
 
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 # Configuration
 GOOGLE_CLIENT_ID='754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
