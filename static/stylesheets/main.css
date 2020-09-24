@@ -41,7 +41,8 @@ nav{
     height: 45px;
     width: 400px;
     border-radius: 15px;
-    border-color: grey;    
+    border-color: grey;
+    margin-top: 15px;
 }
 
 #link1{

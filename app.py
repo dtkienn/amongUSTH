@@ -10,5 +10,8 @@ def homepage():
 def login():
    return render_template("login.html")
 
+@app.route('/all_discussion')
+def all_discussion():
+   return render_template("all_discussion.html")
 if __name__ == '__main__':
    app.run(debug=True)
