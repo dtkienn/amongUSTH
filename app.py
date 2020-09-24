@@ -158,14 +158,9 @@ def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
 
-@app.route('/')
 @app.route('/homepage')
 def homepage():
    return render_template("homepage.html")
-
-@app.route('/login')
-def login():
-   return render_template("login.html")
 
 @app.route('/all_discussion')
 def all_discussion():
