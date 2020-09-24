@@ -163,6 +163,14 @@ def get_google_provider_cfg():
 def homepage():
    return render_template("homepage.html")
 
+@app.route('/login')
+def login():
+   return render_template("login.html")
+
+@app.route('/all_discussion')
+def all_discussion():
+   return render_template("all_discussion.html")
+
 if __name__ == '__main__':
    app.run(debug=True, ssl_context="adhoc")
 
