@@ -157,7 +157,7 @@ def logout():
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
-
+@app.route('/')
 @app.route('/homepage')
 def homepage():
    return render_template("homepage.html")
