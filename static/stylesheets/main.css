@@ -41,7 +41,8 @@ nav{
     height: 45px;
     width: 400px;
     border-radius: 15px;
-    border-color: grey;    
+    border-color: grey;
+    margin-top: 15px;
 }
 
 #link1{
@@ -137,9 +138,21 @@ nav{
 }
 
 table{
-    margin-left: 845px;
-    margin-top: 20px;
+    margin-left: 50%;
+    margin-top: 10%;
+    width: 350;
 }
-tr{
-    margin-bottom: 10px;
+#password,#username{
+    text-align: center;
+    height: 35px;
+    width: 60%;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#signIn, #gmailSignIn{
+    height: 35px;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

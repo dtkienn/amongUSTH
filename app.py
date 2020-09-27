@@ -15,9 +15,8 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
-from login.Db import init_db_command
-from login.User import user
-
+import login.Db as logDb
+import login.User as logUsr
 
 # Configuration
 GOOGLE_CLIENT_ID='754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
@@ -42,7 +41,7 @@ def unauthorized():
 
 # Naive database setup
 try:
-    init_db_command()
+    logDb.init_db_command()
 except sqlite3.OperationalError:
     # Assume it's already been created
     pass
@@ -54,13 +53,16 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    return logUsr.user.get(user_id)
 
 
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
-        return render_template("myprofile.html")
+        name = user.getName()
+        email = user.getEmail()
+
+        return render_template("myprofile.html", name = name, email=email)
     else:
         return render_template("login.html")
 
@@ -128,13 +130,15 @@ def callback():
 
     # Create a user in our db with the information provided
     # by Google
-    user = User(
+    
+    global user
+    user = logUsr.user(
         id_=unique_id, name=users_name, email=users_email, profile_pic=picture
     )
 
     # Doesn't exist? Add to database
-    if not User.get(unique_id):
-        User.create(unique_id, users_name, users_email, picture)
+    if not user.get(unique_id):
+        user.create(unique_id, users_name, users_email, picture)
 
     # Begin user session by logging the user in
     login_user(user)
@@ -153,11 +157,14 @@ def logout():
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
-
 @app.route('/')
 @app.route('/homepage')
 def homepage():
    return render_template("homepage.html")
+
+@app.route('/all_discussion')
+def all_discussion():
+   return render_template("all_discussion.html")
 
 if __name__ == '__main__':
    app.run(debug=True, ssl_context="adhoc")
