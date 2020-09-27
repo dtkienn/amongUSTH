@@ -17,6 +17,7 @@ class user:
     
     def get_info(email):
         querry = {'email' : email}
-        doc = col.find_one(querry, {"uid" : 1, "name" : 1, "email": 1, "password" : 0})
+        doc = col.find_one(querry)
+        print(doc)
 
         
