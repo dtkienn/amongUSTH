@@ -2,7 +2,7 @@
 
 **1. INTRODUCTION**
 
-Among USTH is a question and answer site to help USTH students with their academic study. 
+AmongUSTH is a question and answer site to help USTH students with their academic study. 
 
 **2. FEATURES**
 
@@ -31,8 +31,8 @@ Among USTH is a question and answer site to help USTH students with their academ
 
 **4. USAGE**
 
-	pip install virtualenv
-	python app.py then follow route on browser
+	pip install -r requirements.txt
+	
 
 **5. DEVELOPING PROCESS** (by team leader, any comments of team members are taken into consideration)
 
@@ -61,6 +61,14 @@ These targets should be adjusted every two weeks to address real-time problems w
 	    	+ Start displaying database information in pages
 		
 - 4nd week: ....
+
+**6. TEAM'S PROGRESS**
+- 40% front-end on homepage, right sidebar still has no contents.
+- 100% front-end on login/logout sites. Back-end still needs logout function.
+- Upcoming: 
+	+ Front-end: Create layout for discussion and book pages.
+	+ Back-end: Write upload (insert into database, generate links for books), download function for books.
+	--> Link those back-end & front-end
 		
 
 
