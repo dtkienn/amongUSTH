@@ -149,11 +149,16 @@ def callback():
     return redirect(url_for("index"))
 
 
-@app.route("/logout")
+@app.route("/logout", methods = ["GET","POST"])
 @login_required
 def logout():
-    logout_user()
-    return redirect(url_for("index"))
+    if request.method == 'POST':
+        pass
+    elif request.method == 'GET':
+        logout_user()
+        return redirect(url_for("index"))
+    else:
+        print('error logout')
 
 
 def get_google_provider_cfg():
