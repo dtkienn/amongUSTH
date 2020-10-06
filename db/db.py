@@ -19,5 +19,3 @@ class user:
         querry = {'email' : email}
         doc = col.find_one(querry)
         print(doc)
-
-        
