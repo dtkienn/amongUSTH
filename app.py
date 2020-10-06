@@ -15,8 +15,10 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
-import login.Db as logDb
-import login.User as logUsr
+import sys
+sys.path.insert(1, r'C:\Users\Trung\Documents\GitHub\amongUSTH\login')
+import db as logDb
+import user as logUsr
 
 # Configuration
 GOOGLE_CLIENT_ID='754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
