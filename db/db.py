@@ -5,13 +5,14 @@ db = client['mydatabase']
 col = db["student"]
 
 class user:
-    def login(a,b,c,d):
-        myquerry={"email":c}
+    def login(name, email):
+        myquerry={"email":email}
         mydoc = col.find_one(myquerry)
             
         if mydoc == None:
-            mylist={"uid":a,"name":b,"email":c, "password" : d}
+            mylist={"name":name,"email":email}
             col.insert_one(mylist)
+            print("Created!")
         else:
             print("WELCOME BACK")
     
