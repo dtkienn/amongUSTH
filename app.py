@@ -112,16 +112,10 @@ def callback():
     # Parse the tokens!
     client.parse_request_body_response(json.dumps(token_response.json()))
 
-    # Now that we have tokens (yay) let's find and hit URL
-    # from Google that gives you user's profile information,
-    # including their Google Profile Image and Email
     userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
     uri, headers, body = client.add_token(userinfo_endpoint)
     userinfo_response = requests.get(uri, headers=headers, data=body)
 
-    # We want to make sure their email is verified.
-    # The user authenticated with Google, authorized our
-    # app, and now we've verified their email through Google!
     if userinfo_response.json().get("email_verified"):
         unique_id = userinfo_response.json()["sub"]
         users_email = userinfo_response.json()["email"]
@@ -133,14 +127,17 @@ def callback():
     # Create a user in our db with the information provided
     # by Google
     
+    from db.db import user as udb
+
     global user
     user = logUsr.user(
         id_=unique_id, name=users_name, email=users_email, profile_pic=picture
     )
-
     # Doesn't exist? Add to database
     if not user.get(unique_id):
         user.create(unique_id, users_name, users_email, picture)
+    
+    udb.login(users_name, users_email)
 
     # Begin user session by logging the user in
     login_user(user)
@@ -172,6 +169,8 @@ def homepage():
 @app.route('/all_discussion')
 def all_discussion():
    return render_template("all_discussion.html")
+
+
 
 if __name__ == '__main__':
    app.run(debug=True, ssl_context="adhoc")
