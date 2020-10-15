@@ -1,7 +1,11 @@
 from db import book
 from db import user
+from db import discussion
 
-name = "AAAAA"
-author = "BBBBB"
-link = "CCCCC"
-book.add(name, author, link)
+title = "Testtttttytt"
+content = 'This is a Testttytttttt'
+author = 'Me'
+
+discussion.add(title, content, author)
+
+
