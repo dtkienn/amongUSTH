@@ -127,7 +127,7 @@ def callback():
     # Create a user in our db with the information provided
     # by Google
     
-    from db.db import user as udb
+    from db import user as udb
 
     global user
     user = logUsr.user(
