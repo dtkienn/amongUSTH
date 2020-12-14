@@ -1,113 +1,83 @@
-{% extends 'base.html' %}
-
-{% block head %}
-
-
-{% endblock %}
-
-{% block body %}
-
-<div class= "row" id = "undernav-row">
-        <h2 class= "col-sm-12">Homepage</h2>
-</div>
-<div class= "row">
-    <div id= "message">
-        <h5 class= "col-sm-12">Welcome to amongUSTH</h5>
-        <p class= "col-sm-12">amongUSTH introduction goes here</p>    
+<!DOCTYPE html>
+<html lang="pt-br">
+   <head>
+      <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+      <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    
+      <meta charset="UTF-8">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&display=swap" rel="stylesheet">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>AmongUSTH - Web sharing site for USTH studens</title>
+      <link rel="stylesheet" href="static/stylesheets/style.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+      <script src="js/myjs.js"></script>
+   </head>
+   <body>
+    <div class="wrapper">
+        <header>
+            <nav>
+                <div class="menu-icon">
+                  <i class="fa fa-bars fa-2x"></i>
+                </div>
+                <div class="logo">
+                  AMONGUSTH
+                </div>
+                <div class="menu">
+                  <ul>
+                     <li><a href="#">SIGN UP NOW!</a></li> 
+                  </ul>
+               </div>
+            </nav>
+         </header>
     </div>
-</div>
-
-{% endblock %}
-
-{% block page_content %} 
-<div class= "row" id= "row1">
-    <div id="test">Featured in amongUSTH</div>
-</div>
-<div class= "row" id=" row2">
-    <div id="link1">Article name goes here</div>
-    <div id="link2">Article name goes here</div>
-    <div id="link2">Article name goes here</div>
-    <div id="link2">Article name goes here</div>
-</div>
-<div class= "row" id= "row3">
-    <div id= "detail1">Author name</div>
-    <div id= "detail2">Author name</div>
-    <div id= "detail2">Author name</div>
-    <div id= "detail2">Author name</div>
-</div>
-<div class= "row" id= "row4">
-    <div id= "detail1">Date published</div>
-    <div id= "detail2">Date published</div>
-    <div id= "detail2">Date published</div>
-    <div id= "detail2">Date published</div>
-</div>
-<div class= "row" id= "row6">
-    <div id= "detail-end">Number of views</div>
-    <div id= "detail3">Number of views</div>
-    <div id= "detail3">Number of views</div>
-    <div id= "detail3">Number of views</div>
-</div>
-<div class= "row" id=" row7">
-    <div id="link1">Article name goes here</div>
-    <div id="link2">Article name goes here</div>
-    <div id="link2">Article name goes here</div>
-    <div id="link2">Article name goes here</div>
-</div>
-<div class= "row" id= "row8">
-    <div id= "detail1">Author name</div>
-    <div id= "detail2">Author name</div>
-    <div id= "detail2">Author name</div>
-    <div id= "detail2">Author name</div>
-</div>
-<div class= "row" id= "row9">
-    <div id= "detail1">Date published</div>
-    <div id= "detail2">Date published</div>
-    <div id= "detail2">Date published</div>
-    <div id= "detail2">Date published</div>
-</div>
-<div class= "row" id= "row10">
-    <div id= "detail-end">Number of views</div>
-    <div id= "detail3">Number of views</div>
-    <div id= "detail3">Number of views</div>
-    <div id= "detail3">Number of views</div>
-</div>
-<div class= "row" id= "row11">
-    <div id="test">Latest discussions</div>
-</div>
-<div class= "row" id=" row12">
-    <div id="link1">Discussion name goes here</div>
-    <div id="link2">Discussion name goes here</div>
-    <div id="link2">Discussion name goes here</div>
-    <div id="link2">Discussion name goes here</div>
-</div>
-<div class= "row" id= "row13">
-    <div id= "detail1">Author name</div>
-    <div id= "detail2">Author name</div>
-    <div id= "detail2">Author name</div>
-    <div id= "detail2">Author name</div>
-</div>
-<div class= "row" id= "row14">
-    <div id= "detail1">Rating</div>
-    <div id= "detail2">Rating</div>
-    <div id= "detail2">Rating</div>
-    <div id= "detail2">Rating</div>
-</div>
-<div class= "row" id= "row15">
-    <div id= "detail-end">Number of comments</div>
-    <div id= "detail3">Number of comments</div>
-    <div id= "detail3">Number of comments</div>
-    <div id= "detail3">Number of comments</div>
-</div>
-
-
-
-
-{% endblock %}
-
-{% block sidebar_content %}
-<div class= "col-sm-3" id="sticky-sidebar" style="background-color: lightgrey;">
-    <div class="sticky-top">
+    <div class="homepage-first-container">
+        <div class="homepage-first-container-child-left">
+            <ul>
+                <li>You are an USTH-er and need more knowledge to improve your schoolwork?</li>
+                <li><br></li>
+                <li>Luckily, your thought has been shaped up with AmongUSTH! So, wait no more,
+                <a href="" style="color: #2251ff">SIGN UP NOW</a> 
+                and get access to books shared by USTH-ers!</li>
+            </ul>
+        </div>
+        <div class="homepage-first-container-child-right">
+            <p><br></p>
+            <p>Though many of us live busy lives, it’s important to find the time to read.</p>
+            <p>- Anonymous</p>
+        </div>
     </div>
-</div>
-
-{% endblock %}
+    <div class="homepage-first-div">THE FIRST EVER ACADEMIC-BASED VIRTUAL LIBRARY FOR USTH-ers</div>
+    <div class="homepage-first-outer">
+        <div class="homepage-first-outer-div"><img src="static/images/book1.png" class="book1">
+            <h3 class= "homepage-first-outer-text">
+                Share materials online
+            </h3>
+        </div>
+        <div class="homepage-first-outer-div"><img src="static/images/book2.png" class="book1">
+            <h3 class= "homepage-first-outer-text">
+                Collect materials 
+            </h3>
+        </div>
+        <div class="homepage-first-outer-div"><img src="static/images/book3.png" class="book1">
+            <h3 class= "homepage-first-outer-text">
+               Review materials
+            </h3>
+        </div>
+    </div>
+    <div class="picture"></div>
+    <div class="homepage-main-feature-container">
+        <div class="main-feature-container-left">Something..
+        </div>
+        <div class="main-feature-container-right">
+            <div>Main Features</div>
+            <ul>
+                <li>1</li>
+                <li>2</li>
+            </ul>
+        </div>
+    </div>
+   </body>
+</html>

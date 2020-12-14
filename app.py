@@ -166,10 +166,6 @@ def get_google_provider_cfg():
 def homepage():
    return render_template("homepage.html")
 
-@app.route('/all_discussion')
-def all_discussion():
-   return render_template("all_discussion.html")
-
 
 
 if __name__ == '__main__':
