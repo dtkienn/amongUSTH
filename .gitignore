@@ -1,8 +1,9 @@
 *.vscode
 *__pycache__
-**.pyc
+*.pyc
 get-pip*
 # Byte-compiled / optimized / DLL files
+login/__pycache__/
 __pycache__/
 *.py[cod]
 
@@ -59,3 +60,8 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Database file for login
+sqlite_db
+
+db/test.py

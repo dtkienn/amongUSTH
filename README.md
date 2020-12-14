@@ -31,8 +31,8 @@ AmongUSTH is a question and answer site to help USTH students with their academi
 
 **4. USAGE**
 
-	pip install virtualenv
-	python app.py then follow route on browser
+	pip install -r requirements.txt
+	
 
 **5. DEVELOPING PROCESS** (by team leader, any comments of team members are taken into consideration)
 
