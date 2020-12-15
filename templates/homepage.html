@@ -6,6 +6,8 @@
       <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    
       <meta charset="UTF-8">
       <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=BioRhyme&display=swap" rel="stylesheet">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
       <link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&display=swap" rel="stylesheet">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -16,23 +18,7 @@
       <script src="js/myjs.js"></script>
    </head>
    <body>
-    <div class="wrapper">
-        <header>
-            <nav>
-                <div class="menu-icon">
-                  <i class="fa fa-bars fa-2x"></i>
-                </div>
-                <div class="logo">
-                  AMONGUSTH
-                </div>
-                <div class="menu">
-                  <ul>
-                     <li><a href="#">SIGN UP NOW!</a></li> 
-                  </ul>
-               </div>
-            </nav>
-         </header>
-    </div>
+    {% include 'navbar.html' %}
     <div class="homepage-first-container">
         <div class="homepage-first-container-child-left">
             <ul>
@@ -69,15 +55,19 @@
     </div>
     <div class="picture"></div>
     <div class="homepage-main-feature-container">
-        <div class="main-feature-container-left">Something..
+        <div class="main-feature-container-left">
+            <div class= "main-feature-title">Main Features</div>
+            <ul>
+                <li>A platform on-the-go! Go AmongUSTH 24/7!</li>
+                <li>Can't find your book? Request one inside AmongUSTH!</li>
+                <li>Contribute books and materials to the site! Especially those you feel can facilitate others to study better.</li>
+                <li>Upvote, downvote if it's worth! Even share in on Facebook or Twitter!</li>
+            </ul>
         </div>
         <div class="main-feature-container-right">
-            <div>Main Features</div>
-            <ul>
-                <li>1</li>
-                <li>2</li>
-            </ul>
+            <img style="vertical-align: right" class="iphone-pic" src="https://lh3.googleusercontent.com/proxy/NbK-An9eyWE0YMbmOGt9tnJtVGltqPSB5MA7p94-ti6V1IciO4p0t30-8IWWlOntNTajTfGij7A_Yjj8Bw1rx1QUEBv6n_KluxNcIAvlMsdvXH-GZi7E" alt="">
         </div>
     </div>
    </body>
 </html>
+

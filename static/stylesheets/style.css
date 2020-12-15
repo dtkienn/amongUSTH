@@ -24,6 +24,7 @@ header {
     font-weight: bold;
     font-size: 20px;
     letter-spacing: 10px;
+    text-decoration: none;
 }
 
 .homepage-first-container {
@@ -86,7 +87,7 @@ nav {
     position: fixed;
     width: 100%;
     line-height: 60px;
-    background: black;
+    background-color: black;
 }
 
 nav ul {
@@ -194,20 +195,76 @@ footer .footer-child-2{
 }
 .homepage-main-feature-container{
     width: 70%;
-    margin: 4em auto;
     font-size: 20px;
     line-height: 30px;
     font-size: 25px;
     text-align: justify;
     height: 175px;
+    margin-top: 3em;
+    margin-left: 3em;
+    font-family: 'BioRhyme', serif;
 }
 .main-feature-container-left{
+    width: 80%;
+    text-align: right;
+    float: left;
+    margin-top: 1em;
+}
+.main-feature-container-left ul{
+    list-style-type: none;
+}
+.main-feature-container-left li{
+    margin-top: 25px;
+}
+.main-feature-container-right{
     width: 20%;
     text-align: right;
     float: left;
 }
-.main-feature-container-right{
-    width: 80%;
-    text-align: left;
-    float: left;
+.main-feature-title{
+    color: #00229e;
 }
+.box {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25rem;
+    padding: 2.5rem;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 0.625rem;
+    text-align: center;
+  }
+  
+  .box h2 {
+    margin: 0 0 1.875rem;
+    padding: 0;
+    color: #fff;
+    text-align: center;
+  }
+  
+  .box h3{
+      margin: 0 0 1.875rem;
+      padding: 0;
+      color: #fff;
+      text-align: center;
+      font-size: 1rem;
+  }
+    
+      
+  .box input[type="submit"] {
+    border: none;
+    outline: none;
+    color: #fff;
+    background-color: #03a9f4;
+    padding: 0.625rem 1.25rem;
+    cursor: pointer;
+    border-radius: 0.312rem;
+    font-size: 1rem;
+  }
+  
+  .box input[type="submit"]:hover {
+    background-color: #1cb1f5;
+  }
+  

@@ -69,20 +69,20 @@ def index():
         return render_template("login.html")
 
 
-@app.route("/login", methods = ["POST"])
-def login():
+#@app.route("/login", methods = ["POST"])
+#def login():
     # Find out what URL to hit for Google login
-    google_provider_cfg = get_google_provider_cfg()
-    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+#    google_provider_cfg = get_google_provider_cfg()
+#    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
     # Use library to construct the request for login and provide
     # scopes that let you retrieve user's profile from Google
-    request_uri = client.prepare_request_uri(
-        authorization_endpoint,
-        redirect_uri=request.base_url + "/callback",
-        scope=["openid", "email", "profile"],
-    )
-    return redirect(request_uri)
+#    request_uri = client.prepare_request_uri(
+#        authorization_endpoint,
+#        redirect_uri=request.base_url + "/callback",
+#        scope=["openid", "email", "profile"],
+#    )
+#    return redirect(request_uri)
 
 
 @app.route("/login/callback")
@@ -166,7 +166,9 @@ def get_google_provider_cfg():
 def homepage():
    return render_template("homepage.html")
 
-
+@app.route('/login')
+def login():
+    return render_template("login.html")
 
 if __name__ == '__main__':
    app.run(debug=True, ssl_context="adhoc")
