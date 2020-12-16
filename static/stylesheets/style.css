@@ -1,270 +1,269 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 body {
-    font-family: 'Vollkorn', serif;
-    font-weight: lighter;
+  font-family: "Vollkorn", serif;
+  font-weight: lighter;
 }
 
 header {
-    width: 100%;
-    background: url(https://usth.edu.vn/uploads/tin-tuc/2020_10/1nhom-ban-vui-ve-khi-o-truong.jpg) no-repeat 50% 50%;
-    background-size: cover;
-    height: 600px;
+  width: 100%;
+  background: url(https://usth.edu.vn/uploads/tin-tuc/2020_10/1nhom-ban-vui-ve-khi-o-truong.jpg)
+    no-repeat 50% 50%;
+  background-size: cover;
+  height: 600px;
 }
 .logo {
-    line-height: 60px;
-    position: fixed;
-    float: left;
-    margin: 16px 46px;
-    color: #fff;
-    font-weight: bold;
-    font-size: 20px;
-    letter-spacing: 10px;
-    text-decoration: none;
+  line-height: 60px;
+  position: fixed;
+  float: left;
+  margin: 16px 46px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 20px;
+  letter-spacing: 10px;
+  text-decoration: none;
 }
 
 .homepage-first-container {
-    width: 70%;
-    margin: 4em auto;
-    font-size: 20px;
-    line-height: 30px;
-    text-align: center;
-    font-size: 25px;
-    text-align: justify;
-    height: 175px;
+  width: 70%;
+  margin: 4em auto;
+  font-size: 20px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 25px;
+  text-align: justify;
+  height: 175px;
 }
-.homepage-first-container-child-left{
-    width: 62%;
-    float: left;
-    padding: 20px;
-    border-right: 1px solid #000;
-}
-
-.homepage-first-container-child-left ul{
-    list-style-type: none;
-}
-.homepage-first-container-child-right{
-    width: 38%;
-    float: left;
-    padding: 20px;
-    color: grey;
-}
-.homepage-first-div{
-    width: 100%;
-    text-align: center;
-    font-size: 25px;
-    padding-top: 30px;
+.homepage-first-container-child-left {
+  width: 62%;
+  float: left;
+  padding: 20px;
+  border-right: 1px solid #000;
 }
 
-.homepage-first-outer{
-    width: 75%;
-    height: 200px;
-    margin: 4em auto;
+.homepage-first-container-child-left ul {
+  list-style-type: none;
 }
-.homepage-first-outer-div{
-    width: 33.333%;
-    float: left;
-    padding: 20px;
-    text-align: center;
+.homepage-first-container-child-right {
+  width: 38%;
+  float: left;
+  padding: 20px;
+  color: grey;
 }
-.homepage-first-outer-text{
-    padding-top: 30px;
-    text-align: center;
-    color: #FF851B;
+.homepage-first-div {
+  width: 100%;
+  text-align: center;
+  font-size: 25px;
+  padding-top: 30px;
 }
-.blank-div{
-    height: 30px;
+
+.homepage-first-outer {
+  width: 75%;
+  height: 200px;
+  margin: 4em auto;
 }
-.book1{
-    border-radius: 5px;
-    width: 150px;
+.homepage-first-outer-div {
+  width: 33.333%;
+  float: left;
+  padding: 20px;
+  text-align: center;
+}
+.homepage-first-outer-text {
+  padding-top: 30px;
+  text-align: center;
+  color: #ff851b;
+}
+.blank-div {
+  height: 30px;
+}
+.book1 {
+  border-radius: 5px;
+  width: 150px;
 }
 nav {
-    position: fixed;
-    width: 100%;
-    line-height: 60px;
-    background-color: black;
+  position: fixed;
+  width: 100%;
+  line-height: 60px;
+  background-color: black;
 }
 
 nav ul {
-    line-height: 60px;
-    list-style: none;
-    background: rgba(0, 0, 0, 0);
-    overflow: hidden;
-    color: #fff;
-    padding: 0;
-    text-align: right;
-    margin: 0;
-    padding-right: 40px;
-    transition: 1s;
+  line-height: 60px;
+  list-style: none;
+  background: rgba(0, 0, 0, 0);
+  overflow: hidden;
+  color: #fff;
+  padding: 0;
+  text-align: right;
+  margin: 0;
+  padding-right: 40px;
+  transition: 1s;
 }
 
 nav.black ul {
-    background: #000;
+  background: #000;
 }
 
 nav ul li {
-    display: inline-block;
-    padding: 16px 40px;;
+  display: inline-block;
+  padding: 16px 40px;
 }
 
 nav ul li a {
-    text-decoration: none;
-    color: #fff;
-    font-size: 16px;
-    letter-spacing: 1px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: 1px;
 }
 
-nav ul li a:hover{
-    color: #fff;
-    text-decoration: none;
+nav ul li a:hover {
+  color: #fff;
+  text-decoration: none;
 }
 
 .menu-icon {
-    line-height: 60px;
-    width: 100%;
+  line-height: 60px;
+  width: 100%;
+  background: #000;
+  text-align: right;
+  box-sizing: border-box;
+  padding: 15px 24px;
+  cursor: pointer;
+  color: #fff;
+  display: none;
+}
+
+@media (max-width: 786px) {
+  .logo {
+    position: fixed;
+    top: 0;
+    margin-top: 16px;
+  }
+
+  nav ul {
+    max-height: 0px;
     background: #000;
-    text-align: right;
+  }
+
+  nav.black ul {
+    background: #000;
+  }
+
+  .showing {
+    max-height: 34em;
+  }
+
+  nav ul li {
     box-sizing: border-box;
-    padding: 15px 24px;
-    cursor: pointer;
-    color: #fff;
-    display: none;
-}
-
-@media(max-width: 786px) {
-
-    .logo {
-          position: fixed;
-          top: 0;
-          margin-top: 16px;
-    }
-
-    nav ul {
-          max-height: 0px;
-          background: #000;
-    }
-
-    nav.black ul {
-          background: #000;
-    }
-
-    .showing {
-          max-height: 34em;
-    }
-
-    nav ul li {
-          box-sizing: border-box;
-          width: 100%;
-          padding: 24px;
-          text-align: center;
-    }
-
-    .menu-icon {
-          display: block;
-    }
-
-}
-
-footer .footer-container{
     width: 100%;
+    padding: 24px;
     text-align: center;
-    color: #fff;
+  }
+
+  .menu-icon {
+    display: block;
+  }
 }
-footer .footer-child-1,.footer-child-3{
-    width: 40%;
-    float: left;
-    padding: 20px;
-    background-color:#00008B;
+
+footer .footer-container {
+  width: 100%;
+  text-align: center;
+  color: #fff;
 }
-footer .footer-child-2{
-    width: 20%;
-    float: left;
-    padding: 20px;
-    background-color:#00008B;
+footer .footer-child-1,
+.footer-child-3 {
+  width: 40%;
+  float: left;
+  padding: 20px;
+  background-color: #00008b;
 }
-.picture{
-    width: 100%;
-    height: 800px;
-    background: url(https://tapchikientruc.com.vn/wp-content/uploads/2016/11/A1163-tckt-021.jpg);
-    background-size: cover;
+footer .footer-child-2 {
+  width: 20%;
+  float: left;
+  padding: 20px;
+  background-color: #00008b;
 }
-.homepage-main-feature-container{
-    width: 70%;
-    font-size: 20px;
-    line-height: 30px;
-    font-size: 25px;
-    text-align: justify;
-    height: 175px;
-    margin-top: 3em;
-    margin-left: 3em;
-    font-family: 'BioRhyme', serif;
+.picture {
+  width: 100%;
+  height: 800px;
+  background: url(https://tapchikientruc.com.vn/wp-content/uploads/2016/11/A1163-tckt-021.jpg);
+  background-size: cover;
 }
-.main-feature-container-left{
-    width: 80%;
-    text-align: right;
-    float: left;
-    margin-top: 1em;
+.homepage-main-feature-container {
+  width: 70%;
+  font-size: 20px;
+  line-height: 30px;
+  font-size: 25px;
+  text-align: justify;
+  height: 175px;
+  margin-top: 3em;
+  margin-left: 3em;
+  font-family: "BioRhyme", serif;
 }
-.main-feature-container-left ul{
-    list-style-type: none;
+.main-feature-container-left {
+  width: 80%;
+  text-align: right;
+  float: left;
+  margin-top: 1em;
 }
-.main-feature-container-left li{
-    margin-top: 25px;
+.main-feature-container-left ul {
+  list-style-type: none;
 }
-.main-feature-container-right{
-    width: 20%;
-    text-align: right;
-    float: left;
+.main-feature-container-left li {
+  margin-top: 25px;
 }
-.main-feature-title{
-    color: #00229e;
+.main-feature-container-right {
+  width: 20%;
+  text-align: right;
+  float: left;
+}
+.main-feature-title {
+  color: #00229e;
 }
 .box {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 25rem;
-    padding: 2.5rem;
-    box-sizing: border-box;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 0.625rem;
-    text-align: center;
-  }
-  
-  .box h2 {
-    margin: 0 0 1.875rem;
-    padding: 0;
-    color: #fff;
-    text-align: center;
-  }
-  
-  .box h3{
-      margin: 0 0 1.875rem;
-      padding: 0;
-      color: #fff;
-      text-align: center;
-      font-size: 1rem;
-  }
-    
-      
-  .box input[type="submit"] {
-    border: none;
-    outline: none;
-    color: #fff;
-    background-color: #03a9f4;
-    padding: 0.625rem 1.25rem;
-    cursor: pointer;
-    border-radius: 0.312rem;
-    font-size: 1rem;
-  }
-  
-  .box input[type="submit"]:hover {
-    background-color: #1cb1f5;
-  }
-  
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25rem;
+  padding: 2.5rem;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 0.625rem;
+  text-align: center;
+}
+
+.box h2 {
+  margin: 0 0 1.875rem;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+}
+
+.box h3 {
+  margin: 0 0 1.875rem;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.box input[type="submit"] {
+  border: none;
+  outline: none;
+  color: #fff;
+  background-color: #03a9f4;
+  padding: 0.625rem 1.25rem;
+  cursor: pointer;
+  border-radius: 0.312rem;
+  font-size: 1rem;
+}
+
+.box input[type="submit"]:hover {
+  background-color: #1cb1f5;
+}
