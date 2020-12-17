@@ -7,11 +7,6 @@ book = db["book"]
 diss = db['discussion']
 cmt = db['comment']
 
-db.orgid_counter.insert({'_id': "userid", 'seq': 0})  
-def getNextSequence(collection,name):  
-   return collection.find_and_modify(query= { '_id': name },update= { '$inc': {'seq': 1}}, new=True ).get('seq');  
-db.users.insert({'_uid': getNextSequence(db.orgid_counter,"userid"), 'name': "Sara a"})  
-
 class user:
     def login(name, email):
         myquerry={"email":email}
