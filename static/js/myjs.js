@@ -1,6 +1,13 @@
 $(document).ready(function(){
-    $(".submit").click(function(){
-        //document.getElementsByClassName("search-dropdown").toggle("show");
-        document.getElementsByTagName()
+    var filter = document.getElementById("filter");
+    $("#search-filter-btn").click(function(){
+        //var close = document.getElementsById("close");
+        $("#filter").css("display", "block");
+    })
+    $("#close").click(function(){
+        $("#filter").css("display", "none");
     })
 })
+
+
+

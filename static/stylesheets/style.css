@@ -212,7 +212,7 @@ footer .footer-child-2 {
   border-left: 30px;
   outline: none;
 }
-.search-bar input[type="submit"]{
+.search-bar button[type="submit"]{
   height: 50px;
   width: 10%;
   border-radius: 20px;
@@ -224,17 +224,72 @@ footer .footer-child-2 {
   background-color: #f0daa4;
 }
 
-.search-dropdown{
-  display: none;
+.search-filter{
+  width: 20%;
+  text-align: center;
+  background-color: grey;
   position: absolute;
-  background-color: white;
-  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  outline: none;
+  text-decoration: none;
 }
 
-.search-bar input[type="submit"]:hover{
+.search-bar button[type="submit"]:hover{
   background-color: #d13b40ed;
 }
 
+.filter button[type="submit"]{
+  height: 50px;
+  width: 10%;
+  border-radius: 20px;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  background-color: #f0daa4;
+}
+
+.filter{
+  display: none; 
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: black;
+  background-color: rgba(0,0,0,0.4); 
+}
+.filter-content{
+  background-color: #fefefe;
+  margin: 15% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  height: 30%;
+  text-align: center;
+}
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.search-table{
+  border: none;
+  margin-top: 2%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2%;
+}
+.search-table th {
+  width: 30%;
+}
 .box {
   position: absolute;
   top: 40%;

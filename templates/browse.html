@@ -29,16 +29,56 @@
     href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     />
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="js/myjs.js"></script>
+    <script src="/static/js/myjs.js"></script>
 
 </head>
 <body>
     {% include 'navbar.html' %}
     <div class="search-bar">
         <input type="text" placeholder="Search for material(s)...">
-        <input type="submit" title="Search" class="submit">
-        <!--<div class="search-dropdown">FUCKKKKKKKKKKKKKK</div>
-        -->
+        <button type="submit">Search</button>
+    </div>
+    <button type="submit" class="search-filter" id="search-filter-btn">Add search filter(s)</button>
+
+    <div id="filter" class="filter">
+        <div class="filter-content">
+            <span class="close" id="close">&times;</span>
+            <div class="filter-title">ADD YOUR SEARCH FILTER(s)</div>
+            <table class="search-table">
+                <tr>
+                    <th>Material Type</th>
+                    <th>Subject</th>
+                    <th>Author</th>    
+                </tr>
+                <tr>
+                    <th>
+                        <select name="Type" id="search-type">
+                            <option value="">Books</option>
+                            <option value="">Lectures</option>
+                            <option value="">Documents</option>
+                            <option value="">Any</option>
+                        </select>
+                    </th>
+                    <th>
+                        <select name="Major" id="search-subject">
+                            <option value="">Information Technology</option>
+                            <option value="">Chemistry</option>
+                            <option value="">Cyber Security</option>
+                            <option value="">Any</option>
+                        </select>
+                    </th>
+                    <th>
+                        <select name="Author" id="search-author">
+                            <option value="">Paul Annman</option>
+                            <option value="">Halliday</option>
+                            <option value="">Steve Jobs</option>
+                            <option value="">Any</option>
+                        </select>
+                    </th>
+                </tr>
+            </table>            
+        <button type="submit">Search</button>
+        </div>
     </div>
     {% include 'footer.html' %}
 </body>
