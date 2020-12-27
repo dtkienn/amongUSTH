@@ -285,3 +285,24 @@ footer .follow {
   font-size: 50px;
   padding-right: 3rem;
 }
+/* for browse content */
+.wrapper-content {
+  max-height: 260px;
+  display: block;
+  width: 100%;
+  overflow-x: scroll;
+}
+.item-container {
+  display: block;
+  white-space: nowrap;
+}
+.item {
+  display: inline-block;
+  min-width: 239px;
+  height: 239px;
+  line-height: 239px;
+  text-align: left;
+  background-color: #ddd;
+  border: 2px solid black;
+  margin-right: 10px;
+}
