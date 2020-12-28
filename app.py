@@ -16,7 +16,6 @@ import requests
 
 # Internal imports
 import sys
-sys.path.insert(1, r'C:\Users\Trung\Documents\GitHub\amongUSTH\login')
 import login.Db as logDb
 import login.User as logUsr
 
@@ -38,7 +37,7 @@ login_manager.init_app(app)
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return "You must be logged in to access this content.", 403
+    return render_template("login.html")
 
 
 # Naive database setup
@@ -61,28 +60,29 @@ def load_user(user_id):
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
-        name = user.getName()
-        email = user.getEmail()
+        # name = user.getName()
+        # email = user.getEmail()
 
-        return render_template("myprofile.html", name = name, email=email)
+        # return render_template("myprofile.html", name = name, email=email)
+        return render_template('browse.html')
     else:
         return render_template("login.html")
 
 
-#@app.route("/login", methods = ["POST"])
-#def login():
-    # Find out what URL to hit for Google login
-#    google_provider_cfg = get_google_provider_cfg()
-#    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+@app.route("/login")
+def login():
+    #Find out what URL to hit for Google login
+    google_provider_cfg = get_google_provider_cfg()
+    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
-    # Use library to construct the request for login and provide
-    # scopes that let you retrieve user's profile from Google
-#    request_uri = client.prepare_request_uri(
-#        authorization_endpoint,
-#        redirect_uri=request.base_url + "/callback",
-#        scope=["openid", "email", "profile"],
-#    )
-#    return redirect(request_uri)
+    #Use library to construct the request for login and provide
+    #scopes that let you retrieve user's profile from Google
+    request_uri = client.prepare_request_uri(
+        authorization_endpoint,
+        redirect_uri=request.base_url + "/callback",
+        scope=["openid", "email", "profile"],
+    )
+    return redirect(request_uri)
 
 
 @app.route("/login/callback")
@@ -166,13 +166,13 @@ def get_google_provider_cfg():
 def homepage():
    return render_template("homepage.html")
 
-@app.route('/login')
-def login():
-    return render_template("login.html")
 
 @app.route('/browse')
 def browse():
-    return render_template("browse.html")
+    if current_user.is_authenticated:
+        return render_template("browse.html")
+    else:
+        return render_template('login.html')
 
 if __name__ == '__main__':
    app.run(debug=True, ssl_context="adhoc")
