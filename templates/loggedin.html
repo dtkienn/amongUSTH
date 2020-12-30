@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -21,9 +21,9 @@
 <body>
     {% include 'navbar.html' %}
     <div class="box">
-        <h2>Login</h2>
-        <h3>For academic and privacy purposes, AmongUSTH is only available for USTH-ers with USTH emails.</h3>
-        <a href="/login" style="color: #2251ff">Login now</a>
+        <h2>{{name}}</h2>
+        <h3>You logged in with email: {{email}}</h3>
+        <a href="/browse" style="color: #2251ff">Click here to browse things</a>
     </div>
     {% include 'footer.html' %}
 </body>
