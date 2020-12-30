@@ -62,10 +62,11 @@ def index():
     if current_user.is_authenticated:
         name = user.getName()
         email = user.getEmail()
+        profile_pic = user.getprofile_pic()
 
         # return render_template("myprofile.html", name = name, email=email)
         print("Logged in")
-        return render_template('loggedin.html', name = name, email = email)
+        return render_template('loggedin.html', name = name, email = email, profile_pic = profile_pic)
     else:
         print("logging")
         return render_template("login.html")
