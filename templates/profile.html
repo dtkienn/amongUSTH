@@ -19,13 +19,15 @@
 
 </head>
 <body>
-    {% include 'navbar_profile.html' %}
+    {% include 'navbar.html' %}
     <div class="box">
+        <h2><img src="{{picture}}" alt=""></h2>
         <h2>{{name}}</h2>
         <h3>You logged in with email: {{email}}</h3>
         <h3>Your username: <span>{{email}}  </span><span class="change">Change</span></h3>
         <h3>Your password: <span>*******</span><span class="change">Change</span></h3>
         <a href="/browse" style="color: #2251ff">Click here to browse things</a>
+        <h4><a href="/logout" style="color: #2251ff">Logout</a></h4>
     </div>
     {% include 'footer.html' %}
 </body>
