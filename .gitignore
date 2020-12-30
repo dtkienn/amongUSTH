@@ -65,3 +65,4 @@ target/
 sqlite_db
 
 db/test.py
+*.pyc
