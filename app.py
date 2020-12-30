@@ -65,7 +65,7 @@ def index():
 
         # return render_template("myprofile.html", name = name, email=email)
         print("Logged in")
-        return render_template('loggedin.html')
+        return render_template('loggedin.html', name = name, email = email)
     else:
         print("logging")
         return render_template("login.html")
