@@ -187,16 +187,26 @@ nav div a:hover {
   display: flex;
 }
 .search-bar input[type="text"]{
-  height: 50px;
+  /*height: 50px;
   text-align: center;
   border-radius: 20px;
   width: 100%;
   float: left;
   border-left: 30px;
-  outline: none;
+  outline: none;*/
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 85%;
+  background: #f1f1f1;
+}
+
+.search-bar input[type="text"]::after{
+  content: "";
 }
 .search-btn{
-  height: 50px;
+  /*height: 50px;
   width: 10%;
   border-radius: 20px;
   text-align: center;
@@ -204,7 +214,16 @@ nav div a:hover {
   right: 30px;
   text-decoration: none;
   outline: none;
-  background-color: #f0daa4;
+  background-color: #f0daa4;*/
+  float: left;
+  width: 15%;
+  padding: 10px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none; /* Prevent double borders */
+  cursor: pointer;
 }
 
 .search-filter-btn{
@@ -223,6 +242,16 @@ nav div a:hover {
   outline: none;
   text-decoration: none;
   font-size: 30px;
+}
+.change{
+  color: blue;
+}
+.change:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+.helloUser{
+  font-size: 22px;
 }
 
 .search-filter-tooltip{
@@ -247,20 +276,11 @@ nav div a:hover {
 }
 
 .search-btn:hover{
-  background-color: #d13b40ed;
-}
-
-.filter button[type="submit"]{
-  height: 50px;
-  width: 10%;
-  border-radius: 20px;
-  text-align: center;
-  text-decoration: none;
-  outline: none;
-  background-color: #f0daa4;
+  background-color: #0b7dda;
 }
 
 .filter{
+  text-align: center;
   display: none; 
   position: fixed;
   z-index: 1;

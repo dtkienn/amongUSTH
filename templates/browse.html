@@ -30,18 +30,19 @@
     />
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="/static/js/myjs.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 <body>
     <!--Navbar-->
-    {% include 'navbar.html' %}
-      <div class="search-bar">
+    {% include 'navbar_profile.html' %}
+    <form class="search-bar">
         <input type="text" placeholder="Search for material(s)...">
-        <button type="submit" class="search-btn">Search</button>
+        <button type="submit" class="search-btn"><i class="fa fa-search" alt=""></i></button>
         <div class="search-filter-btn" id="search-filter-btn">&#x2b;
             <span class="search-filter-tooltip">Add your search criterias</span>
         </div>
-    </div>
+    </form>
 
     <div id="filter" class="filter">
         <div class="filter-content">
@@ -80,7 +81,7 @@
                     </th>
                 </tr>
             </table>            
-        <button type="submit">Search</button>
+            <button type="submit" class="search-btn"><i class="fa fa-search" alt=""></i></button>
         </div>
     </div>
 

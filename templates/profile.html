@@ -19,10 +19,12 @@
 
 </head>
 <body>
-    {% include 'navbar.html' %}
+    {% include 'navbar_profile.html' %}
     <div class="box">
         <h2>{{name}}</h2>
         <h3>You logged in with email: {{email}}</h3>
+        <h3>Your username: <span>{{email}}  </span><span class="change">Change</span></h3>
+        <h3>Your password: <span>*******</span><span class="change">Change</span></h3>
         <a href="/browse" style="color: #2251ff">Click here to browse things</a>
     </div>
     {% include 'footer.html' %}
