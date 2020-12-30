@@ -64,4 +64,5 @@ target/
 # Database file for login
 sqlite_db
 
-db/test.py
+test.py
+*.pyc

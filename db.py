@@ -9,27 +9,27 @@ cmt = db['comment']
 
 class user:
     def login(name, email):
-        myquerry={"email":email}
-        mydoc = users.find_one(myquerry)
+        query={"email":email}
+        doc = users.find_one(query)
             
-        if mydoc == None:
-            mylist={"name":name,"email":email}
-            users.insert_one(mylist)
+        if doc == None:
+            mlist={"name":name,"email":email}
+            users.insert_one(mlist)
             print("Created!")
         else:
             print("WELCOME BACK")
     
     def get_info(email):
-        querry = {'id' : email}
-        doc = users.find_one(querry)
+        query = {'id' : email}
+        doc = users.find_one(query)
         print(doc)
 
 class book:
     def add(bname, bauthor, link):
-        querry = {"name":bname, "link":link}
-        doc = book.find_one(querry)
+        query = {"name":bname, "link":link}
+        doc = book.find_one(query)
 
-        if book.find_one(querry) == None:
+        if book.find_one(query) == None:
             mylist = {"name":bname, "author":bauthor}
             book.insert_one(mylist)
             print("Created book!")
@@ -39,10 +39,10 @@ class book:
 
 class discussion:
     def add (title, content, author):
-        querry = {'content' : content}
-        doc = diss.find_one(querry)
+        query = {'content' : content}
+        doc = diss.find_one(query)
 
-        if diss.find_one(querry) == None:
+        if diss.find_one(query) == None:
             mylist = {'_id' : "0",  "title" : title, 'content' : content, "author" : author}
             diss.insert_one(mylist)
             print("Created discussion!")
@@ -51,5 +51,5 @@ class discussion:
             print("Content existed!")
 
     def comment(uid, content):
-        querry = {''}
+        query = {''}
     
