@@ -65,7 +65,7 @@ def index():
 
         # return render_template("myprofile.html", name = name, email=email)
         print("Logged in")
-        return render_template('loggedin.html', name = name, email = email, profile_pic = profile_pic)
+        return render_template('profile.html', name = name, email = email)
     else:
         print("logging")
         return render_template("login.html", text = "Login")
@@ -177,7 +177,8 @@ def homepage():
 def browse():
     if current_user.is_authenticated:
         name = user.getName()
-        return render_template("browse.html", name = name)
+        email = user.getEmail()
+        return render_template("browse.html", name=name, email=email)
     else:
         return render_template('login.html', text = "You need to login!")
 
