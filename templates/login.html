@@ -20,10 +20,18 @@
 </head>
 <body>
     {% include 'navbar.html' %}
-    <div class="box">
+    <div class="login-box">
+        <h2>Login</h2>
         <h2>{{text}}</h2>
         <h3>For academic and privacy purposes, AmongUSTH is only available for USTH-ers with USTH emails.</h3>
-        <a href="/login" style="color: #2251ff">Login now</a>
+        <form action="submit">
+            <div class="login-submit-form">
+                <input type="text" placeholder="Username" id="username">
+                <input type="password" placeholder="Password" id="password">    
+            </div>
+            <button href="/" type="submit" class="login-btn">Login now</button>
+        </form>
+        <h3>First time here? <a style="color: #2251ff" href="/login">Register</a> with your USTH Email</h3>
     </div>
     {% include 'footer.html' %}
 </body>
