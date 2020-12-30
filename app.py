@@ -15,7 +15,6 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
-import sys
 import login.Db as logDb
 import login.User as logUsr
 
@@ -69,7 +68,7 @@ def index():
         return render_template('loggedin.html', name = name, email = email, profile_pic = profile_pic)
     else:
         print("logging")
-        return render_template("login.html")
+        return render_template("login.html", text = "Login")
 
 
 @app.route("/login")
@@ -149,7 +148,7 @@ def callback():
     return redirect(url_for("index"))
 
 
-@app.route("/logout", methods = ["GET","POST"])
+@app.route("/logout")
 @login_required
 def logout():
     if request.method == 'POST':
@@ -167,15 +166,20 @@ def get_google_provider_cfg():
 @app.route('/')
 @app.route('/homepage')
 def homepage():
-   return render_template("homepage.html")
+    if current_user.is_authenticated:
+        name = user.getName()
+        return render_template("homepage.html", name = name)
+    else:
+        return render_template("homepage.html", name = 'SIGN UP NOW!')
 
 
 @app.route('/browse')
 def browse():
     if current_user.is_authenticated:
-        return render_template("browse.html")
+        name = user.getName()
+        return render_template("browse.html", name = name)
     else:
-        return render_template('login.html')
+        return render_template('login.html', text = "You need to login!")
 
 if __name__ == '__main__':
    app.run(debug=True, ssl_context="adhoc")

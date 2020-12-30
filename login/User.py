@@ -40,4 +40,5 @@ class user(UserMixin):
         return self.email
     def getprofile_pic(self):
         return self.profile_pic
-    def get
+    def getid(self):
+        return self.id_
