@@ -60,12 +60,14 @@ def load_user(user_id):
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
-        # name = user.getName()
-        # email = user.getEmail()
+        name = user.getName()
+        email = user.getEmail()
 
         # return render_template("myprofile.html", name = name, email=email)
-        return render_template('browse.html')
+        print("Logged in")
+        return render_template('loggedin.html', name = name, email = email)
     else:
+        print("logging")
         return render_template("login.html")
 
 
