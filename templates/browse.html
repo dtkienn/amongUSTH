@@ -36,54 +36,41 @@
 <body>
     <!--Navbar-->
     {% include 'navbar_profile.html' %}
+
+    <!--Search bar-->
     <form class="search-bar">
-        <input type="text" placeholder="Search for material(s)...">
-        <button type="submit" class="search-btn"><i class="fa fa-search" alt=""></i></button>
-        <div class="search-filter-btn" id="search-filter-btn">&#x2b;
-            <span class="search-filter-tooltip">Add your search criterias</span>
+        <div class="search-placeholder">
+            <input type="text" placeholder="Search for material(s)...">
+            <button type="submit" class="search-btn"><i class="fa fa-search" alt=""></i></button>    
+        </div>
+        <div class="filter">
+            <select class="filter-select" id="filter-type">
+                <option value>Material type</option>
+                <option value="">Any</option>
+                <option value="">Hey</option>
+                <option value="">Hey</option>
+            </select>
+            <select class="filter-select" id="filter-type">
+                <option value>Subject</option>
+                <option value="">Any</option>
+                <option value="">Hey</option>
+                <option value="">Hey</option>
+            </select>
+            <select class="filter-select" id="filter-type">
+                <option value>Author</option>
+                <option value="">Hey</option>
+                <option value="">Hey</option>
+                <option value="">Hey</option>
+            </select>
+            <select class="filter-select" id="filter-type">
+                <option value>One more filter..?</option>
+                <option value="">Hey</option>
+                <option value="">Hey</option>
+                <option value="">Hey</option>
+            </select>
+
         </div>
     </form>
-
-    <div id="filter" class="filter">
-        <div class="filter-content">
-            <span class="close" id="close">&times;</span>
-            <div class="filter-title">ADD YOUR SEARCH FILTER(s)</div>
-            <table class="search-table">
-                <tr>
-                    <th>Material Type</th>
-                    <th>Subject</th>
-                    <th>Author</th>    
-                </tr>
-                <tr>
-                    <th>
-                        <select name="Type" id="search-type">
-                            <option value="">Books</option>
-                            <option value="">Lectures</option>
-                            <option value="">Documents</option>
-                            <option value="">Any</option>
-                        </select>
-                    </th>
-                    <th>
-                        <select name="Major" id="search-subject">
-                            <option value="">Information Technology</option>
-                            <option value="">Chemistry</option>
-                            <option value="">Cyber Security</option>
-                            <option value="">Any</option>
-                        </select>
-                    </th>
-                    <th>
-                        <select name="Author" id="search-author">
-                            <option value="">Paul Annman</option>
-                            <option value="">Halliday</option>
-                            <option value="">Steve Jobs</option>
-                            <option value="">Any</option>
-                        </select>
-                    </th>
-                </tr>
-            </table>            
-            <button type="submit" class="search-btn"><i class="fa fa-search" alt=""></i></button>
-        </div>
-    </div>
 
     <!--Book-->
     <h1>Books</h1>
