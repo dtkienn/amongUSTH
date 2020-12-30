@@ -21,7 +21,7 @@ header {
   line-height: 50px;
   position: fixed;
   float: left;
-  margin: 16px 36px;
+  margin: 0px 20px;
   color: #fff;
   font-weight: bold;
   font-size: 25px;
@@ -79,7 +79,7 @@ header {
   color: #ff851b;
 }
 .blank-div {
-  height: 30px;
+  height: 50px;
 }
 .book1 {
   border-radius: 5px;
@@ -172,6 +172,7 @@ nav div a:hover {
   background-size: cover;
 }
 
+
 .search-bar{
   position: absolute;
   top: 40%;
@@ -194,7 +195,7 @@ nav div a:hover {
   border-left: 30px;
   outline: none;
 }
-.search-bar button[type="submit"]{
+.search-btn{
   height: 50px;
   width: 10%;
   border-radius: 20px;
@@ -206,22 +207,46 @@ nav div a:hover {
   background-color: #f0daa4;
 }
 
-.search-filter{
-  width: 20%;
+.search-filter-btn{
+  height: 2%;
+  width: 4%;
   text-align: center;
-  background-color: grey;
+  border: none;
   position: absolute;
-  top: 50%;
+  /*background-color: grey;*/
+  background-color: none;
+  position: absolute;
+  top: 70%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
   outline: none;
   text-decoration: none;
+  font-size: 30px;
 }
 
-.search-bar button[type="submit"]:hover{
+.search-filter-tooltip{
+  visibility: hidden;
+  width: 200px;
+  font-size: 17px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  position: absolute;
+  z-index: -1;
+  
+}
+
+.search-filter-btn:hover{
+  cursor: pointer;
+}
+
+.search-filter-btn:hover .search-filter-tooltip{
+  visibility: visible;
+}
+
+.search-btn:hover{
   background-color: #d13b40ed;
 }
 
