@@ -33,12 +33,15 @@
 
 </head>
 <body>
+    <!--Navbar-->
     {% include 'navbar.html' %}
-    <div class="search-bar">
+      <div class="search-bar">
         <input type="text" placeholder="Search for material(s)...">
-        <button type="submit">Search</button>
+        <button type="submit" class="search-btn">Search</button>
+        <div class="search-filter-btn" id="search-filter-btn">&#x2b;
+            <span class="search-filter-tooltip">Add your search criterias</span>
+        </div>
     </div>
-    <button type="submit" class="search-filter" id="search-filter-btn">Add search filter(s)</button>
 
     <div id="filter" class="filter">
         <div class="filter-content">
@@ -80,6 +83,56 @@
         <button type="submit">Search</button>
         </div>
     </div>
+
+    <!--Book-->
+    <h1>Books</h1>
+    <div class="wrapper-content">
+        <div class="item-container">
+            <div class="item">box-1</div>
+            <div class="item">box-2</div>
+            <div class="item">box-3</div>
+            <div class="item">box-4</div>
+            <div class="item">box-5</div>
+            <div class="item">box-6</div>
+            <div class="item">box-7</div>
+            <div class="item">box-8</div>
+            <div class="item">box-9</div>
+            <div class="item">box-10</div>
+        </div>
+    </div>
+    <!--Document-->
+    <h1>Documents</h1>
+    <div class="wrapper-content">
+        <div class="item-container">
+            <div class="item">box-1</div>
+            <div class="item">box-2</div>
+            <div class="item">box-3</div>
+            <div class="item">box-4</div>
+            <div class="item">box-5</div>
+            <div class="item">box-6</div>
+            <div class="item">box-7</div>
+            <div class="item">box-8</div>
+            <div class="item">box-9</div>
+            <div class="item">box-10</div>
+        </div>
+    </div>
+    <!--Slide-->
+    <h1>Slides</h1>
+    <div class="wrapper-content">
+        <div class="item-container">
+            <div class="item">box-1</div>
+            <div class="item">box-2</div>
+            <div class="item">box-3</div>
+            <div class="item">box-4</div>
+            <div class="item">box-5</div>
+            <div class="item">box-6</div>
+            <div class="item">box-7</div>
+            <div class="item">box-8</div>
+            <div class="item">box-9</div>
+            <div class="item">box-10</div>
+        </div>
+    </div>
+    <!--Footer-->
     {% include 'footer.html' %}
 </body>
 </html>
