@@ -1,5 +1,6 @@
 import json
 import os
+from re import template
 import sqlite3
 
 # Third party libraries
@@ -65,7 +66,7 @@ def index():
 
         # return render_template("myprofile.html", name = name, email=email)
         print("Logged in")
-        return render_template('profile.html', name = name, email = email)
+        return render_template('profile.html', name = name, email = email, picture = profile_pic)
     else:
         print("logging")
         return render_template("login.html", text = "Login")
@@ -122,7 +123,7 @@ def callback():
         unique_id = userinfo_response.json()["sub"]
         users_email = userinfo_response.json()["email"]
         picture = userinfo_response.json()["picture"]
-        users_name = userinfo_response.json()["given_name"]
+        users_name = userinfo_response.json()["name"]
     else:
         return "User email not available or not verified by Google.", 400
 
@@ -139,27 +140,24 @@ def callback():
     if not user.get(unique_id):
         user.create(unique_id, users_name, users_email, picture)
     
-    udb.login(users_name, users_email)
-
-    # Begin user session by logging the user in
-    login_user(user)
-
-    # Send user back to homepage
-    return redirect(url_for("index"))
-
+    if "@st.usth.edu.vn" in users_email:
+        udb.login(users_name, users_email)
+        # Begin user session by logging the user in
+        login_user(user)
+        return redirect(url_for('index'))
+    else:
+        return redirect(url_for('loginfail'))
+        
+@app.route('/loginfail')
+def loginfail():
+    return render_template('login.html', text = "LOGIN FAILED :(")
 
 @app.route("/logout")
 @login_required
 def logout():
-    if request.method == 'POST':
-        pass
-    elif request.method == 'GET':
-        logout_user()
-        return redirect(url_for("index"))
-    else:
-        print('error logout')
-
-
+    logout_user()
+    return redirect(url_for("index"))
+    
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
@@ -167,8 +165,9 @@ def get_google_provider_cfg():
 @app.route('/homepage')
 def homepage():
     if current_user.is_authenticated:
+        profile_pic = user.getprofile_pic()
         name = user.getName()
-        return render_template("homepage.html", name = name)
+        return render_template("homepage.html", picture = profile_pic, name = name)
     else:
         return render_template("homepage.html", name = 'SIGN UP NOW!')
 
@@ -178,7 +177,8 @@ def browse():
     if current_user.is_authenticated:
         name = user.getName()
         email = user.getEmail()
-        return render_template("browse.html", name=name, email=email)
+        profile_pic = user.getprofile_pic()
+        return render_template("browse.html", name=name, picture = profile_pic)
     else:
         return render_template('login.html', text = "You need to login!")
 
