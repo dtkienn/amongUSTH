@@ -37,7 +37,7 @@ login_manager.init_app(app)
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return render_template("login.html")
+    return render_template("login.html", display_navbar= "none")
 
 
 # Naive database setup
@@ -66,10 +66,10 @@ def index():
 
         # return render_template("myprofile.html", name = name, email=email)
         print("Logged in")
-        return render_template('profile.html', name = name, email = email, picture = profile_pic)
+        return render_template('profile.html', name = name, email = email, picture = profile_pic, display_navbar="inline")
     else:
         print("logging")
-        return render_template("login.html", text = "Login", display="none")
+        return render_template("login.html", text = "Login", display_noti="none", display_navbar= "none", name= "SIGN UP NOW!")
 
 
 @app.route("/login")
@@ -150,7 +150,7 @@ def callback():
         
 @app.route('/loginfail')
 def loginfail():
-    return render_template('login.html', text = "LOGIN FAILED :(", display= "block", loginNotiText="Login failed! The email address that you used is not a valid USTH Email")
+    return render_template('login.html', text = "LOGIN FAILED :(",display_navbar="none", display_noti= "block", loginNotiText="Login failed! The email address that you used is not a valid USTH Email")
 
 @app.route("/logout")
 @login_required
@@ -167,9 +167,9 @@ def homepage():
     if current_user.is_authenticated:
         profile_pic = user.getprofile_pic()
         name = user.getName()
-        return render_template("homepage.html", picture = profile_pic, name = name)
+        return render_template("homepage.html", display_navbar="inline", picture = profile_pic, name = name)
     else:
-        return render_template("homepage.html", name = 'SIGN UP NOW!')
+        return render_template("homepage.html", display_navbar="none", name = 'SIGN UP NOW!')
 
 
 @app.route('/browse')
@@ -178,7 +178,7 @@ def browse():
         name = user.getName()
         email = user.getEmail()
         profile_pic = user.getprofile_pic()
-        return render_template("browse.html", name=name, picture = profile_pic)
+        return render_template("browse.html", display_navbar="inline", name=name, picture = profile_pic)
     else:
         return render_template('login.html', text = "You need to login!")
 
