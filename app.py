@@ -69,7 +69,7 @@ def index():
         return render_template('profile.html', name = name, email = email, picture = profile_pic)
     else:
         print("logging")
-        return render_template("login.html", text = "Login")
+        return render_template("login.html", text = "Login", display="none")
 
 
 @app.route("/login")
@@ -150,7 +150,7 @@ def callback():
         
 @app.route('/loginfail')
 def loginfail():
-    return render_template('login.html', text = "LOGIN FAILED :(")
+    return render_template('login.html', text = "LOGIN FAILED :(", display= "block", loginNotiText="Login failed! The email address that you used is not a valid USTH Email")
 
 @app.route("/logout")
 @login_required

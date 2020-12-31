@@ -114,6 +114,7 @@ nav ul li {
   padding: 16px 40px;
 }
 
+
 nav menu ul li a {
   text-decoration: none;
   color: #fff;
@@ -243,22 +244,13 @@ nav div a:hover {
   text-decoration: underline;
   cursor: pointer;
 }
-.helloUser{
-  font-size: 22px;
-}
-
-.search-filter-btn:hover{
-  cursor: pointer;
-}
-
-.search-filter-btn:hover .search-filter-tooltip{
-  visibility: visible;
-}
-
 .search-btn:hover{
   background-color: #0b7dda;
 }
-
+.profile-picture{
+  width: 50px;
+  height: 50px;
+}
 .filter-content{
   background-color: #fefefe;
   margin: 15% auto; 
@@ -433,4 +425,42 @@ footer .follow {
   background-color: #ddd;
   border: 2px solid black;
   margin-right: 10px;
+}
+.login-noti{ /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.login-noti-content{
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  text-align: center;
+  font-size: 25px;
+  display: flex;
+}
+.login-noti-content p{
+  margin: auto;
+  color: red;
+}
+.login-noti-content button{
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none; /* Prevent double borders */
+  cursor: pointer;
+  text-decoration: none;
+}
+.login-noti-content button:hover{
+  background-color:#0b7dda;
+  cursor: pointer;
 }

@@ -32,6 +32,19 @@
         </form>
         <h3>First time here? Or just lazy when using an username? <a style="color: #2251ff" href="/login">Login</a> with your USTH Email</h3>
     </div>
+    <div class="login-noti" id="login-noti" style="display: {{display}};">
+        <div class="login-noti-content">
+            <span>
+                <img src="static/images/error.png"></img>
+            </span>
+            <p>{{loginNotiText}}</p>
+            <div>
+                <button class="retry-btn" type="">
+                    <a href="/index"><img src="static/images/retry.png" alt=""></a>
+                </button>
+            </div>
+        </div>
+    </div>
     {% include 'footer.html' %}
 </body>
 </html>
