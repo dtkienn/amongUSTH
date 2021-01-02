@@ -2,6 +2,7 @@ import json
 import os
 from re import template
 import sqlite3
+from datetime import timedelta
 
 # Third party libraries
 from flask import Flask, render_template, redirect, request, url_for
@@ -18,6 +19,7 @@ import requests
 # Internal imports
 import login.Db as logDb
 import login.User as logUsr
+# from login.mongo import User as mongoUsr
 
 # Configuration
 GOOGLE_CLIENT_ID='754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
@@ -129,8 +131,6 @@ def callback():
 
     # Create a user in our db with the information provided
     # by Google
-    
-    from db import user as udb
 
     global user
     user = logUsr.user(
@@ -141,10 +141,13 @@ def callback():
         user.create(unique_id, users_name, users_email, picture)
     
     if "@st.usth.edu.vn" in users_email:
-        udb.login(users_name, users_email)
         # Begin user session by logging the user in
+
+        # mongoUsr.register()
         login_user(user)
-        return redirect(url_for('index'))
+        time = timedelta(minutes = 60)
+        app.permanent_session_lifetime = time # User will automagically kicked from session after 'time'
+        return redirect(url_for('index'), loginNotiText="Session timed out. Please log in again")
     else:
         return redirect(url_for('loginfail'))
         
