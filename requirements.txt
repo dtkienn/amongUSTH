@@ -1,8 +1,7 @@
 flask
-mysql-connector
 flask-login
 oauthlib
 requests
 cryptography
 dnspython
-
+pymongo

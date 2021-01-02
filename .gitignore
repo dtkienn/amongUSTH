@@ -3,10 +3,11 @@
 *.pyc
 get-pip*
 # Byte-compiled / optimized / DLL files
-login/__pycache__/
 __pycache__/
+**/__pycache__/
 *.py[cod]
-
+sqlite_db
+data/
 # C extensions
 *.so
 
