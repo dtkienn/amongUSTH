@@ -19,7 +19,7 @@ import requests
 # Internal imports
 import login.Db as logDb
 import login.User as logUsr
-# from login.mongo import User as mongoUsr
+from login.mongo import User as mongoUsr
 
 # Configuration
 GOOGLE_CLIENT_ID='754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
@@ -142,11 +142,20 @@ def callback():
     
     if "@st.usth.edu.vn" in users_email:
         # Begin user session by logging the user in
-
-        # mongoUsr.register()
         login_user(user)
+
+        # Create session timeout
         time = timedelta(minutes = 60)
         app.permanent_session_lifetime = time # User will automagically kicked from session after 'time'
+        
+        # Add user information to Online database
+        id_ = user.get_id()
+        name = user.getName()
+        email = user.getEmail()
+        avatar = user.getprofile_pic()
+
+        mongoUsr.register(id_,name,email,avatar)
+
         return redirect(url_for('index'))
     else:
         return redirect(url_for('loginfail'))
