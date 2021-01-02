@@ -174,12 +174,7 @@ nav div a:hover {
   background-size: cover;
 }
 
-<<<<<<< HEAD
-
-.search-bar{
-=======
 .search-bar {
->>>>>>> origin/Trung
   position: absolute;
   top: 40%;
   left: 50%;
@@ -191,14 +186,8 @@ nav div a:hover {
   background: rgba(253, 246, 246, 0.815);
   border-radius: 0.625rem;
 }
-<<<<<<< HEAD
 .search-bar input[type="text"]{
-  /*height: 50px;
-=======
-.search-bar input[type="text"] {
-  height: 50px;
->>>>>>> origin/Trung
-  text-align: center;
+  /*text-align: center;
   border-radius: 20px;
   width: 100%;
   float: left;
@@ -210,7 +199,6 @@ nav div a:hover {
   float: left;
   width: 85%;
 }
-<<<<<<< HEAD
 .filter{
   display: flex;
   padding-top: 2%;  
@@ -229,11 +217,10 @@ nav div a:hover {
   font-size: 17px;
 }
 .search-btn{
-  /*height: 50px;
-=======
-.search-bar button[type="submit"] {
   height: 50px;
->>>>>>> origin/Trung
+}
+.search-bar button[type="submit"] {
+  /*height: 50px;
   width: 10%;
   border-radius: 20px;
   text-align: center;
@@ -266,8 +253,7 @@ nav div a:hover {
 .profile-picture{
   width: 50px;
   height: 50px;
-=======
-
+}
 .search-filter {
   width: 20%;
   text-align: center;
@@ -308,7 +294,6 @@ nav div a:hover {
   overflow: auto;
   background-color: black;
   background-color: rgba(0, 0, 0, 0.4);
->>>>>>> origin/Trung
 }
 .filter-content {
   background-color: #fefefe;
@@ -319,26 +304,12 @@ nav div a:hover {
   height: 30%;
   text-align: center;
 }
-<<<<<<< HEAD
 
-.search-table{
-=======
 .close {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
-}
-.search-table {
->>>>>>> origin/Trung
-  border: none;
-  margin-top: 2%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 2%;
-}
-.search-table th {
-  width: 30%;
 }
 .box, .login-box {
   position: absolute;
