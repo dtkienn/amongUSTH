@@ -1,6 +1,8 @@
 import json
 import os
+from re import template
 import sqlite3
+from datetime import timedelta
 
 # Third party libraries
 from flask import Flask, render_template, redirect, request, url_for
@@ -15,9 +17,9 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
-import sys
 import login.Db as logDb
 import login.User as logUsr
+# from login.mongo import User as mongoUsr
 
 # Configuration
 GOOGLE_CLIENT_ID='754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
@@ -37,7 +39,7 @@ login_manager.init_app(app)
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return render_template("login.html")
+    return render_template("login.html", display_navbar= "none")
 
 
 # Naive database setup
@@ -60,13 +62,16 @@ def load_user(user_id):
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
-        # name = user.getName()
-        # email = user.getEmail()
+        name = user.getName()
+        email = user.getEmail()
+        profile_pic = user.getprofile_pic()
 
         # return render_template("myprofile.html", name = name, email=email)
-        return render_template('browse.html')
+        print("Logged in")
+        return render_template('profile.html', name = name, email = email, picture = profile_pic, display_navbar="inline")
     else:
-        return render_template("login.html")
+        print("logging")
+        return render_template("login.html", text = "Login", display_noti="none", display_navbar= "none", name= "SIGN UP NOW!")
 
 
 @app.route("/login")
@@ -120,14 +125,12 @@ def callback():
         unique_id = userinfo_response.json()["sub"]
         users_email = userinfo_response.json()["email"]
         picture = userinfo_response.json()["picture"]
-        users_name = userinfo_response.json()["given_name"]
+        users_name = userinfo_response.json()["name"]
     else:
         return "User email not available or not verified by Google.", 400
 
     # Create a user in our db with the information provided
     # by Google
-    
-    from db import user as udb
 
     global user
     user = logUsr.user(
@@ -137,42 +140,50 @@ def callback():
     if not user.get(unique_id):
         user.create(unique_id, users_name, users_email, picture)
     
-    udb.login(users_name, users_email)
+    if "@st.usth.edu.vn" in users_email:
+        # Begin user session by logging the user in
 
-    # Begin user session by logging the user in
-    login_user(user)
+        # mongoUsr.register()
+        login_user(user)
+        time = timedelta(minutes = 60)
+        app.permanent_session_lifetime = time # User will automagically kicked from session after 'time'
+        return redirect(url_for('index'))
+    else:
+        return redirect(url_for('loginfail'))
+        
+@app.route('/loginfail')
+def loginfail():
+    return render_template('login.html', text = "LOGIN FAILED :(",display_navbar="none", display_noti= "block", loginNotiText="Login failed! The email address that you used is not a valid USTH Email")
 
-    # Send user back to homepage
-    return redirect(url_for("index"))
-
-
-@app.route("/logout", methods = ["GET","POST"])
+@app.route("/logout")
 @login_required
 def logout():
-    if request.method == 'POST':
-        pass
-    elif request.method == 'GET':
-        logout_user()
-        return redirect(url_for("index"))
-    else:
-        print('error logout')
-
-
+    logout_user()
+    return redirect(url_for("index"))
+    
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
 @app.route('/')
 @app.route('/homepage')
 def homepage():
-   return render_template("homepage.html")
+    if current_user.is_authenticated:
+        profile_pic = user.getprofile_pic()
+        name = user.getName()
+        return render_template("homepage.html", display_navbar="inline", picture = profile_pic, name = name)
+    else:
+        return render_template("homepage.html", display_navbar="none", name = 'SIGN UP NOW!')
 
 
 @app.route('/browse')
 def browse():
     if current_user.is_authenticated:
-        return render_template("browse.html")
+        name = user.getName()
+        email = user.getEmail()
+        profile_pic = user.getprofile_pic()
+        return render_template("browse.html", display_navbar="inline", name=name, picture = profile_pic)
     else:
-        return render_template('login.html')
+        return render_template('login.html', text = "You need to login!")
 
 if __name__ == '__main__':
    app.run(debug=True, ssl_context="adhoc")

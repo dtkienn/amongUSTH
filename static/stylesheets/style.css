@@ -22,7 +22,7 @@ header {
   line-height: 50px;
   position: fixed;
   float: left;
-  margin: 16px 36px;
+  margin: 2px 20px;
   color: #fff;
   font-weight: bold;
   font-size: 25px;
@@ -80,7 +80,7 @@ header {
   color: #ff851b;
 }
 .blank-div {
-  height: 30px;
+  height: 50px;
 }
 .book1 {
   border-radius: 5px;
@@ -114,6 +114,7 @@ nav ul li {
   display: inline-block;
   padding: 16px 40px;
 }
+
 
 nav menu ul li a {
   text-decoration: none;
@@ -184,19 +185,42 @@ nav div a:hover {
   /*background: rgba(0, 0, 0, 0.6);*/
   background: rgba(253, 246, 246, 0.815);
   border-radius: 0.625rem;
-  display: flex;
 }
-.search-bar input[type="text"] {
-  height: 50px;
-  text-align: center;
+.search-bar input[type="text"]{
+  /*text-align: center;
   border-radius: 20px;
   width: 100%;
   float: left;
   border-left: 30px;
-  outline: none;
+  outline: none;*/
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 85%;
+}
+.filter{
+  display: flex;
+  padding-top: 2%;  
+  width: 80%;
+  margin: auto;
+}
+.search-placeholder{
+  display: flex;
+  width: 100%;
+}
+.search-bar input[type="text"]::after{
+  content: "";
+}
+.filter-select{
+  width: 25%;
+  font-size: 17px;
+}
+.search-btn{
+  height: 50px;
 }
 .search-bar button[type="submit"] {
-  height: 50px;
+  /*height: 50px;
   width: 10%;
   border-radius: 20px;
   text-align: center;
@@ -204,9 +228,32 @@ nav div a:hover {
   right: 30px;
   text-decoration: none;
   outline: none;
-  background-color: #f0daa4;
+  background-color: #f0daa4;*/
+  float: left;
+  width: 15%;
+  padding: 10px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none; /* Prevent double borders */
+  cursor: pointer;
 }
-
+<<<<<<< HEAD
+.change{
+  color: blue;
+}
+.change:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+.search-btn:hover{
+  background-color: #0b7dda;
+}
+.profile-picture{
+  width: 50px;
+  height: 50px;
+}
 .search-filter {
   width: 20%;
   text-align: center;
@@ -257,23 +304,14 @@ nav div a:hover {
   height: 30%;
   text-align: center;
 }
+
 .close {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
-.search-table {
-  border: none;
-  margin-top: 2%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 2%;
-}
-.search-table th {
-  width: 30%;
-}
-.box {
+.box, .login-box {
   position: absolute;
   top: 40%;
   left: 50%;
@@ -285,22 +323,43 @@ nav div a:hover {
   border-radius: 0.625rem;
   text-align: center;
 }
+.login-box input{
+  border-radius: 10px;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 
-.box h2 {
+.box h2, .login-box h2 {
   margin: 0 0 1.875rem;
   padding: 0;
   color: #fff;
   text-align: center;
 }
 
-.box h3 {
-  margin: 0 0 1.875rem;
+.box h3, .login-box h3{
   padding: 0;
   color: #fff;
   text-align: center;
   font-size: 1rem;
 }
 
+.login-submit-form{
+  display: block;
+  width: 80%;
+  margin: auto;
+}
+.login-btn{
+  border-radius: 20px;
+  color: white;
+  background-color: lightskyblue;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.login-btn:hover{
+  background-color:#0b7dda;
+  cursor: pointer;
+}
 .box input[type="submit"] {
   border: none;
   outline: none;
@@ -421,4 +480,42 @@ footer .follow {
   line-height: 200px;
   font-size: 80px;
   color: white;
+}
+.login-noti{ /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.login-noti-content{
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  text-align: center;
+  font-size: 25px;
+  display: flex;
+}
+.login-noti-content p{
+  margin: auto;
+  color: red;
+}
+.login-noti-content button{
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none; /* Prevent double borders */
+  cursor: pointer;
+  text-decoration: none;
+}
+.login-noti-content button:hover{
+  background-color:#0b7dda;
+  cursor: pointer;
 }
