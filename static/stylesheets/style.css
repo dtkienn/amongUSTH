@@ -3,6 +3,7 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -173,8 +174,7 @@ nav div a:hover {
   background-size: cover;
 }
 
-
-.search-bar{
+.search-bar {
   position: absolute;
   top: 40%;
   left: 50%;
@@ -187,8 +187,7 @@ nav div a:hover {
   border-radius: 0.625rem;
 }
 .search-bar input[type="text"]{
-  /*height: 50px;
-  text-align: center;
+  /*text-align: center;
   border-radius: 20px;
   width: 100%;
   float: left;
@@ -218,6 +217,9 @@ nav div a:hover {
   font-size: 17px;
 }
 .search-btn{
+  height: 50px;
+}
+.search-bar button[type="submit"] {
   /*height: 50px;
   width: 10%;
   border-radius: 20px;
@@ -237,6 +239,7 @@ nav div a:hover {
   border-left: none; /* Prevent double borders */
   cursor: pointer;
 }
+<<<<<<< HEAD
 .change{
   color: blue;
 }
@@ -251,9 +254,50 @@ nav div a:hover {
   width: 50px;
   height: 50px;
 }
-.filter-content{
+.search-filter {
+  width: 20%;
+  text-align: center;
+  background-color: grey;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  outline: none;
+  text-decoration: none;
+}
+
+.search-bar button[type="submit"]:hover {
+  background-color: #d13b40ed;
+}
+
+.filter button[type="submit"] {
+  height: 50px;
+  width: 10%;
+  border-radius: 20px;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  background-color: #f0daa4;
+}
+
+.filter {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: black;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.filter-content {
   background-color: #fefefe;
-  margin: 15% auto; 
+  margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
@@ -261,15 +305,11 @@ nav div a:hover {
   text-align: center;
 }
 
-.search-table{
-  border: none;
-  margin-top: 2%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 2%;
-}
-.search-table th {
-  width: 30%;
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
 }
 .box, .login-box {
   position: absolute;
@@ -363,25 +403,22 @@ footer .footer-container {
   text-align: left;
   color: #fff;
   size: 25px;
+  padding: 25px;
   background-color: #64ace0;
 }
 
 footer .footer-logo {
-  width: 100%;
-  text-align: left;
-  font-size: 25px;
-  padding-top: 100px;
-  padding-left: 150px;
-  padding-bottom: 100px;
+  position: relative;
+  float: right;
+  left: 80px;
+  top: 125px;
   font-weight: bold;
   font-size: 50px;
   letter-spacing: 10px;
 }
 
 footer .col-md-4 ul {
-  width: 100%;
   text-align: center;
-  font-size: 25px;
   padding-top: 80px;
   padding-bottom: 100px;
   font-size: 25px;
@@ -391,40 +428,58 @@ footer .col-md-4 li {
   padding-top: 5px;
 }
 
+footer .list-unstyled li a {
+  color: #fff;
+  position: relative;
+}
 footer .follow {
+  position: relative;
   width: 100%;
   text-align: left;
-  font-size: 25px;
-  padding-top: 80px;
-  padding-bottom: 20px;
+  top: 80px;
+  bottom: 20px;
   font-size: 25px;
 }
 
 .social a {
+  top: 85px;
+  position: relative;
   color: #fff;
   font-size: 50px;
   padding-right: 3rem;
 }
-/* for browse content */
-.wrapper-content {
-  max-height: 260px;
-  display: block;
-  width: 100%;
-  overflow-x: scroll;
+/* browse content */
+.title {
+  padding-top: 25px;
+  padding-left: 25px;
+  font-size: 50px;
+  font-weight: bold;
 }
-.item-container {
-  display: block;
-  white-space: nowrap;
+
+.carousel {
+  background: #eee;
+  margin-top: 25px;
+  margin-bottom: 30px;
 }
-.item {
-  display: inline-block;
-  min-width: 239px;
+
+.carousel-cell {
+  width: 239px;
   height: 239px;
-  line-height: 239px;
-  text-align: left;
-  background-color: #ddd;
-  border: 2px solid black;
   margin-right: 10px;
+  background: #8c8;
+  border-radius: 5px;
+  counter-increment: carousel-cell;
+  text-align: center;
+  color: #fff;
+}
+
+/* cell number  */
+.carousel-cell:before {
+  display: block;
+  text-align: center;
+  line-height: 200px;
+  font-size: 80px;
+  color: white;
 }
 .login-noti{ /* Hidden by default */
   position: fixed; /* Stay in place */

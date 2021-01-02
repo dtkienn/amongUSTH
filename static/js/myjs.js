@@ -3,6 +3,3 @@ $(document).ready(function(){
         $("#login-noti").css("display", "none");
     })
 })
-
-
-
