@@ -20,7 +20,7 @@ class User:
             mdict = {'UID' : id_, 'Fullname' : name, 'Email' : email, 'Link_to_image' : profile_pic}
             u_info.insert_one(mdict)
     
-    def is_student_or_not(email):
+    def is_student(email):
         if ".bi" in email or '.ba' in email:
             print('Stuuu')
             return True
