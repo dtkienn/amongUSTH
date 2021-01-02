@@ -62,9 +62,10 @@ def load_user(user_id):
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
-        name = user.getName()
-        email = user.getEmail()
-        profile_pic = user.getprofile_pic()
+        id_ = user.get_id()
+        name = mongoUsr.getName(id_)
+        email = mongoUsr.getEmail(id_)
+        profile_pic = mongoUsr.getProfile_pic(id_)
 
         # return render_template("myprofile.html", name = name, email=email)
         print("Logged in")

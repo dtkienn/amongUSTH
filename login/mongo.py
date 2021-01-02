@@ -17,7 +17,7 @@ class User:
             print('Existed!')
             pass
         else: 
-            mdict = {'UID' : id_, 'Fullname' : name, 'Email' : email, 'Link_to_image' : profile_pic}
+            mdict = {'UID' : id_, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
             u_info.insert_one(mdict)
     
     def is_student(email):
@@ -66,3 +66,15 @@ class User:
         else:
             print('Check your current password!')
             pass
+
+    def getProfile_pic(id_):
+        mdict = u_info.find_one({'UID' : id_}, {'Profile_pic' : 1, '_id' : 0})
+        return mdict['Profile_pic']
+
+    def getName(id_):
+        mdict = u_info.find_one({'UID' : id_}, {'Fullname' : 1, '_id' : 0})
+        return mdict['Fullname']
+
+    def getEmail(id_):
+        mdict = u_info.find_one({'UID' : id_}, {'Email' : 1, '_id' : 0})
+        return mdict['Email']
