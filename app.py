@@ -142,10 +142,10 @@ def callback():
     
     if "@st.usth.edu.vn" in users_email:
         # Begin user session by logging the user in
+
         # mongoUsr.register()
-        
         login_user(user)
-        time = timedelta(minutes = 0, seconds = 5)
+        time = timedelta(minutes = 60)
         app.permanent_session_lifetime = time # User will automagically kicked from session after 'time'
         return redirect(url_for('index'))
     else:
