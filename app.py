@@ -147,7 +147,7 @@ def callback():
         login_user(user)
         time = timedelta(minutes = 60)
         app.permanent_session_lifetime = time # User will automagically kicked from session after 'time'
-        return redirect(url_for('index'), loginNotiText="Session timed out. Please log in again")
+        return redirect(url_for('index'))
     else:
         return redirect(url_for('loginfail'))
         
