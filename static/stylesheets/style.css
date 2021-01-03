@@ -213,6 +213,7 @@ nav div a:hover {
   content: "";
 }
 .filter-select{
+  height: 50px;
   width: 25%;
   font-size: 17px;
 }
@@ -382,7 +383,7 @@ footer .footer-container {
   color: #fff;
   size: 25px;
   padding: 25px;
-  background-color: #64ace0;
+  background-color: #000;
 }
 
 footer .footer-logo {
