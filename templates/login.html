@@ -25,13 +25,19 @@
 </style>
 <body>
     {% include 'navbar.html' %}
-    <div class="login-box">
+    <div class="login-box" id="login-box">
         <h2>LOGIN</h2>
         <h3>For academic and privacy purposes, AmongUSTH is only available for USTH-ers with USTH emails.</h3>
         <form action="submit">
             <div class="login-submit-form">
-                <input type="text" placeholder="Username" id="username">
-                <input type="password" placeholder="Password" id="password">    
+                <div class="form-container">
+                    <div class="username-label">Username</div>
+                    <input type="text" placeholder="" id="username">
+                </div>
+                <div class="form-container">
+                    <div class="password-label">Password</div>
+                    <input type="password" placeholder="" id="password">    
+                </div>
             </div>
             <button href="/" type="submit" class="login-btn">Login now</button>
         </form>

@@ -176,7 +176,7 @@ nav div a:hover {
 
 .search-bar {
   position: absolute;
-  top: 40%;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 70%;
@@ -185,6 +185,16 @@ nav div a:hover {
   /*background: rgba(0, 0, 0, 0.6);*/
   background: rgba(253, 246, 246, 0.815);
   border-radius: 0.625rem;
+}
+.upload-btn{
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  box-sizing: border-box;
+  background: black;
+  color: white;
 }
 .search-bar input[type="text"]{
   /*text-align: center;
@@ -198,6 +208,15 @@ nav div a:hover {
   border: 1px solid grey;
   float: left;
   width: 85%;
+  transition: 1s;
+}
+.search-bar input[type="text"]:focus{
+  width: 100%;
+}
+.change-password-box{
+  background-color: white;
+  color: black;
+  width: 100%;
 }
 .filter{
   display: flex;
@@ -216,6 +235,11 @@ nav div a:hover {
   height: 50px;
   width: 25%;
   font-size: 17px;
+  transition: 1s;
+}
+.filter-select:hover, .filter-selct:focus{
+  width: 40%;
+  background-color: #F5F5F5	;
 }
 .search-btn{
   height: 50px;
@@ -233,7 +257,7 @@ nav div a:hover {
   float: left;
   width: 15%;
   padding: 10px;
-  background: #2196F3;
+  background: gray;
   color: white;
   font-size: 17px;
   border: 1px solid grey;
@@ -270,7 +294,8 @@ nav div a:hover {
 }
 
 .search-bar button[type="submit"]:hover {
-  background-color: #d13b40ed;
+  background-color: black;
+  color: white;
 }
 
 .filter button[type="submit"] {
@@ -302,21 +327,59 @@ nav div a:hover {
   border-radius: 0.625rem;
   text-align: center;
 }
+.profile-box{
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25rem;
+  padding: 2.5rem;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 0.625rem;
+  text-align: center;
+}
 .login-box input{
-  border-radius: 10px;
+  /*border-radius: 10px;*/
+  border: white 0.5px solid;
+  border-bottom: black 0.5px solid;
   text-align: center;
   padding-top: 10px;
   padding-bottom: 10px;
+  width: 65%;
+  float: left;
+}
+.upload-box{
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25rem;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 0.625rem;
+  text-align: center;
+}
+.upload-box h5{
+  margin: 0 0 1.875rem;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+}
+.upload-box input{
+  margin-top: 20px;
+  background: none;
 }
 
-.box h2, .login-box h2 {
+.box h2, .login-box h2, .profile-box h2 {
   margin: 0 0 1.875rem;
   padding: 0;
   color: #fff;
   text-align: center;
 }
 
-.box h3, .login-box h3{
+.box h3, .login-box h3, .profile-box h3{
   padding: 0;
   color: #fff;
   text-align: center;
@@ -329,14 +392,17 @@ nav div a:hover {
   margin: auto;
 }
 .login-btn{
-  border-radius: 20px;
   color: white;
-  background-color: lightskyblue;
+  background-color: black;
+  height: 35px;
   margin-top: 5px;
   margin-bottom: 5px;
+  transition: height 0.5s;
 }
 .login-btn:hover{
-  background-color:#0b7dda;
+  background-color: white;
+  height: 50px;
+  color: black;
   cursor: pointer;
 }
 .box input[type="submit"] {
@@ -434,6 +500,53 @@ footer .follow {
   font-size: 50px;
   font-weight: bold;
 }
+.form-container{
+  display: flex;
+  width: 100%;
+  height: 45px;
+}
+.form-container-modal{
+  margin-left: 25%;
+  display: flex;
+  width: 50%;
+  height: 45px;
+}
+
+.username-label, .password-label{
+  border: white 0.5px solid;
+  border-bottom: black 0.5px solid;
+  background: grey;
+  float: left;
+  width: 35%;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  word-wrap: break-word;
+  font-size: 15px;
+}
+.current-password-label, .new-password-label{
+  border: white 0.5px solid;
+  border-bottom: black 0.5px solid;
+  background: grey;
+  float: left;
+  width: 40%;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  word-wrap: break-word;
+  font-size: 15px;
+  margin: auto;
+}
+.change-password-modal input{
+  /*border-radius: 10px;*/
+  border: white 0.5px solid;
+  border-bottom: black 0.5px solid;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 60%;
+  float: left;
+}
 
 .carousel {
   background: #eee;
@@ -497,4 +610,55 @@ footer .follow {
 .login-noti-content button:hover{
   background-color:#0b7dda;
   cursor: pointer;
+}
+@-webkit-keyframes fadein {
+  from {top:-100px;opacity: 0;}
+  to {top:0px;opacity:1;}
+}
+.change-password-modal{
+  display: none;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.change-password-modal:target {
+  display: block;
+  position: absolute;
+}
+.change-password-modal-content{
+  background: url(https://freefrontend.com/assets/img/css-triangle-backgrounds/2-triangles-background.png);
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%; /* Could be more or less, depending on screen size */
+  text-align: center;
+  font-size: 25px;
+  padding: 2.5rem;
+  -webkit-animation-name: fadein;
+  -webkit-animation-duration: 1.5s; 
+}
+.change-password-modal-title{
+  margin-bottom: 20px;
+}
+.change-password-modal button{
+  font-size: 15px;
+  margin-top: 15px;
+}
+.modal-close-btn{
+  float: right;
+  text-decoration: none;
+}
+.modal-close-btn a{
+  color: black;
+  text-decoration: none;
+  transition: 1s;
+}
+.modal-close-btn a:hover{
+  color: white;
 }
