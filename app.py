@@ -146,7 +146,7 @@ def callback():
         login_user(user)
 
         # Create session timeout
-        time = timedelta(minutes = 60)
+        time = timedelta(minutes=60)
         app.permanent_session_lifetime = time # User will automagically kicked from session after 'time'        
         # Add user information to Online database
         id_ = user.get_id()
@@ -156,9 +156,13 @@ def callback():
 
         mongoUsr.register(id_,name,email,avatar)
         return redirect(url_for('index'))
+    #    return redirect(url_for('timeout'))
     else:
         return redirect(url_for('loginfail'))
         
+#@app.route('/timeout')
+#def timeout():
+#    return render_template('login.html', display_navbar="none", display_noti= "block", loginNotiText="Session timed out, please login again")
 @app.route('/loginfail')
 def loginfail():
     return render_template('login.html', text = "LOGIN FAILED :(",display_navbar="none", display_noti= "block", loginNotiText="Login failed! The email address that you used is not a valid USTH Email")

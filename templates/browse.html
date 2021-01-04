@@ -35,6 +35,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
+<style>
+    header{
+        background: url(https://wallpaperaccess.com/full/124383.jpg) no-repeat 50% 50%;
+        background-size: cover;
+    }
+</style>
 <body>
     <!--Navbar-->
     {% include 'navbar.html' %}
@@ -72,6 +78,10 @@
             </select>
         </div>
     </form>
+    <div class="upload-box">
+        <h5>Can't find your books? Upload now!</h5>
+        <input type="file" class="upload-btn">
+    </div>
 
     <!--Book-->
     <div class="title">Books</div>

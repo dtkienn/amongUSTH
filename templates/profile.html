@@ -1,6 +1,7 @@
     <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    
@@ -14,25 +15,40 @@
     <title>Join AmongUSTH!</title>
     <link rel="stylesheet" href="static/stylesheets/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="js/myjs.js"></script>
 
 </head>
 <style>
     header{
-        background: url(https://thewritelife.com/wp-content/uploads/2019/08/How-to-format-a-book.jpg)
+        background: url(https://htmlcolorcodes.com/assets/images/html-color-codes-color-tutorials-hero.jpg)
     }
 </style>
 <body>
     {% include 'navbar.html' %}
-    <div class="box">
+    <div class="profile-box" id="profile-box">
         <h2><img class="profile-picture" src="{{picture}}" alt=""></h2>
         <h2>{{name}}</h2>
         <h3>You logged in with email: {{email}}</h3>
-        <h3>Your username: <span>{{email}}  </span><span class="change">Change</span></h3>
-        <h3>Your password: <span>*******</span><span class="change">Change</span></h3>
+        <h3>Your username: <span>{{email}}  </span><a href="">Change</a></h3>
+        <h3 id="user-password">Your password: <span>*******</span><span><a href="#change-password-modal">Change</a></span></h3>
         <a href="/browse" style="color: #2251ff">Click here to browse things</a>
         <h4><a href="/logout" style="color: #2251ff">Logout</a></h4>
+    </div>
+
+    <div class="change-password-modal" id="change-password-modal">
+        <div class="change-password-modal-content">
+            <span class="modal-close-btn"><a href="/index">&times;</a></span>
+            <div class="change-password-modal-title">Change password</div>
+            <div class="form-container-modal">
+                <div class="current-password-label">Current password</div>
+                <input type="password" placeholder="" id="username">
+            </div>
+            <div class="form-container-modal">
+                <div class="new-password-label">New password</div>
+                <input type="password" placeholder="" id="password">    
+            </div>
+            <button href="/" type="submit" class="login-btn">Change!</button>
+        </div>
     </div>
     {% include 'footer.html' %}
 </body>
