@@ -5,7 +5,7 @@ import sqlite3
 from datetime import timedelta
 
 # Third party libraries
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_login import (
     LoginManager,
     current_user,
@@ -15,6 +15,7 @@ from flask_login import (
 )
 from oauthlib.oauth2 import WebApplicationClient
 import requests
+from password_generator import PasswordGenerator as ps
 
 # Internal imports
 import login.Db as logDb
@@ -63,32 +64,53 @@ def load_user(user_id):
 def index():
     if current_user.is_authenticated:
         id_ = user.get_id()
-        name = mongoUsr.getName(id_)
-        email = mongoUsr.getEmail(id_)
-        profile_pic = mongoUsr.getProfile_pic(id_)
+        name = mongoUsr.get_name(id_)
+        email = mongoUsr.get_email(id_)
+        profile_pic = mongoUsr.get_profile_pic(id_)
 
         # return render_template("myprofile.html", name = name, email=email)
         print("Logged in")
         return render_template('profile.html', name = name, email = email, picture = profile_pic, display_navbar="inline")
+    
+    if 'username' in session:
+        print('You are logged in as ' + session['username'])
+        id_ = mongoUsr.get_id(session['username'])
+        name = mongoUsr.get_name(id_)
+        email = mongoUsr.get_email(id_)
+        profile_pic = mongoUsr.get_profile_pic(id_)
+        return render_template('profile.html', username = session['username'], name = name, email = email, picture = profile_pic, display_navbar="inline")
+
     else:
-        print("logging")
+        print("Logging")
         return render_template("login.html", text = "Login", display_noti="none", display_navbar= "none", name= "SIGN UP NOW!")
 
 
-@app.route("/login")
+@app.route("/login", methods = ['GET', 'POST'])
 def login():
-    #Find out what URL to hit for Google login
-    google_provider_cfg = get_google_provider_cfg()
-    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+    if request.method =='GET':
+        #Find out what URL to hit for Google login
+        google_provider_cfg = get_google_provider_cfg()
+        authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
-    #Use library to construct the request for login and provide
-    #scopes that let you retrieve user's profile from Google
-    request_uri = client.prepare_request_uri(
-        authorization_endpoint,
-        redirect_uri=request.base_url + "/callback",
-        scope=["openid", "email", "profile"],
-    )
-    return redirect(request_uri)
+        #Use library to construct the request for login and provide
+        #scopes that let you retrieve user's profile from Google
+        request_uri = client.prepare_request_uri(
+            authorization_endpoint,
+            redirect_uri=request.base_url + "/callback",
+            scope=["openid", "email", "profile"],
+        )
+        return redirect(request_uri)
+    elif request.method =='POST':
+        data = request.form
+        print(data)
+        username = data['username']
+        login_user = mongoUsr.get_login(username)
+        if login_user['Password'] == data['password']:
+            session['username'] = data['username']
+        else:
+            print('Incorrect password!!')
+        return redirect(url_for('index'))
+            
 
 
 @app.route("/login/callback")
@@ -149,14 +171,29 @@ def callback():
         time = timedelta(minutes=60)
         app.permanent_session_lifetime = time # User will automagically kicked from session after 'time'        
         # Add user information to Online database
-        id_ = user.get_id()
-        name = user.getName()
-        email = user.getEmail()
-        avatar = user.getprofile_pic()
+        
 
-        mongoUsr.register(id_,name,email,avatar)
+        id_ = user.get_id()
+        if mongoUsr.is_registerd(id_):
+            pass
+        else:
+            name = user.getName()
+            email = user.getEmail()
+            avatar = user.getprofile_pic()
+
+            temp = email.split('.', 1)
+            temp = temp[1].split('@',1)
+            temp_username = temp[0]
+
+            gen_pass = ps()
+            temp_password = gen_pass.shuffle_password('qwertyuiopasdfghjklzxcvbnm', 6)
+            print(temp_password)
+
+            mongoUsr.add_login(id_,temp_username, temp_password)
+            mongoUsr.register(id_,name,email,avatar)
+
         return redirect(url_for('index'))
-    #    return redirect(url_for('timeout'))
+    
     else:
         return redirect(url_for('loginfail'))
         

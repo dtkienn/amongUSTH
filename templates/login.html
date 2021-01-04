@@ -28,19 +28,20 @@
     <div class="login-box" id="login-box">
         <h2>LOGIN</h2>
         <h3>For academic and privacy purposes, AmongUSTH is only available for USTH-ers with USTH emails.</h3>
-        <form action="submit">
+        <form action="/login", method = 'post'>
             <div class="login-submit-form">
                 <div class="form-container">
                     <div class="username-label">Username</div>
-                    <input type="text" placeholder="" id="username">
+                    <input type="text" placeholder="" id="username" name = 'username'>
                 </div>
                 <div class="form-container">
                     <div class="password-label">Password</div>
-                    <input type="password" placeholder="" id="password">    
+                    <input type="password" placeholder="" id="password", name = 'password'>    
                 </div>
             </div>
-            <button href="/" type="submit" class="login-btn">Login now</button>
+            <button type="submit" class="login-btn">Login now</button>
         </form>
+    
         <h3>First time here? Or just lazy when using an username? <a style="color: #2251ff" href="/login">Login</a> with your USTH Email</h3>
     </div>
     <div class="login-noti" id="login-noti" style="display: {{display_noti}};">

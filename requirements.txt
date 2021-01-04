@@ -5,3 +5,5 @@ requests
 cryptography
 dnspython
 pymongo
+bcrypt
+random-password-generator
