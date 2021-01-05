@@ -1,6 +1,5 @@
 import pymongo
 from login.User import user as usr
-import bcrypt
 
 client = pymongo.MongoClient("mongodb+srv://Sm00thiee:123@cluster0.3ihx5.mongodb.net/?retryWrites=true&w=majority")
 
@@ -45,7 +44,7 @@ class User:
             # print('Existed')
             pass
         else:
-            u_login.insert_one({'UID' : id_, 'Username' : username, 'Password' : password})
+            u_login.insert_one({'UID' : id_, 'Username' : username, 'Password' : password, 'Status' : 'Active'})
 
     def change_password(id_, current_password, new_password):
         if u_login.find_one({'UID' : id_}, {'Password' : 1, '_id' : 0}) == {'Password' : current_password}:
@@ -53,10 +52,13 @@ class User:
             {
                 '$set': {'Password' :  new_password}
             })
+            new_password = u_login.find_one({'UID' : id_}, {'Password' : 1, '_id' : 0})
+            new_password = new_password['Password']
             print('Sucessfull')
-            print('New password ', u_login.find_one({'UID' : id_}, {'Password' : 1, '_id' : 0}))
+            print ('New password: ', new_password)
+        elif u_login.find_one({'UID' : id_}, {'Password' : 1, '_id' : 0}) != {'Password' : current_password}:
+            print ('Wrong password!')
         else:
-            # print('Check your current password!')
             pass
 
     def change_username(id_, current_password, new_username):
@@ -92,4 +94,22 @@ class User:
         if mdict:
             return True
         else:
+            return False
+
+    def set_status(id_, stt):
+        status = ''
+        if stt == 0:
+            status = 'Inactive'
+        elif stt == 1:
+            status = 'Active'
+        u_login.update({'UID' : id_},
+            {
+                '$set': {'Status' :  status}
+            })
+
+    def is_active(id_):
+        mdict = u_login.find_one({'UID' : id_})
+        if mdict['Status'] == 'Active':
+            return True
+        elif mdict['Status'] == 'Inactive':
             return False

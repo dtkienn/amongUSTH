@@ -4,6 +4,7 @@ from re import template
 import sqlite3
 from datetime import timedelta
 
+
 # Third party libraries
 from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_login import (
@@ -59,7 +60,6 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 def load_user(user_id):
     return logUsr.user.get(user_id)
 
-
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
@@ -68,7 +68,7 @@ def index():
         email = mongoUsr.get_email(id_)
         profile_pic = mongoUsr.get_profile_pic(id_)
 
-        # return render_template("myprofile.html", name = name, email=email)
+        mongoUsr.set_status(id_,1)
         print("Logged in")
         return render_template('profile.html', name = name, email = email, picture = profile_pic, display_navbar="inline")
     
@@ -78,11 +78,38 @@ def index():
         name = mongoUsr.get_name(id_)
         email = mongoUsr.get_email(id_)
         profile_pic = mongoUsr.get_profile_pic(id_)
+
+        mongoUsr.set_status(id_,1)
+
         return render_template('profile.html', username = session['username'], name = name, email = email, picture = profile_pic, display_navbar="inline")
 
     else:
-        print("Logging")
-        return render_template("login.html", text = "Login", display_noti="none", display_navbar= "none", name= "SIGN UP NOW!")
+        try:
+            id_ = user.get_id()
+            mongoUsr.set_status(id_,0)
+        except NameError:
+            print('First time openning index')
+        finally:
+            print("Not logged in")
+            return render_template("login.html", text = "Login", display_noti="none", display_navbar= "none", name= "SIGN UP NOW!")
+
+@app.route("/index/change_password", methods = ['POST'])
+def change_password():
+    id_ = user.get_id()
+    if mongoUsr.is_active(id_):
+        data = request.form
+        current_password = data['current_password']
+        new_password = data['new_password']
+        re_password = data['re_password']
+
+        if re_password == new_password:
+            mongoUsr.change_password(id_, current_password, new_password)
+        else:
+            print('Passwords are not match!')
+            pass
+    else:
+        pass
+    return redirect(url_for('index'))
 
 
 @app.route("/login", methods = ['GET', 'POST'])
@@ -208,7 +235,7 @@ def loginfail():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("homepage"))
     
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
@@ -228,7 +255,6 @@ def homepage():
 def browse():
     if current_user.is_authenticated:
         name = user.getName()
-        email = user.getEmail()
         profile_pic = user.getprofile_pic()
         return render_template("browse.html", display_navbar="inline", name=name, picture = profile_pic)
     else:
