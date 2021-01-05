@@ -90,6 +90,7 @@ header {
 nav {
   position: fixed;
   width: 100%;
+  z-index: 1;
   line-height: 60px;
   background-color: black;
 }
@@ -115,7 +116,6 @@ nav ul li {
   display: inline-block;
   padding: 16px 40px;
 }
-
 
 nav menu ul li a {
   text-decoration: none;
@@ -187,7 +187,7 @@ nav div a:hover {
   background: rgba(253, 246, 246, 0.815);
   border-radius: 0.625rem;
 }
-.upload-btn{
+.upload-btn {
   position: absolute;
   top: 55%;
   left: 50%;
@@ -197,7 +197,7 @@ nav div a:hover {
   background: black;
   color: white;
 }
-.search-bar input[type="text"]{
+.search-bar input[type="text"] {
   /*text-align: center;
   border-radius: 20px;
   width: 100%;
@@ -211,39 +211,39 @@ nav div a:hover {
   width: 85%;
   transition: 1s;
 }
-.search-bar input[type="text"]:focus{
+.search-bar input[type="text"]:focus {
   width: 100%;
 }
-.change-password-box{
+.change-password-box {
   background-color: white;
   color: black;
   width: 100%;
 }
-.filter{
+.filter {
   display: flex;
-  padding-top: 2%;  
+  padding-top: 2%;
   width: 80%;
   margin: auto;
 }
-.search-placeholder{
+.search-placeholder {
   display: flex;
   width: 100%;
 }
-.search-bar input[type="text"]::after{
+.search-bar input[type="text"]::after {
   content: "";
 }
-.filter-select{
+.filter-select {
   height: 50px;
   width: 25%;
   font-size: 17px;
   transition: 1s;
   text-align-last: center;
 }
-.filter-select:focus{
+.filter-select:focus {
   width: 40%;
-  background-color: #F5F5F5	;
+  background-color: #f5f5f5;
 }
-.search-btn{
+.search-btn {
   height: 50px;
 }
 .search-bar button[type="submit"] {
@@ -266,17 +266,17 @@ nav div a:hover {
   border-left: none; /* Prevent double borders */
   cursor: pointer;
 }
-.change{
+.change {
   color: blue;
 }
-.change:hover{
+.change:hover {
   text-decoration: underline;
   cursor: pointer;
 }
-.search-btn:hover{
+.search-btn:hover {
   background-color: #0b7dda;
 }
-.profile-picture{
+.profile-picture {
   width: 50px;
   height: 50px;
 }
@@ -310,14 +310,14 @@ nav div a:hover {
   background-color: #f0daa4;
 }
 
-
 .close {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
-.box, .login-box {
+.box,
+.login-box {
   position: absolute;
   top: 40%;
   left: 50%;
@@ -329,7 +329,7 @@ nav div a:hover {
   border-radius: 0.625rem;
   text-align: center;
 }
-.profile-box{
+.profile-box {
   position: absolute;
   top: 35%;
   left: 50%;
@@ -341,7 +341,7 @@ nav div a:hover {
   border-radius: 0.625rem;
   text-align: center;
 }
-.login-box input{
+.login-box input {
   /*border-radius: 10px;*/
   border: white 0.5px solid;
   border-bottom: black 0.5px solid;
@@ -351,7 +351,7 @@ nav div a:hover {
   width: 65%;
   float: left;
 }
-.upload-box{
+.upload-box {
   position: absolute;
   top: 55%;
   left: 50%;
@@ -363,37 +363,41 @@ nav div a:hover {
   border-radius: 0.625rem;
   text-align: center;
 }
-.upload-box h5{
+.upload-box h5 {
   margin: 0 0 1.875rem;
   padding: 0;
   color: #fff;
   text-align: center;
 }
-.upload-box input{
+.upload-box input {
   margin-top: 20px;
   background: none;
 }
 
-.box h2, .login-box h2, .profile-box h2 {
+.box h2,
+.login-box h2,
+.profile-box h2 {
   margin: 0 0 1.875rem;
   padding: 0;
   color: #fff;
   text-align: center;
 }
 
-.box h3, .login-box h3, .profile-box h3{
+.box h3,
+.login-box h3,
+.profile-box h3 {
   padding: 0;
   color: #fff;
   text-align: center;
   font-size: 1rem;
 }
 
-.login-submit-form{
+.login-submit-form {
   display: block;
   width: 80%;
   margin: auto;
 }
-.login-btn{
+.login-btn {
   color: white;
   background-color: black;
   height: 35px;
@@ -401,7 +405,7 @@ nav div a:hover {
   margin-bottom: 5px;
   transition: height 0.5s;
 }
-.login-btn:hover{
+.login-btn:hover {
   background-color: white;
   height: 50px;
   color: black;
@@ -504,31 +508,26 @@ footer .follow {
   font-size: 50px;
   font-weight: bold;
   background-color: #659dbd;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  text-shadow: 5px 5px 0px #eb452b, 
-  10px 10px 0px #efa032, 
-  15px 15px 0px #46b59b, 
-  20px 20px 0px #017e7f, 
-  25px 25px 0px #052939, 
-  30px 30px 0px #659dbd, 
-  35px 35px 0px #659dbd, 
-  40px 40px 0px #659dbd, 
-  45px 45px 0px #659dbd;
+  text-shadow: 5px 5px 0px #eb452b, 10px 10px 0px #efa032, 15px 15px 0px #46b59b,
+    20px 20px 0px #017e7f, 25px 25px 0px #052939, 30px 30px 0px #659dbd,
+    35px 35px 0px #659dbd, 40px 40px 0px #659dbd, 45px 45px 0px #659dbd;
 }
-.form-container{
+.form-container {
   display: flex;
   width: 100%;
   height: 45px;
 }
-.form-container-modal{
+.form-container-modal {
   margin-left: 25%;
   display: flex;
   width: 50%;
   height: 45px;
 }
 
-.username-label, .password-label{
+.username-label,
+.password-label {
   border: white 0.5px solid;
   border-bottom: black 0.5px solid;
   background: grey;
@@ -540,7 +539,8 @@ footer .follow {
   word-wrap: break-word;
   font-size: 15px;
 }
-.current-password-label, .new-password-label{
+.current-password-label,
+.new-password-label {
   border: white 0.5px solid;
   border-bottom: black 0.5px solid;
   background: grey;
@@ -553,7 +553,7 @@ footer .follow {
   font-size: 15px;
   margin: auto;
 }
-.change-password-modal input{
+.change-password-modal input {
   /*border-radius: 10px;*/
   border: white 0.5px solid;
   border-bottom: black 0.5px solid;
@@ -572,7 +572,7 @@ footer .follow {
 
 .carousel-cell {
   width: 239px;
-  height: 239px;
+  height: 358.36px;
   margin-right: 10px;
   background: #8c8;
   border-radius: 5px;
@@ -581,7 +581,7 @@ footer .follow {
   color: #fff;
   transition: 1s;
 }
-.carousel-cell:hover{
+.carousel-cell:hover {
   height: 205px;
 }
 /* cell number  */
@@ -592,7 +592,8 @@ footer .follow {
   font-size: 80px;
   color: white;
 }
-.login-noti{ /* Hidden by default */
+.login-noti {
+  /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   left: 0;
@@ -600,10 +601,10 @@ footer .follow {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
-.login-noti-content{
+.login-noti-content {
   background-color: #fefefe;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
@@ -613,12 +614,12 @@ footer .follow {
   font-size: 25px;
   display: flex;
 }
-.login-noti-content p{
+.login-noti-content p {
   margin: auto;
   color: red;
 }
-.login-noti-content button{
-  background: #2196F3;
+.login-noti-content button {
+  background: #2196f3;
   color: white;
   font-size: 17px;
   border: 1px solid grey;
@@ -626,15 +627,21 @@ footer .follow {
   cursor: pointer;
   text-decoration: none;
 }
-.login-noti-content button:hover{
-  background-color:#0b7dda;
+.login-noti-content button:hover {
+  background-color: #0b7dda;
   cursor: pointer;
 }
 @-webkit-keyframes fadein {
-  from {top:-100px;opacity: 0;}
-  to {top:0px;opacity:1;}
+  from {
+    top: -100px;
+    opacity: 0;
+  }
+  to {
+    top: 0px;
+    opacity: 1;
+  }
 }
-.change-password-modal{
+.change-password-modal {
   display: none;
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
@@ -643,14 +650,14 @@ footer .follow {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 .change-password-modal:target {
   display: block;
   position: absolute;
 }
-.change-password-modal-content{
+.change-password-modal-content {
   background: url(https://freefrontend.com/assets/img/css-triangle-backgrounds/2-triangles-background.png);
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
@@ -660,28 +667,28 @@ footer .follow {
   font-size: 25px;
   padding: 2.5rem;
   -webkit-animation-name: fadein;
-  -webkit-animation-duration: 1.5s; 
+  -webkit-animation-duration: 1.5s;
 }
-.change-password-modal-title{
+.change-password-modal-title {
   margin-bottom: 20px;
 }
-.change-password-modal button{
+.change-password-modal button {
   font-size: 15px;
   margin-top: 15px;
 }
-.modal-close-btn{
+.modal-close-btn {
   float: right;
   text-decoration: none;
 }
-.modal-close-btn a{
+.modal-close-btn a {
   color: black;
   text-decoration: none;
   transition: 1s;
 }
-.modal-close-btn a:hover{
+.modal-close-btn a:hover {
   color: white;
 }
-.carousel-caption{
+.carousel-caption {
   color: black;
   background-color: white;
   width: inherit;
@@ -740,13 +747,15 @@ footer .follow {
     transform: translateY(0);
   }
 }
-nav a{
+nav a {
   display: inline-block;
   vertical-align: middle;
   -webkit-transform: perspective(1px) translateZ(0);
   transform: perspective(1px) translateZ(0);
 }
-nav a:hover, nav a:focus, nav a:active {
+nav a:hover,
+nav a:focus,
+nav a:active {
   -webkit-animation-name: moveUpandDown;
   animation-name: moveUpandDown;
   -webkit-animation-duration: 1s;

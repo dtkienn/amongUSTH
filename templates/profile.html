@@ -36,20 +36,24 @@
     </div>
 
     <div class="change-password-modal" id="change-password-modal">
-        <form action="">
-        <div class="change-password-modal-content">
-            <span class="modal-close-btn"><a href="/index">&times;</a></span>
-            <div class="change-password-modal-title">Change password</div>
-            <div class="form-container-modal">
-                <div class="current-password-label">Current password</div>
-                <input type="password" placeholder="" id="username">
+        <form action = '/index/change_password' method="post">
+            <div class="change-password-modal-content">
+                <span class="modal-close-btn"><a href="/index">&times;</a></span>
+                <div class="change-password-modal-title">Change password</div>
+                <div class="form-container-modal">
+                    <div class="current-password-label">Current password</div>
+                    <input type="password" placeholder="" id="" name = 'current_password'>
+                </div>
+                <div class="form-container-modal">
+                    <div class="new-password-label">New password</div>
+                    <input type="password" placeholder="" id="password" name = 'new_password'>    
+                </div>
+                <div class="form-container-modal">
+                    <div class="new-password-label">Re-enter new password</div>
+                    <input type="password" placeholder="" id="password" name = 're_password'>    
+                </div>
+                <button type="submit" class="login-btn">Change!</button>
             </div>
-            <div class="form-container-modal">
-                <div class="new-password-label">New password</div>
-                <input type="password" placeholder="" id="password">    
-            </div>
-            <button href="/" type="submit" class="login-btn">Change!</button>
-        </div>
         </form>
     </div>
     {% include 'footer.html' %}
