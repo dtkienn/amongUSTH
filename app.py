@@ -234,6 +234,10 @@ def browse():
     else:
         return render_template('login.html', text = "You need to login!")
 
+@app.route('/admin')
+def admin():
+    return render_template("admin.html", display_navbar="none", name="ADMIN")
+
 if __name__ == '__main__':
    app.run(debug=True, ssl_context="adhoc")
 
