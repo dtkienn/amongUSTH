@@ -19,9 +19,6 @@ class User:
         else: 
             mdict = {'UID' : id_, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
             u_info.insert_one(mdict)
-    
-    def get_login(username):
-        return u_login.find_one({'Username': username})
 
     def is_student(email):
         if ".bi" in email or '.ba' in email:
@@ -39,40 +36,6 @@ class User:
         mdict = {'UID' : id_, 'Department' : department}
         u_lec.insert_one(mdict)
 
-    def add_login(id_, username, password):
-        if u_login.find_one({'UID' : id_}):
-            # print('Existed')
-            pass
-        else:
-            u_login.insert_one({'UID' : id_, 'Username' : username, 'Password' : password, 'Status' : 'Active'})
-
-    def change_password(id_, current_password, new_password):
-        if u_login.find_one({'UID' : id_}, {'Password' : 1, '_id' : 0}) == {'Password' : current_password}:
-            u_login.update({'UID' : id_},
-            {
-                '$set': {'Password' :  new_password}
-            })
-            new_password = u_login.find_one({'UID' : id_}, {'Password' : 1, '_id' : 0})
-            new_password = new_password['Password']
-            print('Sucessfull')
-            print ('New password: ', new_password)
-        elif u_login.find_one({'UID' : id_}, {'Password' : 1, '_id' : 0}) != {'Password' : current_password}:
-            print ('Wrong password!')
-        else:
-            pass
-
-    def change_username(id_, current_password, new_username):
-        if u_login.find_one({'UID' : id_}, {'Password' : 1, '_id' : 0}) == {'Password' : current_password}:
-            u_login.update({'UID' : id_},
-            {
-                '$set': {'Username' :  new_username}
-            })
-            print('Sucessfull')
-            print('New username ',u_login.find_one({'UID' : id_}, {'Password' : 1, '_id' : 0}))
-        else:
-            # print('Check your current password!')
-            pass
-
     def get_profile_pic(id_):
         mdict = u_info.find_one({'UID' : id_}, {'Profile_pic' : 1, '_id' : 0})
         return mdict['Profile_pic']
@@ -88,28 +51,3 @@ class User:
     def get_id(username):
         mdict = u_login.find_one({'Username' : username})
         return mdict['UID']
-    
-    def is_registerd (id_):
-        mdict = u_login.find_one({'UID' : id_})
-        if mdict:
-            return True
-        else:
-            return False
-
-    def set_status(id_, stt):
-        status = ''
-        if stt == 0:
-            status = 'Inactive'
-        elif stt == 1:
-            status = 'Active'
-        u_login.update({'UID' : id_},
-            {
-                '$set': {'Status' :  status}
-            })
-
-    def is_active(id_):
-        mdict = u_login.find_one({'UID' : id_})
-        if mdict['Status'] == 'Active':
-            return True
-        elif mdict['Status'] == 'Inactive':
-            return False
