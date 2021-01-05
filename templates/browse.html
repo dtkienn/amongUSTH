@@ -32,9 +32,20 @@
     />
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="/static/js/myjs.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
+<style>
+    header{
+        background: url(https://wallpaperaccess.com/full/124383.jpg) no-repeat 50% 50%;
+        background-size: cover;
+    }
+    body{
+        background-color: #659dbd;
+    }
+</style>
 <body>
     <!--Navbar-->
     {% include 'navbar.html' %}
@@ -43,23 +54,23 @@
     <form class="search-bar">
         <div class="search-placeholder">
             <input type="text" placeholder="Search for material(s)...">
-            <button type="submit" class="search-btn"><i class="fa fa-search" alt=""></i></button>    
+            <button type="submit" name="search" class="search-btn"><i class="fa fa-search" alt=""></i></button>    
         </div>
         <div class="filter">
             <select class="filter-select" id="filter-type">
-                <option value>Material type</option>
-                <option value="">Any</option>
-                <option value="">Hey</option>
-                <option value="">Hey</option>
+                <option value>Any Material type</option>
+                <option value="">Document</option>
+                <option value="">Books</option>
+                <option value="">Slides</option>
             </select>
             <select class="filter-select" id="filter-type">
-                <option value>Subject</option>
-                <option value="">Any</option>
-                <option value="">Hey</option>
-                <option value="">Hey</option>
+                <option value>Any Subject</option>
+                <option value="">Mathematics</option>
+                <option value="">Chemistry</option>
+                <option value="">Something</option>
             </select>
             <select class="filter-select" id="filter-type">
-                <option value>Author</option>
+                <option value>Any Author</option>
                 <option value="">Hey</option>
                 <option value="">Hey</option>
                 <option value="">Hey</option>
@@ -70,53 +81,147 @@
                 <option value="">Hey</option>
                 <option value="">Hey</option>
             </select>
-
         </div>
     </form>
+    <div class="upload-box">
+        <h5>Can't find your books? Upload now!</h5>
+        <input type="file" class="upload-btn">
+    </div>
 
     <!--Book-->
-    <div class="title">Books</div>
+    <div class="title">BOOKS</div>
     <!-- Flickity HTML init -->
-    <div class="carousel" data-flickity='{ "wrapAround": true }'>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
+    <div class="carousel" data-flickity='{ "groupCells": true }'>
+      <div class="carousel-cell">
+          <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+          <div class="carousel-caption">Book name here</div>
+      </div>
+      <div class="carousel-cell">
+        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+        <div class="carousel-caption">Book name here</div>
+    </div>
+    <div class="carousel-cell">
+        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+        <div class="carousel-caption">Book name here</div>
+    </div>
+    <div class="carousel-cell">
+        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+        <div class="carousel-caption">Book name here</div>
+    </div>
+    <div class="carousel-cell">
+        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+        <div class="carousel-caption">Book name here</div>
+    </div>
+    <div class="carousel-cell">
+        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+        <div class="carousel-caption">Book name here</div>
+    </div>
+    <div class="carousel-cell">
+        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+        <div class="carousel-caption">Book name here</div>
+    </div>
+    <div class="carousel-cell">
+        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+        <div class="carousel-caption">Book name here</div>
+    </div>
+    <div class="carousel-cell">
+        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+        <div class="carousel-caption">Book name here</div>
+    </div>
+
     </div>
     <!--Document-->
-    <div class="title">Documents</div>
+    <div class="title">DOCUMENTS</div>
     <!-- Flickity HTML init -->
-    <div class="carousel" data-flickity='{ "wrapAround": true }'>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
+    <div class="carousel" data-flickity='{ "groupCells": true }'>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Document name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Document name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Document name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Document name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Document name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Document name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Document name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Document name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Document name here</div>
+        </div>
+
+  
     </div>
     <!--Slide-->
-    <div class="title">Slides</div>
+    <div class="title">SLIDES</div>
     <!-- Flickity HTML init -->
-    <div class="carousel" data-flickity='{ "wrapAround": true }'>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
-      <div class="carousel-cell"></div>
+    <div class="carousel" data-flickity='{ "groupCells": true }'>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Slide name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Slide name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Slide name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Slide name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Slide name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Slide name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Slide name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Slide name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Slide name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Slide name here</div>
+        </div>
+        <div class="carousel-cell">
+            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            <div class="carousel-caption">Slide name here</div>
+        </div>
+
     </div>
     <!--Footer-->
     {% include 'footer.html' %}
