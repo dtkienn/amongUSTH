@@ -67,7 +67,6 @@ def index():
         email = mongoUsr.get_email(id_)
         profile_pic = mongoUsr.get_profile_pic(id_)
 
-        mongoUsr.set_status(id_,1)
         print("Logged in")
         return render_template('profile.html', name = name, email = email, picture = profile_pic, display_navbar="inline")
 
@@ -153,10 +152,10 @@ def callback():
         app.permanent_session_lifetime = time # User will automagically kicked from session after 'time'        
         
         # Add user information to Online database
-        id_ = user.getid()
-        name = mongoUsr.getName()
-        email = mongoUsr.getEmail()
-        profile_pic = mongoUsr.getprofile_pic()
+        id_ = user.get_id()
+        name = user.getName()
+        email = user.getEmail()
+        profile_pic = user.getprofile_pic()
         mongoUsr.register(id_,name,email,profile_pic)
 
         return redirect(url_for('index'))
