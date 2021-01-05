@@ -151,8 +151,13 @@ def callback():
         # Create session timeout
         time = timedelta(minutes=60)
         app.permanent_session_lifetime = time # User will automagically kicked from session after 'time'        
+        
         # Add user information to Online database
-        mongoUsr.register(id_,name,email,avatar)
+        id_ = user.getid()
+        name = mongoUsr.getName()
+        email = mongoUsr.getEmail()
+        profile_pic = mongoUsr.getprofile_pic()
+        mongoUsr.register(id_,name,email,profile_pic)
 
         return redirect(url_for('index'))
     
