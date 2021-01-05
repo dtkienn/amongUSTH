@@ -1,7 +1,5 @@
 from flask_login import UserMixin
-
 from login.Db import get_db
-
 
 class user(UserMixin):
     def __init__(self, id_, name, email, profile_pic=None):
