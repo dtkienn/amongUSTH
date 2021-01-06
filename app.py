@@ -23,8 +23,8 @@ import login.User as logUsr
 from login.mongo import User as mongoUsr
 
 # Configuration
-GOOGLE_CLIENT_ID='754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
-GOOGLE_CLIENT_SECRET='7TMNNst1I5ueVjacoQDa1sJg'
+GOOGLE_CLIENT_ID = '754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
+GOOGLE_CLIENT_SECRET = '7TMNNst1I5ueVjacoQDa1sJg'
 GOOGLE_DISCOVERY_URL = (
     "https://accounts.google.com/.well-known/openid-configuration"
 )
@@ -40,7 +40,7 @@ login_manager.init_app(app)
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return render_template("login.html", display_navbar= "none")
+    return render_template("login.html", display_navbar="none")
 
 
 # Naive database setup
@@ -59,6 +59,7 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 def load_user(user_id):
     return logUsr.user.get(user_id)
 
+
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
@@ -68,28 +69,27 @@ def index():
         profile_pic = mongoUsr.get_profile_pic(id_)
 
         print("Logged in")
-        return render_template('profile.html', name = name, email = email, picture = profile_pic, display_navbar="inline")
+        return render_template('profile.html', name=name, email=email, picture=profile_pic, display_navbar="inline")
 
     else:
         print("Not logged in")
-        return render_template("login.html", text = "Login", display_noti="none", display_navbar= "none", name= "SIGN UP NOW!")
+        return render_template("login.html", text="Login", display_noti="none", display_navbar="none", name="SIGN UP NOW!")
 
 
-@app.route("/login", methods = ['GET', 'POST'])
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    #Find out what URL to hit for Google login
+    # Find out what URL to hit for Google login
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
-    #Use library to construct the request for login and provide
-    #scopes that let you retrieve user's profile from Google
+    # Use library to construct the request for login and provide
+    # scopes that let you retrieve user's profile from Google
     request_uri = client.prepare_request_uri(
         authorization_endpoint,
         redirect_uri=request.base_url + "/callback",
         scope=["openid", "email", "profile"],
     )
     return redirect(request_uri)
-            
 
 
 @app.route("/login/callback")
@@ -142,42 +142,47 @@ def callback():
     if not user.get(unique_id):
         user.create(unique_id, users_name, users_email, picture)
 
-    
     if "@st.usth.edu.vn" in users_email:
         # Begin user session by logging the user in
         login_user(user)
 
         # Create session timeout
         time = timedelta(minutes=60)
-        app.permanent_session_lifetime = time # User will automagically kicked from session after 'time'        
-        
+        # User will automagically kicked from session after 'time'
+        app.permanent_session_lifetime = time
+
         # Add user information to Online database
         id_ = user.get_id()
         name = user.getName()
         email = user.getEmail()
         profile_pic = user.getprofile_pic()
-        mongoUsr.register(id_,name,email,profile_pic)
+        mongoUsr.register(id_, name, email, profile_pic)
 
         return redirect(url_for('index'))
-    
+
     else:
         return redirect(url_for('loginfail'))
-        
-#@app.route('/timeout')
-#def timeout():
+
+# @app.route('/timeout')
+# def timeout():
 #    return render_template('login.html', display_navbar="none", display_noti= "block", loginNotiText="Session timed out, please login again")
+
+
 @app.route('/loginfail')
 def loginfail():
-    return render_template('login.html', text = "LOGIN FAILED :(",display_navbar="none", display_noti= "block", loginNotiText="Login failed! The email address that you used is not a valid USTH Email")
+    return render_template('login.html', text="LOGIN FAILED :(", display_navbar="none", display_noti="block", loginNotiText="Login failed! The email address that you used is not a valid USTH Email")
+
 
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("homepage"))
-    
+
+
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
+
 
 @app.route('/')
 @app.route('/homepage')
@@ -185,10 +190,10 @@ def homepage():
     if current_user.is_authenticated:
         profile_pic = user.getprofile_pic()
         name = user.getName()
-        return render_template("homepage.html", display_navbar="inline", picture = profile_pic, name = name)
+        return render_template("homepage.html", display_navbar="inline", picture=profile_pic, name=name)
 
     else:
-        return render_template("homepage.html", display_navbar="none", name = 'SIGN UP NOW!')
+        return render_template("homepage.html", display_navbar="none", name='SIGN UP NOW!')
 
 
 @app.route('/browse')
@@ -197,10 +202,21 @@ def browse():
         name = user.getName()
         profile_pic = user.getprofile_pic()
 
-        return render_template("browse.html", display_navbar="inline", name=name, picture = profile_pic)
+        return render_template("browse.html", display_navbar="inline", name=name, picture=profile_pic)
     else:
-        return render_template('login.html', text = "You need to login!")
+        return render_template('login.html', text="You need to login!")
+
+
+@app.route('/content')
+def content():
+    if current_user.is_authenticated:
+        name = user.getName()
+        profile_pic = user.getprofile_pic()
+
+        return render_template("content.html", display_navbar="inline", name=name, picture=profile_pic)
+    else:
+        return render_template('login.html', text="You need to login!")
+
 
 if __name__ == '__main__':
-   app.run(debug=True, ssl_context="adhoc")
-
+    app.run(debug=True, ssl_context="adhoc")

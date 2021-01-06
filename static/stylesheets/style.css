@@ -765,3 +765,98 @@ nav a:active {
   -webkit-animation-iteration-count: 1;
   animation-iteration-count: 1;
 }
+
+/* content.html */
+.up_container {
+  display: flex;
+  width: 60%;
+  height: 50vh;
+  align-items: center;
+  overflow: hidden;
+  margin: auto;
+}
+
+.book_image {
+  flex: 1;
+  text-align: center;
+  height: 45vh;
+}
+.book_image img {
+  filter: drop-shadow(0px 5px 3px black);
+}
+
+.right_contain_up {
+  flex: 3;
+  height: 45vh;
+  padding-left: 15px;
+}
+
+.book_title {
+  width: 70%;
+  height: auto;
+  font-size: 50px;
+  font-weight: bold;
+}
+.author {
+  width: 70%;
+  height: auto;
+  font-size: 25px;
+  font-weight: bold;
+  color: gray;
+}
+.download {
+  color: white;
+  width: 40%;
+  background-color: black;
+  height: 10vh;
+  margin-top: 25px;
+}
+
+.middle_container {
+  display: flex;
+  overflow: hidden;
+  width: 60%;
+  height: auto;
+  align-items: center;
+  margin: auto;
+  height: 65vh;
+}
+.left_contain_mid {
+  flex: 1;
+  color: #000;
+  height: 100%;
+}
+.left_contain_mid li {
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 50px;
+}
+.right_contain_mid {
+  flex: 3;
+  height: 100%;
+  padding-left: 15px;
+}
+
+.right_contain_mid p {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.bottom_container {
+  display: flex;
+  overflow: hidden;
+  width: 80%;
+  height: auto;
+  align-items: center;
+  margin: auto;
+  height: 65vh;
+}
+
+.comment_section {
+  flex: 3;
+  height: 100%;
+}
+.recommend_section {
+  flex: 1;
+  height: 100%;
+}
