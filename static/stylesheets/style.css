@@ -873,18 +873,70 @@ nav a:active {
 .bottom_container {
   display: flex;
   overflow: hidden;
-  width: 80%;
+  width: 100%;
   height: auto;
-  align-items: center;
   margin: auto;
-  height: 65vh;
+  height: 100vh;
 }
 
 .comment_section {
-  flex: 3;
+  float: left;
+  width: 75%;
   height: 100%;
 }
+.comment_section h2{
+  text-align: center;
+}
+
 .recommend_section {
-  flex: 1;
+  float: left;
+  width: 25%;
   height: 100%;
 }
+.recommend_section h2{
+  text-align: left;
+}
+.comment{
+  box-sizing: border-box;
+  width: inherit;
+  height: 15%;
+  margin: auto;
+  text-align: left;
+  border:#000 1px solid;
+  background-color: white;
+  box-shadow: 5px 10px #8888;
+}
+.comment-upper{
+  display: flex;
+  height: 80%;
+  padding: 10px;
+}
+.comment:not(:first-child){
+  margin-top: 30px;
+}
+.profile img{
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  margin: 20px;
+  margin-left: 40px
+}
+.username{
+  width: 130px;
+  text-align: center;
+}
+.comment-content{
+  word-wrap: break-word;
+  margin: auto;
+  text-align: justify;
+}
+.comment-footer{
+  height: 20%;
+  padding-left: 120px;
+}
+.recommend-book{
+  padding-left: 20%;
+  height: 300px;
+  padding-top: 20px;
+}
+
