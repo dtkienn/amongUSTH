@@ -42,16 +42,61 @@
         background: url(https://wallpaperaccess.com/full/124383.jpg) no-repeat 50% 50%;
         background-size: cover;
     }
-    body{
-        background-color: #659dbd;
-    }
 </style>
 <body>
     <!--Navbar-->
     {% include 'navbar.html' %}
 
     <!--Up container-->
-    
+    <section class="up_container">
+        <div class="book_image">
+         <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+         </div>
+        </div>
+        <div class="right_contain_up">
+         <div class="book_title">Book cover design fomular</div>
+         <div class="author">ANITA NIPALE</div>
+         <button class="download">DOWNLOAD</button>
+       </div>
+       </section>
+    <!-- Mid container -->
+       <section class="middle_container">
+         <div class="left_contain_mid">
+           <ul class="list-unstyled">
+             <li>Published: 2000</li>
+             <li>Pages: 180</li>
+             <li>Downloads: 400</li>
+           </ul>
+         </div>
+         <div class="right_contain_mid">
+           <div class="description">
+             <p>In this fully revised second edition of the best-selling classic Automate the Boring Stuff with Python, you’ll learn how to use Python to write programs that do in minutes what would take you hours to do by hand—no prior programming experience required. You'll learn the basics of Python and explore Python’s rich library of modules for performing specific tasks, like scraping data off websites, reading PDF and Word documents, and automating clicking and typing tasks.
+   
+               The second edition of this international fan favorite includes a brand-new chapter on input validation, as well as tutorials on automating Gmail and Google Sheets, plus tips on automatically updating CSV files. You’ll learn how to create programs that effortlessly perform useful feats of automation to:
+               
+               Search for text in a file or across multiple files
+               Create, update, move, and rename files and folders
+               Search the Web and download online content
+               Update and format data in Excel spreadsheets of any size
+               Split, merge, watermark, and encrypt PDFs
+               Send email responses and text notifications
+               Fill out online forms
+               Step-by-step instructions walk you through each program, and updated practice projects at the end of each chapter challenge you to improve those programs and use your newfound skills to automate similar tasks.
+               
+               Don't spend your time doing work a well-trained monkey could do. Even if you've never written a line of code, you can make your computer do the grunt work. Learn how in Automate the Boring Stuff with Python, 2nd Edition.
+             </p>
+           </div>
+         </div>
+       </section>
+    <!-- Bot container -->
+       <section class="bottom_container">
+         <div class="comment_section">
+           <h2>READER REVIEW</h2>
+         </div>
+         <div class="recommend_section">
+           <h2>YOU MIGHT ALSO LIKE</h2>
+         </div>
+       </section>
     <!--Footer-->
     {% include 'footer.html' %}
 </body>
