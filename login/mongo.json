@@ -1,0 +1,20 @@
+{
+    "read_only": [
+        {
+            "username" : "read_only",
+            "password" : "XUb7i8IPuDNUaBWY"
+        }
+    ],
+    "read_write" : [
+        {
+            "username" : "read_write",
+            "password" : "5U65i3fEXTYbVeuu"
+        }
+    ],
+    "admin" : [
+        {
+            "username" : "admin",
+            "password" : "cJC0q6sr6YWNGeve"
+        }
+    ]
+}

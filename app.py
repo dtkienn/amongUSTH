@@ -161,6 +161,7 @@ def callback():
         return redirect(url_for('index'))
 
     else:
+        logout_user()
         return redirect(url_for('loginfail'))
 
 # @app.route('/timeout')
