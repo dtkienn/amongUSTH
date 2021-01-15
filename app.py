@@ -2,6 +2,8 @@ import json
 import os
 from re import template
 import sqlite3
+from datetime import timedelta
+
 
 # Third party libraries
 from flask import Flask, render_template, redirect, request, url_for
@@ -18,7 +20,9 @@ import requests
 # Internal imports
 import login.Db as logDb
 import login.User as logUsr
-
+from login.mongo import User as mongoUsr
+from flask_bcrypt import Bcrypt
+from forms.forms import Password
 # Configuration
 GOOGLE_CLIENT_ID='754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET='7TMNNst1I5ueVjacoQDa1sJg'
@@ -33,7 +37,8 @@ app.secret_key = os.urandom(24)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
+login_manager.login_view = "login"
+bcrypt = Bcrypt(app)
 
 @login_manager.unauthorized_handler
 def unauthorized():
@@ -56,25 +61,49 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 def load_user(user_id):
     return logUsr.user.get(user_id)
 
-
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
-        name = user.getName()
-        email = user.getEmail()
-        profile_pic = user.getprofile_pic()
+        form = Password()
+        id_ = user.get_id()
+        name = mongoUsr.get_name(id_)
+        email = mongoUsr.get_email(id_)
+        profile_pic = mongoUsr.get_profile_pic(id_)
+        # pswd = generate_password()
 
-        # return render_template("myprofile.html", name = name, email=email)
         print("Logged in")
-        return render_template('profile.html', name = name, email = email, picture = profile_pic, display_navbar="inline")
+        return render_template('profile.html', name = name, email = email, picture = profile_pic, display_navbar="inline",form=form)#, pssd = pswd)
+
     else:
-        print("logging")
+        print("Not logged in")
         return render_template("login.html", text = "Login", display_noti="none", display_navbar= "none", name= "SIGN UP NOW!")
 
 
-@app.route("/login")
+def generate_password():
+    form = Password()
+    hashed_password = str(bcrypt.generate_password_hash("123456").decode('utf-8'))[:8]
+    id_ = user.get_id()
+    email = mongoUsr.get_email(id_)
+    username = email.split(".")[1].split("@")[0]
+    profile_pic = mongoUsr.get_profile_pic(id_)
+    mongoUsr.add_login_info(id_, username, hashed_password)
+
+    print(hashed_password)
+from flask_login import login_user
+@app.route("/login", methods = ['GET', 'POST'])
 def login():
     #Find out what URL to hit for Google login
+    if request.method=="POST" :
+        username = request.form["username"]
+        password = request.form["password"]
+        user = mongoUsr.login(username, password)
+        if user:
+            @login_manager.user_loader  
+            login_user(user)
+            return redirect(url_for("index"))
+        else:
+            print("login failed")
+
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
@@ -86,6 +115,7 @@ def login():
         scope=["openid", "email", "profile"],
     )
     return redirect(request_uri)
+            
 
 
 @app.route("/login/callback")
@@ -129,8 +159,6 @@ def callback():
 
     # Create a user in our db with the information provided
     # by Google
-    
-    from db import user as udb
 
     global user
     user = logUsr.user(
@@ -139,15 +167,29 @@ def callback():
     # Doesn't exist? Add to database
     if not user.get(unique_id):
         user.create(unique_id, users_name, users_email, picture)
+
     
     if "@st.usth.edu.vn" in users_email:
-        udb.login(users_name, users_email)
         # Begin user session by logging the user in
         login_user(user)
-        return redirect(url_for('index'))
+
+        # Create session timeout
+        time = timedelta(minutes=60)
+        app.permanent_session_lifetime = time # User will automagically kicked from session after 'time'        
+        
+        # Add user information to Online database
+        id_ = user.get_id()
+        name = user.getName()
+        email = user.getEmail()
+        profile_pic = user.getprofile_pic()
+        mongoUsr.register(id_,name,email,profile_pic)
+
+        generate_password()
+        return redirect(url_for('index'))       
+    
     else:
         return redirect(url_for('loginfail'))
-        
+          
 @app.route('/loginfail')
 def loginfail():
     return render_template('login.html', text = "LOGIN FAILED :(",display_navbar="none", display_noti= "block", loginNotiText="Login failed! The email address that you used is not a valid USTH Email")
@@ -156,7 +198,7 @@ def loginfail():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("homepage"))
     
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
@@ -168,6 +210,7 @@ def homepage():
         profile_pic = user.getprofile_pic()
         name = user.getName()
         return render_template("homepage.html", display_navbar="inline", picture = profile_pic, name = name)
+
     else:
         return render_template("homepage.html", display_navbar="none", name = 'SIGN UP NOW!')
 
@@ -176,11 +219,15 @@ def homepage():
 def browse():
     if current_user.is_authenticated:
         name = user.getName()
-        email = user.getEmail()
         profile_pic = user.getprofile_pic()
+
         return render_template("browse.html", display_navbar="inline", name=name, picture = profile_pic)
     else:
         return render_template('login.html', text = "You need to login!")
+
+@app.route('/admin')
+def admin():
+    return render_template("admin.html", display_navbar="none", name="ADMIN")
 
 if __name__ == '__main__':
    app.run(debug=True, ssl_context="adhoc")
