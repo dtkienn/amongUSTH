@@ -1,8 +1,13 @@
 import pymongo
 from login.User import user as usr
 from flask_login import UserMixin
+import json
 
-client = pymongo.MongoClient("mongodb+srv://Sm00thiee:123@cluster0.3ihx5.mongodb.net/?retryWrites=true&w=majority")
+dat = json.load(open('login\mongo.json'))
+data = dat
+username = data['read_write'][0]['username']
+password = data['read_write'][0]['password']
+client = pymongo.MongoClient("mongodb+srv://" + username + ":" + password + "@cluster0.3ihx5.mongodb.net/?retryWrites=true&w=majority")
 
 # Create database for User
 user = client['User']
