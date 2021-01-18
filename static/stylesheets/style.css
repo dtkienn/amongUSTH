@@ -126,7 +126,9 @@ nav div a:hover {
   color: #fff;
   text-decoration: none;
 }
-
+.main-feature{
+  margin: auto;
+}
 @media (max-width: 786px) {
   .logo {
     position: fixed;
@@ -175,7 +177,8 @@ nav div a:hover {
   padding: 2.5rem;
   box-sizing: border-box;
   /*background: rgba(0, 0, 0, 0.6);*/
-  background: rgba(253, 246, 246, 0.815);
+  /* background: rgba(253, 246, 246, 0.815); */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0,0,0, 0.1) );
   border-radius: 0.625rem;
 }
 .upload-btn {
@@ -229,10 +232,13 @@ nav div a:hover {
   font-size: 17px;
   transition: 1s;
   text-align-last: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
 }
-.filter-select:focus {
+.filter-select:focus, .filter-select:hover {
   width: 40%;
   background-color: #f5f5f5;
+  color: black;
 }
 .search-btn {
   height: 50px;
@@ -268,8 +274,13 @@ nav div a:hover {
   background-color: #0b7dda;
 }
 .profile-picture {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+}
+.book-link{
+  width: 40px;
+  height: 40px;
 }
 .search-filter {
   width: 20%;
@@ -307,6 +318,7 @@ nav div a:hover {
   font-size: 28px;
   font-weight: bold;
 }
+
 .box,
 .login-box {
   position: absolute;
@@ -316,8 +328,8 @@ nav div a:hover {
   width: 25rem;
   padding: 2.5rem;
   box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.6);
   border-radius: 0.625rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0,0,0, 0.1) );
   text-align: center;
 }
 .profile-box {
@@ -328,7 +340,7 @@ nav div a:hover {
   width: 25rem;
   padding: 2.5rem;
   box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.6);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0,0,0, 0.1) );
   border-radius: 0.625rem;
   text-align: center;
 }
@@ -350,9 +362,9 @@ nav div a:hover {
   width: 25rem;
   padding: 1.5rem;
   box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.6);
   border-radius: 0.625rem;
   text-align: center;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0,0,0, 0.1) );
 }
 .upload-box h5 {
   margin: 0 0 1.875rem;
@@ -632,6 +644,52 @@ footer .follow {
     opacity: 1;
   }
 }
+.warning-small{
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color:rgb(0, 0, 0);
+  text-align: center;
+}
+.warning-small-container{
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  width: 100%;
+  height: 50%;
+}
+.warning-text{
+  font-size: 2.7vw;
+  color: white;
+  margin: auto;
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+}
+.warning-solution{
+  display: flex;
+  color: white;
+  padding-left: 24%;
+  text-align: center;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+}
+.warning-solution li{
+  font-size: 2.3vw;
+  list-style: none;
+}
+@media only screen and (orientation: portrait){
+  .warning-small{
+    display: block !important;
+  }
+}
 .change-password-modal {
   display: none;
   position: fixed; /* Stay in place */
@@ -682,7 +740,8 @@ footer .follow {
 .carousel-caption {
   color: black;
   background-color: white;
-  width: inherit;
+  width: 239px;
+  overflow: hidden;
   float: left;
   left: 0px;
 }
@@ -891,7 +950,7 @@ nav a:active {
 .comment{
   box-sizing: border-box;
   width: inherit;
-  height: 20%;
+  height: 15%;
   margin: auto;
   text-align: left;
   border:#000 1px solid;
@@ -932,14 +991,61 @@ nav a:active {
   overflow: auto;
   padding-bottom: 20px;
 }
-@media only screen and (min-width: 1200px) {
-  nav {
-    background-color: black;
+@media screen and (max-width: 1200px) {
+.current-password-label,
+.new-password-label {
+  border: white 0.5px solid;
+  border-bottom: black 0.5px solid;
+  background: #888;
+  float: left;
+  width: 50%;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  word-wrap: break-word;
+  font-size: 12px;
+  margin: auto;
+  overflow: hidden;
+}
+.change-password-modal-content {
+  padding: 20px;
+  border: 1px solid #888;
+  width: 100%;
+  text-align: center;
+  font-size: 25px;
+  padding: 2.5rem;
+  -webkit-animation-name: fadein;
+  -webkit-animation-duration: 1.5s;
+}
+.change-password-modal-content input{
+  width: 50%;
+}
+}
+@media only screen and (max-height: 600px) {
+  .comment{
+    height: 20%;
   }
 }
-@media only screen and (max-width: 600px) {
-  nav li{
-    width: 10%;
+@media only screen and (max-width: 1200px){
+  .bottom_container {
+    display: inline-block;
+  }  
+  .comment_section{
+    width: 100%;
+  }
+  .recommend_section{
+    width: 100%;
+  }
+  .bottom-container-title{
+    display: block;
+  }
+  .review-title{
+    width: 100%;
+    padding-left: 35%;
+    padding-top: 10%;
+  }
+  .recommend-title{
+    display: none;
   }
 }
 .scroll{
@@ -948,6 +1054,7 @@ nav a:active {
 .bottom-container-title{
   display: flex;
   width: 100%;
+  padding-top: 10%;
 }
 .bottom-container-title .review-title{
   float: left;
