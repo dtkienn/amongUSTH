@@ -15,11 +15,7 @@ u_stu = user['Student']
 u_lec = user['Lecturer']
 
 
-class User_mongo(UserMixin):
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
-
+class User():
     def register(id_, name, email, profile_pic):
         if u_info.find_one({'Email' : email}):
             print('Existed!')
@@ -28,6 +24,11 @@ class User_mongo(UserMixin):
             mdict = {'UID' : id_, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
             u_info.insert_one(mdict)
             print('Created new user!')
+
+    def is_registerd(id_):
+        if u_login.find_one({'UID' : id_}):
+            return True
+        return False
 
     def is_student(email):
         if ".bi" in email or '.ba' in email:
@@ -46,8 +47,8 @@ class User_mongo(UserMixin):
         mdict = u_login.find_one({'UserName' : username}, {'UserName' :1,'Password' :1})
         print("///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"+str(mdict)+"/////////////////////////////////////////////////////////////////////////////////")
         if password == mdict["Password"]:
-            return User(username, password)
-        return None
+            return True
+        return False
 
     def add_info_lec(id_, department):
         mdict = {'UID' : id_, 'Department' : department}
@@ -70,7 +71,7 @@ class User_mongo(UserMixin):
         return mdict['Email']
 
     def get_id(username):
-        mdict = u_login.find_one({'Username' : username})
+        mdict = u_login.find_one({'UserName' : username})
         return mdict['UID']
     
     def get_db(id_):
@@ -99,7 +100,7 @@ class User_mongo(UserMixin):
 #         return mdict['Email']
 
 #     def get_id(username):
-#         mdict = u_login.find_one({'Username' : username})
+#         mdict = u_login.find_one({'UserName' : username})
 #         return mdict['UID']        
                 
 #         
