@@ -1,10 +1,8 @@
 import pymongo
-from login.User import user as usr
 from flask_login import UserMixin
 import json
 
-dat = json.load(open('login\mongo.json'))
-data = dat
+data = json.load(open('login\mongo.json'))
 username = data['read_write'][0]['username']
 password = data['read_write'][0]['password']
 client = pymongo.MongoClient("mongodb+srv://" + username + ":" + password + "@cluster0.3ihx5.mongodb.net/?retryWrites=true&w=majority")
@@ -17,7 +15,7 @@ u_stu = user['Student']
 u_lec = user['Lecturer']
 
 
-class User(UserMixin):
+class User_mongo(UserMixin):
     def __init__(self, username, password):
         self.username = username
         self.password = password
@@ -29,6 +27,7 @@ class User(UserMixin):
         else: 
             mdict = {'UID' : id_, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
             u_info.insert_one(mdict)
+            print('Created new user!')
 
     def is_student(email):
         if ".bi" in email or '.ba' in email:
@@ -42,19 +41,6 @@ class User(UserMixin):
         mdict = {'UID' : id_, 'USTH_ID' : usth_id, 'Major': major, 'SchoolYear' : schoolYear}
         u_stu.insert_one(mdict)
 
-    @staticmethod
-    def get(user_id):
-        db = get_db()
-        usr = db.execute(
-            "SELECT * FROM user WHERE id = ?", (user_id,)
-        ).fetchone()
-        if not usr:
-            return None
-
-        usr = user(
-            id_=usr[0], name=usr[1], email=usr[2]#, profile_pic=user[3]
-        )
-        return usr
 
     def login(username,password):
         mdict = u_login.find_one({'UserName' : username}, {'UserName' :1,'Password' :1})
@@ -86,6 +72,10 @@ class User(UserMixin):
     def get_id(username):
         mdict = u_login.find_one({'Username' : username})
         return mdict['UID']
+    
+    def get_db(id_):
+        mdict = u_info.find_one({'UID' : id_})
+        return mdict
 
 # class Login_info:
 #     def login_info_register(id_, username, email, password, profile_pic):

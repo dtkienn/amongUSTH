@@ -18,9 +18,8 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
-import login.Db as logDb
 import login.User as logUsr
-from login.mongo import User as mongoUsr
+from login.mongo import User_mongo as mongoUsr
 from flask_bcrypt import Bcrypt
 from forms.forms import Password
 # Configuration
@@ -45,12 +44,6 @@ def unauthorized():
     return render_template("login.html", display_navbar="none")
 
 
-# Naive database setup
-try:
-    logDb.init_db_command()
-except sqlite3.OperationalError:
-    # Assume it's already been created
-    pass
 
 # OAuth2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
@@ -91,7 +84,7 @@ def generate_password():
     mongoUsr.add_login_info(id_, username, hashed_password)
 
     print(hashed_password)
-from flask_login import login_user
+
 @app.route("/login", methods = ['GET', 'POST'])
 def login():
     #Find out what URL to hit for Google login
@@ -99,8 +92,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         user = mongoUsr.login(username, password)
-        if user:
-            @login_manager.user_loader  
+        if user:  
             login_user(user)
             return redirect(url_for("index"))
         else:
