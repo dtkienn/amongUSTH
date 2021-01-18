@@ -3,8 +3,8 @@ from flask_login import UserMixin
 import json
 
 data = json.load(open('login\mongo.json'))
-username = data['read_write'][0]['username']
-password = data['read_write'][0]['password']
+username = data['admin'][0]['username']
+password = data['admin'][0]['password']
 client = pymongo.MongoClient("mongodb+srv://" + username + ":" + password + "@cluster0.3ihx5.mongodb.net/?retryWrites=true&w=majority")
 
 # Create database for User
@@ -38,9 +38,9 @@ class User():
             print('Leccc')
             return False
     
-    def add_info_stu(id_, usth_id, major, schoolYear):
-        mdict = {'UID' : id_, 'USTH_ID' : usth_id, 'Major': major, 'SchoolYear' : schoolYear}
-        u_stu.insert_one(mdict)
+    # def add_info_stu(id_, usth_id, major, schoolYear):
+    #     mdict = {'UID' : id_, 'USTH_ID' : usth_id, 'Major': major, 'SchoolYear' : schoolYear}
+    #     u_stu.insert_one(mdict)
 
 
     def login(username,password):
@@ -77,6 +77,11 @@ class User():
     def get_db(id_):
         mdict = u_info.find_one({'UID' : id_})
         return mdict
+
+    def set_active(id_, status):
+        if status == 'Active':
+            return False
+        return False
 
 # class Login_info:
 #     def login_info_register(id_, username, email, password, profile_pic):

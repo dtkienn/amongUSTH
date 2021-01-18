@@ -58,19 +58,14 @@ def load_user(user_id):
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
-        try:
-            form = Password()
-            id_ = user.get_id()
-            name = mongoUsr.get_name(id_)
-            email = mongoUsr.get_email(id_)
-            profile_pic = mongoUsr.get_profile_pic(id_)
-            # pswd = generate_password()
-        except:
-            print("error!")
-
+        form = Password()
+        id_ = user.get_id()
+        name = mongoUsr.get_name(id_)
+        email = mongoUsr.get_email(id_)
+        profile_pic = mongoUsr.get_profile_pic(id_)
+        # pswd = generate_password()
         print("Logged in")
         return render_template('profile.html', name = name, email = email, picture = profile_pic, display_navbar="inline",form=form)#, pssd = pswd)
-
 
     else:
         print("Not logged in")
@@ -103,6 +98,10 @@ def login():
         )
         if user.verify():  
             login_user(user)
+            # Create session timeout
+            time = timedelta(minutes=60)
+            # User will automagically kicked from session after 'time'
+            app.permanent_session_lifetime = time
         else:
             print("login failed")
         return redirect(url_for("index"))
@@ -182,6 +181,8 @@ def callback():
         # Add user information to Online database
         id_ = user.get_id()
         name = user.getName()
+        # temp = name.split()
+        # name = temp[1] + ' ' + temp[2] + ' ' + temp[0]
         email = user.getEmail()
         profile_pic = user.getprofile_pic()
         mongoUsr.register(id_, name, email, profile_pic)
