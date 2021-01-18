@@ -21,7 +21,8 @@ import requests
 import login.Db as logDb
 import login.User as logUsr
 from login.mongo import User as mongoUsr
-
+from flask_bcrypt import Bcrypt
+from forms.forms import Password
 # Configuration
 GOOGLE_CLIENT_ID = '754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = '7TMNNst1I5ueVjacoQDa1sJg'
@@ -36,7 +37,8 @@ app.secret_key = os.urandom(24)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
+login_manager.login_view = "login"
+bcrypt = Bcrypt(app)
 
 @login_manager.unauthorized_handler
 def unauthorized():
@@ -63,22 +65,47 @@ def load_user(user_id):
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
+        form = Password()
         id_ = user.get_id()
         name = mongoUsr.get_name(id_)
         email = mongoUsr.get_email(id_)
         profile_pic = mongoUsr.get_profile_pic(id_)
+        # pswd = generate_password()
 
         print("Logged in")
-        return render_template('profile.html', name=name, email=email, picture=profile_pic, display_navbar="inline")
+        return render_template('profile.html', name = name, email = email, picture = profile_pic, display_navbar="inline",form=form)#, pssd = pswd)
+
 
     else:
         print("Not logged in")
         return render_template("login.html", text="Login", display_noti="none", display_navbar="none", name="SIGN UP NOW!")
 
 
-@app.route("/login", methods=['GET', 'POST'])
+def generate_password():
+    form = Password()
+    hashed_password = str(bcrypt.generate_password_hash("123456").decode('utf-8'))[:8]
+    id_ = user.get_id()
+    email = mongoUsr.get_email(id_)
+    username = email.split(".")[1].split("@")[0]
+    profile_pic = mongoUsr.get_profile_pic(id_)
+    mongoUsr.add_login_info(id_, username, hashed_password)
+
+    print(hashed_password)
+from flask_login import login_user
+@app.route("/login", methods = ['GET', 'POST'])
 def login():
-    # Find out what URL to hit for Google login
+    #Find out what URL to hit for Google login
+    if request.method=="POST" :
+        username = request.form["username"]
+        password = request.form["password"]
+        user = mongoUsr.login(username, password)
+        if user:
+            @login_manager.user_loader  
+            login_user(user)
+            return redirect(url_for("index"))
+        else:
+            print("login failed")
+
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
@@ -158,15 +185,12 @@ def callback():
         profile_pic = user.getprofile_pic()
         mongoUsr.register(id_, name, email, profile_pic)
 
-        return redirect(url_for('index'))
+        generate_password()
+        return redirect(url_for('index'))       
 
     else:
+        logout_user()
         return redirect(url_for('loginfail'))
-
-# @app.route('/timeout')
-# def timeout():
-#    return render_template('login.html', display_navbar="none", display_noti= "block", loginNotiText="Session timed out, please login again")
-
 
 @app.route('/loginfail')
 def loginfail():
