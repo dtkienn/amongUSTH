@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     {% include 'head.html' %}
@@ -9,16 +9,20 @@
     }
 </style>
 <body>
+
     {% include 'navbar.html' %}
     {% include 'warning.html' %}
     <div class="profile-box" id="profile-box">
-        <h2><img class="profile-picture" src="{{picture}}" alt=""></h2>
-        <h2>{{name}}</h2>
-        <h3>You logged in with email: {{email}}</h3>
-        <h3>Your username: <span>{{username}}  </span><a href="">Change</a></h3>
-        <h3 id="user-password">Your password: <span>*******</span><span><a href="#change-password-modal">Change</a></span></h3>
-        <a href="/browse" style="color: #2251ff">Click here to browse things</a>
-        <h4><a href="/logout" style="color: #2251ff">Logout</a></h4>
+      <h2><img class="profile-picture" src="{{picture}}" alt="" /></h2>
+      <h2>{{name}}</h2>
+      <h3 id="email_get">You logged in with email: {{email}}</h3>
+      <h3>Your username: <span>{{username}} </span><a href="">Change</a></h3>
+      <h3 id="user-password">
+        Your password: <span>*******</span
+        ><span><a href="#change-password-modal">Change</a></span>
+      </h3>
+      <a href="/browse" style="color: #2251ff">Click here to browse things</a>
+      <h4><a href="/logout" style="color: #2251ff">Logout</a></h4>
     </div>
 
     <div class="change-password-modal" id="change-password-modal">
@@ -44,5 +48,46 @@
     </div>
     <section class="glass"></section>
     {% include 'footer.html' %}
-</body>
+
+    <script src="js/myjs.js"></script>
+    <script type="text/javascript">
+      const form = document.getElementById("change-password-modal");
+      form.addEventListener("submit", registerUser);
+      async function registerUser(event) {
+        event.preventDefault();
+
+        const email = "{{ email }}";
+        const current_p = document.getElementById("current_p").value;
+        const password = document.getElementById("password").value;
+        const re_password = document.getElementById("re_password").value;
+        // const result = await fetch("/api/register", {
+        //   method: "POST",
+        //   headers: {
+        //     "Conetent-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+        //     user_email,
+        //     current_p,
+        //     password,
+        //     re_password,
+        //   }),
+        // }).then((res) => {
+        //   console.log(res.json());
+        // });
+        var result_json =  JSON.stringify({
+            Email: email,
+            "Current Password": current_p,
+            "New Password": password,
+            "Retype New Password": re_password,
+          });
+        localStorage.setItem('myjson',result_json);
+        var check = JSON.parse(localStorage.getItem('myjson'));
+        console.log(
+         check
+        );
+      }
+
+      registerUser();
+    </script>
+  </body>
 </html>

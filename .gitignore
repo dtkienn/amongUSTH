@@ -66,3 +66,7 @@ sqlite_db
 
 test.py
 *.pyc
+
+# Test files
+static/stylesheets/*.map
+static/stylesheets/*.scss
