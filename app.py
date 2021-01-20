@@ -67,9 +67,9 @@ def index():
         name = mongoUsr.get_name(id_)
         email = mongoUsr.get_email(id_)
         profile_pic = mongoUsr.get_profile_pic(id_)
-
+        first_Name = name.split(' ', 1)[0]
         print("Logged in")
-        return render_template('profile.html', name=name, email=email, picture=profile_pic, display_navbar="inline")
+        return render_template('profile.html', name=first_Name, email=email, picture=profile_pic, display_navbar="inline")
 
     else:
         print("Not logged in")
@@ -191,7 +191,8 @@ def homepage():
     if current_user.is_authenticated:
         profile_pic = user.getprofile_pic()
         name = user.getName()
-        return render_template("homepage.html", display_navbar="inline", picture=profile_pic, name=name)
+        first_Name = name.split(' ', 1)[0]
+        return render_template("homepage.html", display_navbar="inline", picture=profile_pic, name=first_Name)
 
     else:
         return render_template("homepage.html", display_navbar="none", name='SIGN UP NOW!')
@@ -202,8 +203,9 @@ def browse():
     if current_user.is_authenticated:
         name = user.getName()
         profile_pic = user.getprofile_pic()
+        first_Name = name.split(' ', 1)[0]
 
-        return render_template("browse.html", display_navbar="inline", name=name, picture=profile_pic)
+        return render_template("browse.html", display_navbar="inline", name=first_Name, picture=profile_pic)
     else:
         return render_template('login.html', text="You need to login!")
 
@@ -218,8 +220,9 @@ def content():
     if current_user.is_authenticated:
         name = user.getName()
         profile_pic = user.getprofile_pic()
+        first_Name = name.split(' ', 1)[0]
 
-        return render_template("content.html", display_navbar="inline", name=name, picture=profile_pic)
+        return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic)
     else:
         return render_template('login.html', text="You need to login!")
 

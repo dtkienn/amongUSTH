@@ -1,33 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
-    <link
-      href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-      rel="stylesheet"
-      id="bootstrap-css"/>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <meta charset="UTF-8" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=BioRhyme&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&display=swap"
-      rel="stylesheet"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>AmongUSTH - Web sharing site for USTH students</title>
-    <link rel="stylesheet" href="static/stylesheets/style.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="js/myjs.js"></script>
-    </head>
+    {% include 'head.html' %}
+  </head>
   <body>
     {% include 'navbar.html' %}
+    {% include 'warning.html' %}
     <div class="homepage-first-container">
       <div class="homepage-first-container-child-left">
         <ul>
@@ -75,7 +53,7 @@
   <!-- new feature layout -->
 <div class="container-fluid ">
   <div class="row">
-    <div class="col-lg-6 left">
+    <div class="main-feature">
       <h1>Main Features</h1>
       <ul class="list-unstyled">
         <li>A platform on-the-go! Go AmongUSTH 24/7!</li>
@@ -90,15 +68,7 @@
         </li>
       </ul>
     </div>
-      <div class="col-lg-6 right">
-        <img
-          style="vertical-align: right"
-          class="iphone-pic"
-          src="https://lh3.googleusercontent.com/proxy/NbK-An9eyWE0YMbmOGt9tnJtVGltqPSB5MA7p94-ti6V1IciO4p0t30-8IWWlOntNTajTfGij7A_Yjj8Bw1rx1QUEBv6n_KluxNcIAvlMsdvXH-GZi7E"
-          alt=""
-          />
-        </div>
-      </div>
+    </div>
     </div>
     <!-- Footer -->
     {% include 'footer.html' %}
