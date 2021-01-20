@@ -21,8 +21,9 @@ import requests
 import login.Db as logDb
 import login.User as logUsr
 from login.mongo import User as mongoUsr
+from login.mongo import Book as mongoBook
 from flask_bcrypt import Bcrypt
-from forms.forms import Password
+from forms.forms import Password,BookPost
 # Configuration
 GOOGLE_CLIENT_ID = '754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = '7TMNNst1I5ueVjacoQDa1sJg'
@@ -98,8 +99,8 @@ def login():
         password = request.form["password"]
         user = mongoUsr.login(username, password)
         if user:
-            @login_manager.user_loader  
-            login_user(user)
+            # @login_manager.user_loader  
+            # login_user(user)
             return redirect(url_for("index"))
         else:
             print("login failed")
@@ -247,6 +248,18 @@ def content():
     else:
         return render_template('login.html', text="You need to login!")
 
+@app.route('/book',methods=['GET','POST'])
+def new_book():
+    form = BookPost()
+    if form.validate_on_submit():
+        # book = Book(file_name=form.file_name.data,description=form.description.data,
+        #     file=form.file.data,author=current_user)
+        try:
+           mongoBook.post_book(form.file_name.data,form.file.data,form.description.data)
+        except:
+           print("insert failed")
+        return render_template('homepage.html',title='Created Post')
+    return render_template('homepage.html',title='BookPost',form=form)
 
 if __name__ == '__main__':
     app.run(debug=True, ssl_context="adhoc")

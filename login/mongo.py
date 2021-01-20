@@ -15,7 +15,9 @@ u_info = user['User_info']
 u_login = user['Login_info']
 u_stu = user['Student']
 u_lec = user['Lecturer']
-
+book_db = client['Book']
+book  = book_db['Book_data']
+interaction = client['Interact']
 
 class User(UserMixin):
     def __init__(self, username, password):
@@ -87,29 +89,32 @@ class User(UserMixin):
         mdict = u_login.find_one({'Username' : username})
         return mdict['UID']
 
-# class Login_info:
-#     def login_info_register(id_, username, email, password, profile_pic):
-#         if u_login.find_one({'Email' : email}):
-#             print('Existed')
-#             pass
-#         else:
-#             mdict = {'UID' : id_, 'UserName' : name, 'Email' : email, 'Password' : password, 'Profile_pic' : profile_pic}
-#             u_login.insert_one(mdict)
+class Book():
+    def __init__(self, file_name, description):
+        self.file_name = file_name
+        self.description = description
 
-#     def get_profile_pic(id_):
-#         mdict = u_login.find_one({'UID' : id_}, {'Profile_pic' : 1, '_id' : 0})
-#         return mdict['Profile_pic']
+    def post_book(id_, file_name, file, description):
+        if book.find_one({'filename' : file_name}):
+            print('Existed')
+            pass
+        else:
+            mdict = {'_id' : id_, 'filename' : file_name, 'file' : file, 'description' : description}
+            try:
+                book.insert_one(mdict)
+            except:
+                print("Insert failed")
 
-#     def get_name(id_):
-#         mdict = u_login.find_one({'UID' : id_}, {'Fullname' : 1, '_id' : 0})
-#         return mdict['Fullname']
+    def get_file_name(id_):
+        mdict = book.find_one({'UID' : id_}, {'file_name' : 1, '_id' : 0})
+        return mdict['filename']
 
-#     def get_email(id_):
-#         mdict = u_login.find_one({'UID' : id_}, {'Email' : 1, '_id' : 0})
-#         return mdict['Email']
+    def get_file(id_):
+        mdict = u_login.find_one({'UID' : id_}, {'file' : 1, '_id' : 0})
+        return mdict['file']
 
-#     def get_id(username):
-#         mdict = u_login.find_one({'Username' : username})
-#         return mdict['UID']        
+    def get_description(id_):
+        mdict = u_login.find_one({'UID' : id_}, {'description' : 1, '_id' : 0})
+        return mdict['description'] 
                 
-#         
+        
