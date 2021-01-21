@@ -18,7 +18,6 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
-import login.Db as logDb
 import login.User as logUsr
 from login.mongo import User as mongoUsr
 from flask_bcrypt import Bcrypt
@@ -45,12 +44,6 @@ def unauthorized():
     return render_template("login.html", display_navbar="none")
 
 
-# Naive database setup
-try:
-    logDb.init_db_command()
-except sqlite3.OperationalError:
-    # Assume it's already been created
-    pass
 
 # OAuth2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
@@ -59,7 +52,7 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
-    return logUsr.user.get(user_id)
+    return logUsr.user_info.get(user_id)
 
 
 @app.route("/index")
@@ -80,41 +73,50 @@ def index():
 
 
 def generate_password():
-    form = Password()
-    hashed_password = str(bcrypt.generate_password_hash("123456").decode('utf-8'))[:8]
     id_ = user.get_id()
-    email = mongoUsr.get_email(id_)
-    username = email.split(".")[1].split("@")[0]
-    profile_pic = mongoUsr.get_profile_pic(id_)
-    mongoUsr.add_login_info(id_, username, hashed_password)
+    if mongoUsr.is_registerd(id_):
+        pass
+    else:
+        form = Password()
+        hashed_password = str(bcrypt.generate_password_hash("123456").decode('utf-8'))[:8]
+        email = mongoUsr.get_email(id_)        
+        username = email.split(".")[1].split("@")[0]
+        mongoUsr.add_login_info(id_, username, hashed_password)
+        print(username)
+        print(hashed_password)
 
-    print(hashed_password)
-from flask_login import login_user
 @app.route("/login", methods = ['GET', 'POST'])
 def login():
     #Find out what URL to hit for Google login
     if request.method=="POST" :
         username = request.form["username"]
         password = request.form["password"]
-        user = mongoUsr.login(username, password)
-        if user:
-            @login_manager.user_loader  
+        id_ = mongoUsr.get_id(username)
+        global user
+        user = logUsr.user_login(
+            id_ = id_, username = username, password = password
+        )
+        if user.verify():  
             login_user(user)
-            return redirect(url_for("index"))
+            # Create session timeout
+            time = timedelta(minutes=60)
+            # User will automagically kicked from session after 'time'
+            app.permanent_session_lifetime = time
         else:
             print("login failed")
+        return redirect(url_for("index"))
+    elif request.method == 'GET' :
+        google_provider_cfg = get_google_provider_cfg()
+        authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
-    google_provider_cfg = get_google_provider_cfg()
-    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
-
-    # Use library to construct the request for login and provide
-    # scopes that let you retrieve user's profile from Google
-    request_uri = client.prepare_request_uri(
-        authorization_endpoint,
-        redirect_uri=request.base_url + "/callback",
-        scope=["openid", "email", "profile"],
-    )
-    return redirect(request_uri)
+        # Use library to construct the request for login and provide
+        # scopes that let you retrieve user's profile from Google
+        request_uri = client.prepare_request_uri(
+            authorization_endpoint,
+            redirect_uri=request.base_url + "/callback",
+            scope=["openid", "email", "profile"],
+        )
+        return redirect(request_uri)
 
 
 @app.route("/login/callback")
@@ -160,7 +162,7 @@ def callback():
     # by Google
 
     global user
-    user = logUsr.user(
+    user = logUsr.user_info(
         id_=unique_id, name=users_name, email=users_email, profile_pic=picture
     )
     # Doesn't exist? Add to database
@@ -179,6 +181,8 @@ def callback():
         # Add user information to Online database
         id_ = user.get_id()
         name = user.getName()
+        # temp = name.split()
+        # name = temp[1] + ' ' + temp[2] + ' ' + temp[0]
         email = user.getEmail()
         profile_pic = user.getprofile_pic()
         mongoUsr.register(id_, name, email, profile_pic)
