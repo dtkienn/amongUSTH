@@ -21,7 +21,9 @@ import requests
 import login.Db as logDb
 import login.User as logUsr
 from login.mongo import User as mongoUsr
-
+from login.mongo import Book as mongoBook
+from flask_bcrypt import Bcrypt
+from forms.forms import Password,BookPost
 # Configuration
 GOOGLE_CLIENT_ID = '754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = '7TMNNst1I5ueVjacoQDa1sJg'
@@ -36,7 +38,8 @@ app.secret_key = os.urandom(24)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
+login_manager.login_view = "login"
+bcrypt = Bcrypt(app)
 
 @login_manager.unauthorized_handler
 def unauthorized():
@@ -63,22 +66,45 @@ def load_user(user_id):
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
+        form = Password()
         id_ = user.get_id()
         name = mongoUsr.get_name(id_)
         email = mongoUsr.get_email(id_)
         profile_pic = mongoUsr.get_profile_pic(id_)
-
+        first_Name = name.split(' ', 1)[0]
         print("Logged in")
-        return render_template('profile.html', name=name, email=email, picture=profile_pic, display_navbar="inline")
+        return render_template('profile.html', name=first_Name, email=email, picture=profile_pic, display_navbar="inline")
 
     else:
         print("Not logged in")
         return render_template("login.html", text="Login", display_noti="none", display_navbar="none", name="SIGN UP NOW!")
 
 
-@app.route("/login", methods=['GET', 'POST'])
+def generate_password():
+    form = Password()
+    hashed_password = str(bcrypt.generate_password_hash("123456").decode('utf-8'))[:8]
+    id_ = user.get_id()
+    email = mongoUsr.get_email(id_)
+    username = email.split(".")[1].split("@")[0]
+    profile_pic = mongoUsr.get_profile_pic(id_)
+    mongoUsr.add_login_info(id_, username, hashed_password)
+
+    print(hashed_password)
+from flask_login import login_user
+@app.route("/login", methods = ['GET', 'POST'])
 def login():
-    # Find out what URL to hit for Google login
+    #Find out what URL to hit for Google login
+    if request.method=="POST" :
+        username = request.form["username"]
+        password = request.form["password"]
+        user = mongoUsr.login(username, password)
+        if user:
+            # @login_manager.user_loader  
+            # login_user(user)
+            return redirect(url_for("index"))
+        else:
+            print("login failed")
+
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
@@ -158,16 +184,12 @@ def callback():
         profile_pic = user.getprofile_pic()
         mongoUsr.register(id_, name, email, profile_pic)
 
-        return redirect(url_for('index'))
+        generate_password()
+        return redirect(url_for('index'))       
 
     else:
         logout_user()
         return redirect(url_for('loginfail'))
-
-# @app.route('/timeout')
-# def timeout():
-#    return render_template('login.html', display_navbar="none", display_noti= "block", loginNotiText="Session timed out, please login again")
-
 
 @app.route('/loginfail')
 def loginfail():
@@ -191,7 +213,8 @@ def homepage():
     if current_user.is_authenticated:
         profile_pic = user.getprofile_pic()
         name = user.getName()
-        return render_template("homepage.html", display_navbar="inline", picture=profile_pic, name=name)
+        first_Name = name.split(' ', 1)[0]
+        return render_template("homepage.html", display_navbar="inline", picture=profile_pic, name=first_Name)
 
     else:
         return render_template("homepage.html", display_navbar="none", name='SIGN UP NOW!')
@@ -202,8 +225,9 @@ def browse():
     if current_user.is_authenticated:
         name = user.getName()
         profile_pic = user.getprofile_pic()
+        first_Name = name.split(' ', 1)[0]
 
-        return render_template("browse.html", display_navbar="inline", name=name, picture=profile_pic)
+        return render_template("browse.html", display_navbar="inline", name=first_Name, picture=profile_pic)
     else:
         return render_template('login.html', text="You need to login!")
 
@@ -218,11 +242,24 @@ def content():
     if current_user.is_authenticated:
         name = user.getName()
         profile_pic = user.getprofile_pic()
+        first_Name = name.split(' ', 1)[0]
 
-        return render_template("content.html", display_navbar="inline", name=name, picture=profile_pic)
+        return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic)
     else:
         return render_template('login.html', text="You need to login!")
 
+@app.route('/book',methods=['GET','POST'])
+def new_book():
+    form = BookPost()
+    if form.validate_on_submit():
+        # book = Book(file_name=form.file_name.data,description=form.description.data,
+        #     file=form.file.data,author=current_user)
+        try:
+           mongoBook.post_book("form.file_name.data","form.file.data","form.description.data")
+        except:
+           print("insert failed")
+        return render_template('homepage.html',title='Created Post')
+    return render_template('homepage.html',title='BookPost',form=form)
 
 if __name__ == '__main__':
     app.run(debug=True, ssl_context="adhoc")
