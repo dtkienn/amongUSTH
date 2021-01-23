@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from login.mongo import User as mongo
 
+
 class user_info(UserMixin):
     def __init__(self, id_, name, email, profile_pic):
         self.id = id_
@@ -20,16 +21,20 @@ class user_info(UserMixin):
 
     @staticmethod
     def create(id_, name, email, profile_pic):
-        mongo.add_info_stu(id_, name, email, profile_pic)
+        mongo.register(id_, name, email, profile_pic)
 
     def getName(self):
         return self.name
+
     def getEmail(self):
         return self.email
+
     def getprofile_pic(self):
         return self.profile_pic
+
     def getid(self):
         return self.id_
+
 
 class user_login(UserMixin):
     def __init__(self, id_, username, password):
@@ -48,10 +53,12 @@ class user_login(UserMixin):
 
     def getid(self):
         return self.id_
+
     def getName(self):
         return self.name
+
     def getEmail(self):
         return self.email
+
     def getprofile_pic(self):
         return self.profile_pic
-    
