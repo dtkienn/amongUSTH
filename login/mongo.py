@@ -1,6 +1,7 @@
 import pymongo
 from flask_login import UserMixin
 import json
+import re
 
 data = json.load(open('login\mongo.json'))
 username = data['admin'][0]['username']
@@ -16,9 +17,9 @@ u_lec = user['Lecturer']
 
 
 class User():
-    def register(id_,student_id, name, email, profile_pic):
+    def register(id_, name, email, profile_pic):
         student_id = email.split(".")[1].split("@")[0]
-        student_id.split(3)
+        student_id.split('3')
         if u_info.find_one({'Email' : email}):
             print('Existed!')
             pass
@@ -37,12 +38,9 @@ class User():
         u_info.update_one(item, {'$set': {'major' : major}})
 
     def is_USTHer(email):
-        if '@st.usth.edu.vn' in email:
-            return 'Student'
-        elif '@usth.edu.vn' in email:
-            return 'Lecturer'
-        else:
-            return False
+        if re.match(r"[a-zA-Z\-\.1-9]+[@][s]?[t]?.?usth.edu.vn", email):
+           return True
+        return False
 
     
     # def add_info_stu(id_, usth_id, major, schoolYear):
