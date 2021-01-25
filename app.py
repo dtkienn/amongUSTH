@@ -24,10 +24,12 @@ from flask_bcrypt import Bcrypt
 from forms.forms import Password
 # Configuration
 import json
+
 data = json.load(open('app_key.json'))
 client_key = data['google_login'][0]['client_key']
 client_secret = data['google_login'][0]['client_secret']
 discovery_url = data['google_login'][0]['discovery_url']
+
 GOOGLE_CLIENT_ID = client_key
 GOOGLE_CLIENT_SECRET = client_secret
 GOOGLE_DISCOVERY_URL = discovery_url
@@ -108,6 +110,7 @@ def login():
         else:
             print("login failed")
         return redirect(url_for("index"))
+        
     elif request.method == 'GET' :
         google_provider_cfg = get_google_provider_cfg()
         authorization_endpoint = google_provider_cfg["authorization_endpoint"]
@@ -159,7 +162,7 @@ def callback():
         users_email = userinfo_response.json()["email"]
         picture = userinfo_response.json()["picture"]
         users_name = userinfo_response.json()["name"]
-        if "@st.usth.edu.vn" in users_email or '@usth.edu.vn' in users_email:
+        if mongoUsr.is_USTHer:
             # Add user information to Online database
             global user            
             user = logUsr.user_info(
@@ -184,7 +187,7 @@ def callback():
             # User will automagically kicked from session after 'time'
             app.permanent_session_lifetime = time
             
-            return redirect(url_for('index'))     
+            return redirect(url_for('index'))   
         else:
             return redirect(url_for('loginfail'))
 
