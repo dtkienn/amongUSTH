@@ -20,7 +20,7 @@ class user_info(UserMixin):
 
     @staticmethod
     def create(id_, name, email, profile_pic):
-        mongo.add_info_stu(id_, name, email, profile_pic)
+        mongo.register(id_, name, email, profile_pic)
 
     def getName(self):
         return self.name
