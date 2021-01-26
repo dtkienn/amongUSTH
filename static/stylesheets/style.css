@@ -182,11 +182,7 @@ nav div a:hover {
   border-radius: 0.625rem;
 }
 .upload-btn {
-  position: absolute;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
+  width: 210px;
   box-sizing: border-box;
   background: black;
   color: white;
@@ -367,10 +363,14 @@ nav div a:hover {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0,0,0, 0.1) );
 }
 .upload-box h5 {
-  margin: 0 0 1.875rem;
   padding: 0;
   color: #fff;
   text-align: center;
+}
+.upload-box a{
+  text-decoration: underline;
+  color: blue;
+  font-size: 25px;
 }
 .upload-box input {
   margin-top: 20px;
@@ -414,6 +414,7 @@ nav div a:hover {
   color: black;
   cursor: pointer;
 }
+
 .box input[type="submit"] {
   border: none;
   outline: none;
@@ -1074,4 +1075,92 @@ nav a:active {
 .vote img{
   max-height: 20px;
 }
+.drag-box{
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25rem;
+  padding: 2.5rem;
+  box-sizing: border-box;
+  border-radius: 0.625rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0,0,0, 0.1) );
+  text-align: center;
+}
+.upload-body{
+  display: grid;
+  place-items: center;
+  height: 500px;
+  padding-top: 2%;
+}
+.upload-info{
+  box-sizing: border-box;
+  display: flex;
+  border-radius: 5px;
+  background-color: white;
+  /* transform: translate(-50%, -50%); */
+  width: 50%;
+  height: 80%;
+  padding: 2.5rem;
+}
+.upload-info-pic{
+  width: 80%;
+  float: left;
+  display: grid;
+  place-items: center;
+}
+.upload-info-pic img{
+  width: 60%;
+  height: 300px;
+  padding-bottom: 20px;
+  /* height: 30%; */
+}
+.upload-info-detail{
+  width: 20%;
+  float: left;
+  display: flex;
+  flex-direction: column;
+}
+.upload-body form{
+  width: inherit;
+  height: inherit;
+}
+.upload-input{
+  display: flex;
+  padding-top: 5%;
+  width: 100%;
+}
+.upload-label{
+  font-size: 25px;
+  width: 40%;
+  float: left;
+  padding-left: 10px;
+  padding-right: 200px;
+}
+.upload-submit{
+  display: flex;
+  padding-top: 15%;
+  width: 100%;
+}
+.upload-input input{
+  float: left;
+  border-radius: 10px;
+}
+.upload-submit button{
+  margin-left: 200px;
+  background-color: white;
+  color: black;
+  transition: 1s;
+}
+.upload-submit button:hover{
+  background-color: black;
+  color: white;
+}
+.upload-description{
+  height: 150px;
+  text-align: top;
+  word-wrap: break-word;
+}
+
+
 
