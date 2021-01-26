@@ -1,6 +1,7 @@
 import pymongo
 from flask_login import UserMixin
 import json
+import re
 
 data = json.load(open('login\mongo.json'))
 username = data['admin'][0]['username']
@@ -8,7 +9,7 @@ password = data['admin'][0]['password']
 client = pymongo.MongoClient("mongodb+srv://" + username + ":" + password + "@cluster0.3ihx5.mongodb.net/?retryWrites=true&w=majority")
 
 # Create database for User
-user = client['User']
+user = client['AmongUSTH']
 u_info = user['User_info']
 u_login = user['Login_info']
 u_stu = user['Student']
@@ -17,11 +18,13 @@ u_lec = user['Lecturer']
 
 class User():
     def register(id_, name, email, profile_pic):
+        student_id = email.split(".")[1].split("@")[0]
+        student_id.split('3')
         if u_info.find_one({'Email' : email}):
             print('Existed!')
             pass
         else: 
-            mdict = {'UID' : id_, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
+            mdict = {'UID' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
             u_info.insert_one(mdict)
             print('Created new user!')
 
@@ -30,13 +33,15 @@ class User():
             return True
         return False
 
-    def is_student(email):
-        if ".bi" in email or '.ba' in email:
-            print('Stuuu')
-            return True
-        else:
-            print('Leccc')
-            return False
+    def add_major(id_, major):
+        item = u_info.find_one({'UID' : id_})
+        u_info.update_one(item, {'$set': {'major' : major}})
+
+    def is_USTHer(email):
+        if re.match(r"[a-zA-Z\-\.1-9]+[@][s]?[t]?.?usth.edu.vn", email):
+           return True
+        return False
+
     
     # def add_info_stu(id_, usth_id, major, schoolYear):
     #     mdict = {'UID' : id_, 'USTH_ID' : usth_id, 'Major': major, 'SchoolYear' : schoolYear}
@@ -80,7 +85,7 @@ class User():
 
     def set_active(id_, status):
         if status == 'Active':
-            return False
+            return True
         return False
 
 # class Login_info:
