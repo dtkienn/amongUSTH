@@ -1,0 +1,9 @@
+{
+    "google_login":[
+        {
+            "client_key" : "754525070220-c2lfse3erd1rk52lvas6orr9im9ojkp3.apps.googleusercontent.com",
+            "client_secret" : "7TMNNst1I5ueVjacoQDa1sJg",
+            "discovery_url" : "https://accounts.google.com/.well-known/openid-configuration"
+        }
+    ]
+}

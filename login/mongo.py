@@ -2,6 +2,7 @@ import pymongo
 #from login.User import User as usr
 from flask_login import UserMixin
 import json
+import re
 
 dat = json.load(open('login\mongo.json'))
 data = dat
@@ -10,7 +11,7 @@ password = data['read_write'][0]['password']
 client = pymongo.MongoClient("mongodb+srv://" + username + ":" + password + "@cluster0.3ihx5.mongodb.net/?retryWrites=true&w=majority")
 
 # Create database for User
-user = client['User']
+user = client['AmongUSTH']
 u_info = user['User_info']
 u_login = user['Login_info']
 u_stu = user['Student']
@@ -27,20 +28,24 @@ class User(UserMixin):
         self.password = password
 
     def register(id_, name, email, profile_pic):
+        student_id = email.split(".")[1].split("@")[0]
+        student_id.split('3')
         if u_info.find_one({'Email' : email}):
             print('Existed!')
             pass
         else: 
-            mdict = {'UID' : id_, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
+            mdict = {'UID' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
             u_info.insert_one(mdict)
 
-    def is_student(email):
-        if ".bi" in email or '.ba' in email:
-            print('Stuuu')
-            return True
-        else:
-            print('Leccc')
-            return False
+    def add_major(id_, major):
+        item = u_info.find_one({'UID' : id_})
+        u_info.update_one(item, {'$set': {'major' : major}})
+
+    def is_USTHer(email):
+        if re.match(r"[a-zA-Z\-\.1-9]+[@][s]?[t]?.?usth.edu.vn", email):
+           return True
+        return False
+
     
     def add_info_stu(id_, usth_id, major, schoolYear):
         mdict = {'UID' : id_, 'USTH_ID' : usth_id, 'Major': major, 'SchoolYear' : schoolYear}
@@ -174,3 +179,8 @@ class Comment():
     def get_comment_time(id_):
         mdict = u_login.find_one({'_id' : id_}, {'comment_time' : 1, '_id' : 0})
         return mdict['comment_time']
+
+    def set_active(id_, status):
+        if status == 'Active':
+            return True
+        return False
