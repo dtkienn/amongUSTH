@@ -13,3 +13,8 @@ class BookPost(FlaskForm):
 	description = StringField('Description',validators=[DataRequired()])
 	file = StringField('File',validators=[DataRequired()])
 	submit = SubmitField('Post !')
+
+class CommentPost(FlaskForm):
+	comment_content = StringField('Content', validators=[DataRequired()])
+	submit = SubmitField('Post !')
+

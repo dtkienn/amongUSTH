@@ -18,6 +18,9 @@ u_lec = user['Lecturer']
 book_db = client['Book']
 book  = book_db['Book_data']
 interaction = client['Interact']
+vote = interaction['Vote']
+comment = interaction['Comment']
+
 class User(UserMixin):
     def __init__(self, username, password):
         self.username = username
@@ -114,4 +117,60 @@ class Book():
 
     def get_description(id_):
         mdict = u_login.find_one({'UID' : id_}, {'description' : 1, '_id' : 0})
+        return mdict['description']
+
+class Vote():
+    def __init__(self, up, down):
+        self.up = up
+        self.down = down
+
+    def make_decision(_id, up, down):
+        if vote.find_one({"_id" : _id}):
+            print "Existed"
+            pass
+        else :
+            mdict = {'_id':id_,'up':up,'down':down}
+            try:
+                vote.insert_one(mdict)
+            except:
+                print("Insert failed")
+
+    def get_up(id_):
+        mdict = vote.find_one({'_id' : id_}, {'up' : 1, '_id' : 0})
+        return mdict['up']
+
+    def get_down(id_):
+        mdict = vote.find_one({'_id' : id_}, {'down' : 1, '_id' : 0})
+        return mdict['down']                        
+
+class Comment():
+    def __init__(self, content, user_id, comment_time,book_id):
+        self.content = content
+        self.user_id = user_id
+        self.comment_time = comment_time
+        self.book_id = book_id
+    
+    def post_comment(_id, user_id,book_id,content,comment_time):
+        if comment.find_one({'content': user_id}):
+            print('Existed')
+            pass
+        else :
+            mdict = {'_id':id_,'book_id':book_id,'user_id':user_id,'content':content,'comment_time':comment_time}
+            try:
+                comment.insert_one(mdict)
+            except:
+                print("Insert failed")
+
+    def get_content(id_):
+        mdict = book.find_one({'_id' : id_}, {'content' : 1, '_id' : 0})
+        return mdict['content']
+    def get_file(id_):
+        mdict = u_login.find_one({'UID' : id_}, {'file' : 1, '_id' : 0})
+        return mdict['file']
+
+    def get_description(id_):
+        mdict = u_login.find_one({'UID' : id_}, {'description' : 1, '_id' : 0})
         return mdict['description'] 
+    def get_comment_time(id_):
+        mdict = u_login.find_one({'_id' : id_}, {'comment_time' : 1, '_id' : 0})
+        return mdict['comment_time']
