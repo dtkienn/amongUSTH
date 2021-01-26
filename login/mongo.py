@@ -1,5 +1,5 @@
 import pymongo
-from login.User import user as usr
+#from login.User import User as usr
 from flask_login import UserMixin
 import json
 
@@ -46,19 +46,19 @@ class User(UserMixin):
         mdict = {'UID' : id_, 'USTH_ID' : usth_id, 'Major': major, 'SchoolYear' : schoolYear}
         u_stu.insert_one(mdict)
 
-    @staticmethod
-    def get(user_id):
-        db = get_db()
-        usr = db.execute(
-            "SELECT * FROM user WHERE id = ?", (user_id,)
-        ).fetchone()
-        if not usr:
-            return None
+    # @staticmethod
+    # def get(user_id):
+    #     db = get_db()
+    #     usr = db.execute(
+    #         "SELECT * FROM user WHERE id = ?", (user_id,)
+    #     ).fetchone()
+    #     if not usr:
+    #         return None
 
-        usr = user(
-            id_=usr[0], name=usr[1], email=usr[2]#, profile_pic=user[3]
-        )
-        return usr
+    #     usr = user(
+    #         id_=usr[0], name=usr[1], email=usr[2]#, profile_pic=user[3]
+    #     )
+    #     return usr
 
     def login(username,password):
         mdict = u_login.find_one({'UserName' : username}, {'UserName' :1,'Password' :1})
@@ -126,7 +126,7 @@ class Vote():
 
     def make_decision(_id, up, down):
         if vote.find_one({"_id" : _id}):
-            print "Existed"
+            print ("Existed")
             pass
         else :
             mdict = {'_id':id_,'up':up,'down':down}
