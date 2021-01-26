@@ -247,7 +247,6 @@ def content():
         return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic)
     else:
         return render_template('login.html', text="You need to login!")
-
 @app.route('/book',methods=['GET','POST'])
 def new_book():
     form = BookPost()
@@ -261,5 +260,10 @@ def new_book():
     return render_template('homepage.html',title='Created Post')
     # return render_template('homepage.html',title='BookPost',form=form)
 
+@app.route('/upload')
+def upload():
+    return render_template('upload.html')
+
+    
 if __name__ == '__main__':
     app.run(debug=True, ssl_context="adhoc")
