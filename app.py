@@ -18,10 +18,12 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
+import login.Db as logDb
 import login.User as logUsr
 from login.mongo import User as mongoUsr
+from login.mongo import Book as mongoBook
 from flask_bcrypt import Bcrypt
-from forms.forms import Password
+from forms.forms import Password,BookPost
 # Configuration
 import json
 
@@ -49,6 +51,12 @@ def unauthorized():
     return render_template("login.html", display_navbar="none")
 
 
+# Naive database setup
+try:
+    logDb.init_db_command()
+except sqlite3.OperationalError:
+    # Assume it's already been created
+    pass
 
 # OAuth2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
@@ -57,7 +65,7 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
-    return logUsr.user_info.get(user_id)
+    return logUsr.user.get(user_id)
 
 
 @app.route("/index")
@@ -78,37 +86,30 @@ def index():
 
 
 def generate_password():
+    form = Password()
+    hashed_password = str(bcrypt.generate_password_hash("123456").decode('utf-8'))[:8]
     id_ = user.get_id()
-    if mongoUsr.is_registerd(id_):
-        pass
-    else:
-        form = Password()
-        hashed_password = str(bcrypt.generate_password_hash("123456").decode('utf-8'))[:8]
-        email = mongoUsr.get_email(id_)        
-        username = email.split(".")[1].split("@")[0]
-        mongoUsr.add_login_info(id_, username, hashed_password)
-        print(username)
-        print(hashed_password)
+    email = mongoUsr.get_email(id_)
+    username = email.split(".")[1].split("@")[0]
+    profile_pic = mongoUsr.get_profile_pic(id_)
+    mongoUsr.add_login_info(id_, username, hashed_password)
 
+    print(hashed_password)
+from flask_login import login_user
 @app.route("/login", methods = ['GET', 'POST'])
 def login():
     #Find out what URL to hit for Google login
     if request.method=="POST" :
         username = request.form["username"]
         password = request.form["password"]
-        id_ = mongoUsr.get_id(username)
-        global user
-        user = logUsr.user_login(
-            id_ = id_, username = username, password = password
-        )
-        if user.verify():  
-            login_user(user)
-            # Create session timeout
-            time = timedelta(minutes=60)
-            # User will automagically kicked from session after 'time'
-            app.permanent_session_lifetime = time
+        user = mongoUsr.login(username, password)
+        if user:
+            # @login_manager.user_loader  
+            # login_user(user)
+            return redirect(url_for("index"))
         else:
             print("login failed")
+
         return redirect(url_for("index"))
         
     elif request.method == 'GET' :
@@ -162,6 +163,7 @@ def callback():
         users_email = userinfo_response.json()["email"]
         picture = userinfo_response.json()["picture"]
         users_name = userinfo_response.json()["name"]
+        
         if mongoUsr.is_USTHer:
             # Add user information to Online database
             global user            
@@ -181,6 +183,7 @@ def callback():
                 user.create(unique_id, users_name, users_email, picture)
                 # Begin user session by logging the user in
             login_user(user)
+
 
             # Create session timeout
             time = timedelta(minutes=60)
@@ -249,7 +252,23 @@ def content():
         return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic)
     else:
         return render_template('login.html', text="You need to login!")
+@app.route('/book',methods=['GET','POST'])
+def new_book():
+    form = BookPost()
+    # if form.validate_on_submit():
+        # book = Book(file_name=form.file_name.data,description=form.description.data,
+        #     file=form.file.data,author=current_user)
+    try:
+        mongoBook.post_book("213123","form.file_name.data","form.file.data","form.description.data")
+    except:
+        print("insert failed")
+    return render_template('homepage.html',title='Created Post')
+    # return render_template('homepage.html',title='BookPost',form=form)
 
+@app.route('/upload')
+def upload():
+    return render_template('upload.html')
 
+    
 if __name__ == '__main__':
     app.run(debug=True, ssl_context="adhoc")
