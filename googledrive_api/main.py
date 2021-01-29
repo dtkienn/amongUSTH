@@ -12,7 +12,7 @@ try:
     flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
 except ImportError:
     flags = None
-import auth
+import googledrive_api.auth as auth
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/drive-python-quickstart.json
 SCOPES = 'https://www.googleapis.com/auth/drive'
@@ -79,4 +79,4 @@ def searchFile(size,query):
             print(item)
             print('{0} ({1})'.format(item['name'], item['id']))
 
-#searchFile(10,"name contains 'Getting'")                    
+#searchFile(10,"name contains 'Getting'")
