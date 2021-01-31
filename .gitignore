@@ -70,3 +70,8 @@ test.py
 # Test files
 static/stylesheets/*.map
 static/stylesheets/*.scss
+
+# Document files
+*.doc
+*.pdf
+*.docx
