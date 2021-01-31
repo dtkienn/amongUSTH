@@ -1,17 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    {% include 'head.html' %}
-</head>
-<style>
-    header{
-        background: url(https://htmlcolorcodes.com/assets/images/html-color-codes-color-tutorials-hero.jpg)
-    }
-</style>
-<body>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <link
+      href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=BioRhyme&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link
+      href="https://fonts.googleapis.com/css2?family=BioRhyme&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Join AmongUSTH!</title>
+    <link rel="stylesheet" href="static/stylesheets/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
 
+    <style>
+      header {
+        background: url(https://htmlcolorcodes.com/assets/images/html-color-codes-color-tutorials-hero.jpg);
+      }
+    </style>
+  </head>
+  <body>
     {% include 'navbar.html' %}
-    {% include 'warning.html' %}
     <div class="profile-box" id="profile-box">
       <h2><img class="profile-picture" src="{{picture}}" alt="" /></h2>
       <h2>{{name}}</h2>
@@ -25,28 +55,43 @@
       <h4><a href="/logout" style="color: #2251ff">Logout</a></h4>
     </div>
 
-    <div class="change-password-modal" id="change-password-modal">
-        <form action = '/index/change_password' method="post">
-            <div class="change-password-modal-content">
-                <span class="modal-close-btn"><a href="/index">&times;</a></span>
-                <div class="change-password-modal-title">Change password</div>
-                <div class="form-container-modal">
-                    <div class="current-password-label">Current password</div>
-                    <input type="password" placeholder="" id="" name = 'current_password'>
-                </div>
-                <div class="form-container-modal">
-                    <div class="new-password-label">New password</div>
-                    <input type="password" placeholder="" id="password" name = 'new_password'>    
-                </div>
-                <div class="form-container-modal">
-                    <div class="new-password-label">Re-enter new password</div>
-                    <input type="password" placeholder="" id="password" name = 're_password'>    
-                </div>
-                <button type="submit" class="login-btn">Change!</button>
-            </div>
-        </form>
-    </div>
-    <section class="glass"></section>
+    <form id="change-password-modal">
+      <div class="change-password-modal-content">
+        <span class="modal-close-btn"><a href="/index">&times;</a></span>
+        <div class="change-password-modal-title">Change password</div>
+        <div class="form-container-modal">
+          <div class="current-password-label">Current password</div>
+          <input
+            type="password"
+            autocomplete="off"
+            placeholder=""
+            id="current_p"
+            name="current_password"
+          />
+        </div>
+        <div class="form-container-modal">
+          <div class="new-password-label">New password</div>
+          <input
+            type="password"
+            autocomplete="off"
+            placeholder=""
+            id="password"
+            name="new_password"
+          />
+        </div>
+        <div class="form-container-modal">
+          <div class="new-password-label">Re-enter new password</div>
+          <input
+            type="password"
+            autocomplete="off"
+            placeholder=""
+            id="re_password"
+            name="re_password"
+          />
+        </div>
+        <button type="submit" class="login-btn">Change!</button>
+      </div>
+    </form>
     {% include 'footer.html' %}
 
     <script src="js/myjs.js"></script>
