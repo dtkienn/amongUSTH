@@ -75,7 +75,7 @@ class User(UserMixin):
         u_lec.insert_one(mdict)
 
     def add_login_info(id_, username, password, hased_password):
-        mdict = {'UID' : id_, 'UserName' : username,'Password' : password, "Hashed_password": hased_password}  
+        mdict = {'UID' : id_, 'UserName' : username, 'Password' : password, "Hashed_password": hased_password}  
         u_login.insert_one(mdict)
 
     def get_profile_pic(id_):

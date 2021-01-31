@@ -169,7 +169,7 @@ def callback():
             email = user.getEmail()
             profile_pic = user.getprofile_pic()
             
-            if not mongoUsr.get(id_):
+            if not mongoUsr.account_existed(id_):
                 mongoUsr.register(id_, name, email, profile_pic)
                 generate_password()
                 print('Generated login info!')
