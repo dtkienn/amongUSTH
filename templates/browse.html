@@ -1,41 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link
-    href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-    rel="stylesheet"
-    id="bootstrap-css"
-    />
-    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <meta charset="UTF-8" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link
-    href="https://fonts.googleapis.com/css2?family=BioRhyme&display=swap"
-    rel="stylesheet"
-    />
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link
-    href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@600&display=swap"
-    rel="stylesheet"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Browse</title>
-    <link rel="stylesheet" href="static/stylesheets/style.css" />
-    <link
-    rel="stylesheet"
-    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="/static/js/myjs.js"></script>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    {% include 'head.html' %}
 </head>
 <style>
     header{
@@ -49,6 +15,8 @@
 <body>
     <!--Navbar-->
     {% include 'navbar.html' %}
+    {% include 'warning.html' %}
+
 
     <!--Search bar-->
     <form class="search-bar">
@@ -84,15 +52,15 @@
         </div>
     </form>
     <div class="upload-box">
-        <h5>Can't find your books? Upload now!</h5>
-        <input type="file" class="upload-btn">
+        <h5>Can't find your books?</h5><a href="/upload">Upload now!</a>
+        <!-- <input type="file" class="upload-btn"> -->
     </div>
 
     <!--Book-->
     <div class="browse-book-container">
     <div class="title">BOOKS</div>
     <!-- Flickity HTML init -->
-    <div class="carousel" data-flickity='{ "groupCells": true }'>
+    <div class="carousel" data-flickity='{ "initialIndex ": 3 }'>
       <div class="carousel-cell">
           <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
           <div class="carousel-caption">Book name here</div>
@@ -135,42 +103,60 @@
     <div class="browse-book-container">
     <div class="title">DOCUMENTS</div>
     <!-- Flickity HTML init -->
-    <div class="carousel" data-flickity='{ "groupCells": true }'>
+    <div class="carousel"  data-flickity='{ "initialIndex ": 0 }'>
         <div class="carousel-cell">
-            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-            <div class="carousel-caption">Document name here</div>
+            <a href="/content">
+                <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+                <div class="carousel-caption">Document name here</div>    
+            </a>
         </div>
         <div class="carousel-cell">
-            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-            <div class="carousel-caption">Document name here</div>
+            <a href="/content">
+                <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+                <div class="carousel-caption">Document name here</div>    
+            </a>
         </div>
         <div class="carousel-cell">
-            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-            <div class="carousel-caption">Document name here</div>
+            <a href="/content">
+                <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+                <div class="carousel-caption">Document name here</div>    
+            </a>
         </div>
         <div class="carousel-cell">
-            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-            <div class="carousel-caption">Document name here</div>
+            <a href="/content">
+                <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+                <div class="carousel-caption">Document name here</div>    
+            </a>
         </div>
         <div class="carousel-cell">
-            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-            <div class="carousel-caption">Document name here</div>
+            <a href="/content">
+                <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+                <div class="carousel-caption">Document name here</div>    
+            </a>
         </div>
         <div class="carousel-cell">
-            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-            <div class="carousel-caption">Document name here</div>
+            <a href="/content">
+                <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+                <div class="carousel-caption">Document name here</div>    
+            </a>
         </div>
         <div class="carousel-cell">
-            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-            <div class="carousel-caption">Document name here</div>
+            <a href="/content">
+                <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+                <div class="carousel-caption">Document name here</div>    
+            </a>
         </div>
         <div class="carousel-cell">
-            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-            <div class="carousel-caption">Document name here</div>
+            <a href="/content">
+                <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+                <div class="carousel-caption">Document name here</div>    
+            </a>
         </div>
         <div class="carousel-cell">
-            <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-            <div class="carousel-caption">Document name here</div>
+            <a href="/content">
+                <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+                <div class="carousel-caption">Document name here</div>    
+            </a>
         </div>
     </div>
   

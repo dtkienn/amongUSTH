@@ -1,36 +1,27 @@
+    
 from flask_login import UserMixin
-from login.Db import get_db
+from login.mongo import User as mongo
 
-class user(UserMixin):
-    def __init__(self, id_, name, email, profile_pic=None):
+class user_info(UserMixin):
+    def __init__(self, id_, name, email, profile_pic):
         self.id = id_
-        self.name = names
+        self.name = name
         self.email = email
         self.profile_pic = profile_pic
 
     @staticmethod
     def get(user_id):
-        db = get_db()
-        usr = db.execute(
-            "SELECT * FROM user WHERE id = ?", (user_id,)
-        ).fetchone()
+        usr = mongo.get(user_id)
         if not usr:
             return None
-
-        usr = user(
-            id_=usr[0], name=usr[1], email=usr[2]#, profile_pic=user[3]
+        usr = user_info(
+            id_=usr['UID'], name=usr['Fullname'], email=usr['Email'], profile_pic=usr['Profile_pic']
         )
         return usr
 
     @staticmethod
     def create(id_, name, email, profile_pic):
-        db = get_db()
-        db.execute(
-            "INSERT INTO user (id, name, email, profile_pic)"
-            " VALUES (?, ?, ?, ?)",
-            (id_, name, email, profile_pic),
-        )
-        db.commit()
+        mongo.register(id_, name, email, profile_pic)
 
     def getName(self):
         return self.name
@@ -39,4 +30,29 @@ class user(UserMixin):
     def getprofile_pic(self):
         return self.profile_pic
     def getid(self):
-        return self.id_
+        return self.id
+
+class user_login(UserMixin):
+    def __init__(self, id_, username, password):
+        self.username = username
+        self.password = password
+        self.id = id_
+        self.name = mongo.get_name(id_)
+        self.email = mongo.get_email(id_)
+        self.profile_pic = mongo.get_profile_pic(id_)
+
+    def verify(self):
+        mdict = mongo.login(self.username, self.password)
+        if mdict:
+            return True
+        return False
+
+    def getid(self):
+        return self.id
+    def getName(self):
+        return self.name
+    def getEmail(self):
+        return self.email
+    def getprofile_pic(self):
+        return self.profile_pic
+    
