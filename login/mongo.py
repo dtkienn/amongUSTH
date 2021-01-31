@@ -20,10 +20,13 @@ book_db = client['Book']
 book  = book_db['Book_data']
 interaction = client['Interact']
 <<<<<<< HEAD
+<<<<<<< HEAD
 vote = interaction['Vote']
 comment = interaction['Comment']
 =======
 
+=======
+>>>>>>> parent of 149a40a... update databse
 class User(UserMixin):
     def __init__(self, username, password):
         self.username = username
@@ -120,6 +123,7 @@ class Book():
 
     def get_description(id_):
         mdict = u_login.find_one({'UID' : id_}, {'description' : 1, '_id' : 0})
+<<<<<<< HEAD
         return mdict['description'] 
                 
         import pymongo
@@ -312,3 +316,6 @@ class Comment():
                 
         
 >>>>>>> parent of ddf8ee0... Merge remote-tracking branch 'upstream/thietorigin'
+=======
+        return mdict['description'] 
+>>>>>>> parent of 149a40a... update databse

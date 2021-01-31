@@ -255,15 +255,15 @@ def content():
 @app.route('/book',methods=['GET','POST'])
 def new_book():
     form = BookPost()
-    # if form.validate_on_submit():
+    if form.validate_on_submit():
         # book = Book(file_name=form.file_name.data,description=form.description.data,
         #     file=form.file.data,author=current_user)
-    try:
-        mongoBook.post_book("213123","form.file_name.data","form.file.data","form.description.data")
-    except:
-        print("insert failed")
-    return render_template('homepage.html',title='Created Post')
-    # return render_template('homepage.html',title='BookPost',form=form)
+        try:
+           mongoBook.post_book("form.file_name.data","form.file.data","form.description.data")
+        except:
+           print("insert failed")
+        return render_template('homepage.html',title='Created Post')
+    return render_template('homepage.html',title='BookPost',form=form)
 
 @app.route('/upload')
 def upload():
