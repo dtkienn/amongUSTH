@@ -32,16 +32,16 @@ class user_info(UserMixin):
         return self.id
 
 class user_login(UserMixin):
-    def __init__(self, id_, username, password):
+    def __init__(self, id_, username, hashed_password):
         self.username = username
-        self.password = password
+        self.hashed_password = hashed_password
         self.id = id_
         self.name = mongo.get_name(id_)
         self.email = mongo.get_email(id_)
         self.profile_pic = mongo.get_profile_pic(id_)
 
     def verify(self):
-        mdict = mongo.login(self.username, self.password)
+        mdict = mongo.login(self.username, self.hashed_password)
         if mdict:
             return True
         return False

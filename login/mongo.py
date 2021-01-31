@@ -4,7 +4,7 @@ from flask_login import UserMixin
 import json
 import re
 
-dat = json.load(open('login\mongo.json'))
+dat = json.load(open('login/mongo.json'))
 data = dat
 username = data['read_write'][0]['username']
 password = data['read_write'][0]['password']
@@ -12,21 +12,26 @@ client = pymongo.MongoClient("mongodb+srv://" + username + ":" + password + "@cl
 pymongo.MongoClient()
 
 # Create database for User
+
+# db and collections of user:
 user = client['AmongUSTH']
 u_info = user['User_info']
 u_login = user['Login_info']
 u_stu = user['Student']
 u_lec = user['Lecturer']
+
+# db and collections of book
 book_db = client['Book']
 book  = book_db['Book_data']
+
+# db and collections of interaction: vote and comment.
 interaction = client['Interact']
 vote = interaction['Vote']
 comment = interaction['Comment']
 
 class User(UserMixin):
-    def __init__(self, username, password):
+    def __init__(self, username):
         self.username = username
-        self.password = password
 
     def register(id_, name, email, profile_pic):
         if u_info.find_one({'Email' : email}):
@@ -39,6 +44,9 @@ class User(UserMixin):
 
     def get(id_):
         return u_info.find_one({"UID": id_})
+
+    def get_by_itself(self):
+        return u_info.find_one({"username": self.username})
     
     def account_existed(id_):
         if u_login.find_one({'UID' : id_}):
@@ -58,19 +66,21 @@ class User(UserMixin):
         mdict = {'UID' : id_, 'USTH_ID' : usth_id, 'Major': major, 'SchoolYear' : schoolYear}
         u_stu.insert_one(mdict)
 
-    def login(username,password):
-        mdict = u_login.find_one({'UserName' : username}, {'UserName' :1,'Password' :1})
-        print("///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////"+str(mdict)+"/////////////////////////////////////////////////////////////////////////////////")
-        if password == mdict["Password"]:
-            return User(username, password)
+    def login(bcrypt, username, password):
+        mdict = u_login.find_one({'UserName' : username}, {'UserName' :1,'Hashed_password' :1})
+        # print(str(mdict))
+        # print(str(mdict["Hashed_password"]))
+        check = bcrypt.check_password_hash(mdict["Hashed_password"], password)
+        if check:
+            return User(username)
         return None
 
     def add_info_lec(id_, department):
         mdict = {'UID' : id_, 'Department' : department}
         u_lec.insert_one(mdict)
 
-    def add_login_info(id_, username, password):
-        mdict = {'UID' : id_, 'UserName' : username,'Password' : password}  
+    def add_login_info(id_, username, hased_password):
+        mdict = {'UID' : id_, 'UserName' : username, "Hashed_password": hased_password}  
         u_login.insert_one(mdict)
 
     def get_profile_pic(id_):
@@ -86,7 +96,7 @@ class User(UserMixin):
         return mdict['Email']
 
     def get_id(username):
-        mdict = u_login.find_one({'Username' : username})
+        mdict = u_login.find_one({'UserName' : username}, {"UID": 1, "_id" : 0})
         return mdict['UID']
 
 class Book():
