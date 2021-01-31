@@ -65,7 +65,7 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
-    return logUsr.user.get(user_id)
+    return logUsr.user_info.get(user_id)
 
 
 @app.route("/index")
@@ -170,17 +170,18 @@ def callback():
             user = logUsr.user_info(
                 id_=unique_id, name=users_name, email=users_email, profile_pic=picture
             )
-            id_ = user.get_id()
+            id_ = user.getid()
             name = user.getName()
             # temp = name.split()
             # name = temp[1] + ' ' + temp[2] + ' ' + temp[0]
             email = user.getEmail()
             profile_pic = user.getprofile_pic()
+
             mongoUsr.register(id_, name, email, profile_pic)
             generate_password()
             # Doesn't exist? Add to database
-            if not user.get(unique_id):
-                user.create(unique_id, users_name, users_email, picture)
+            # if not user.get(unique_id):
+                # user.create(unique_id, users_name, users_email, picture)
                 # Begin user session by logging the user in
             login_user(user)
 

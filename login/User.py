@@ -11,7 +11,7 @@ class user_info(UserMixin):
 
     @staticmethod
     def get(user_id):
-        usr = mongo.get_db(user_id)
+        usr = mongo.get(user_id)
         if not usr:
             return None
         usr = user_info(
@@ -30,7 +30,7 @@ class user_info(UserMixin):
     def getprofile_pic(self):
         return self.profile_pic
     def getid(self):
-        return self.id_
+        return self.id
 
 class user_login(UserMixin):
     def __init__(self, id_, username, password):
@@ -48,7 +48,7 @@ class user_login(UserMixin):
         return False
 
     def getid(self):
-        return self.id_
+        return self.id
     def getName(self):
         return self.name
     def getEmail(self):
