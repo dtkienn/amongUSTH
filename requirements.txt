@@ -5,3 +5,5 @@ requests
 cryptography
 dnspython
 pymongo
+flask_wtf
+flask_bcrypt

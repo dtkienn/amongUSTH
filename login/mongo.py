@@ -8,6 +8,7 @@ data = dat
 username = data['read_write'][0]['username']
 password = data['read_write'][0]['password']
 client = pymongo.MongoClient("mongodb+srv://" + username + ":" + password + "@cluster0.3ihx5.mongodb.net/?retryWrites=true&w=majority")
+pymongo.MongoClient()
 
 # Create database for User
 user = client['User']

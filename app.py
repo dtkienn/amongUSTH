@@ -99,12 +99,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         user = mongoUsr.login(username, password)
-        if user:
-            @login_manager.user_loader  
-            login_user(user)
-            return redirect(url_for("index"))
-        else:
-            print("login failed")
+
 
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
