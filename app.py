@@ -79,11 +79,13 @@ def index():
 
 
 def generate_password():
-    hashed_password = str(bcrypt.generate_password_hash("123456").decode('utf-8'))[:8]
+    
     id_ = user.get_id()
     email = mongoUsr.get_email(id_)
     username = email.split(".")[1].split("@")[0]
-    mongoUsr.add_login_info(id_, username, hashed_password)
+    password = username
+    hashed_password = str(bcrypt.generate_password_hash(password).decode('utf-8'))
+    mongoUsr.add_login_info(id_, username, password, hashed_password)
 
     print(hashed_password)
 from flask_login import login_user
@@ -93,7 +95,8 @@ def login():
     if request.method=="POST" :
         username = request.form["username"]
         password = request.form["password"]
-        user = mongoUsr.login(username, password)
+        hased_password = str(bcrypt.generate_password_hash(password).decode('utf-8'))
+        user = mongoUsr.login(username, password, hashed_password)
         if user:
             # @login_manager.user_loader  
             # login_user(user)
@@ -155,7 +158,7 @@ def callback():
         picture = userinfo_response.json()["picture"]
         users_name = userinfo_response.json()["name"]
         
-        if mongoUsr.is_USTHer:
+        if mongoUsr.is_USTHer(users_email):
             # Add user information to Online database
             global user            
             user = logUsr.user_info(
@@ -166,7 +169,7 @@ def callback():
             email = user.getEmail()
             profile_pic = user.getprofile_pic()
             
-            if not mongoUsr.account_existed(id_):
+            if not mongoUsr.get(id_):
                 mongoUsr.register(id_, name, email, profile_pic)
                 generate_password()
                 print('Generated login info!')
