@@ -63,10 +63,10 @@ class User(UserMixin):
         mdict = {'UID' : id_, 'USTH_ID' : usth_id, 'Major': major, 'SchoolYear' : schoolYear}
         u_stu.insert_one(mdict)
 
-    def login(username, password, hashed_password):
+    def login(username, hashed_password):
         mdict = u_login.find_one({'UserName' : username}, {'UserName' :1,'Password' :1})
         printstr(mdict)
-        if password == mdict["Password"] and hashed_password == mdict["Hased_password"]:
+        if hashed_password == mdict["Hased_password"]:
             return User(username)
         return None
 
@@ -74,8 +74,8 @@ class User(UserMixin):
         mdict = {'UID' : id_, 'Department' : department}
         u_lec.insert_one(mdict)
 
-    def add_login_info(id_, username, password, hased_password):
-        mdict = {'UID' : id_, 'UserName' : username, 'Password' : password, "Hashed_password": hased_password}  
+    def add_login_info(id_, username, hased_password):
+        mdict = {'UID' : id_, 'UserName' : username, "Hashed_password": hased_password}  
         u_login.insert_one(mdict)
 
     def get_profile_pic(id_):

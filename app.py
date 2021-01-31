@@ -96,7 +96,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         hased_password = str(bcrypt.generate_password_hash(password).decode('utf-8'))
-        user = mongoUsr.login(username, password, hashed_password)
+        user = mongoUsr.login(username, hashed_password)
         if user:
             # @login_manager.user_loader  
             # login_user(user)
