@@ -29,17 +29,21 @@ class User(UserMixin):
         self.password = password
 
     def register(id_, name, email, profile_pic):
-        student_id = email.split(".")[1].split("@")[0]
-        student_id.split('3')
         if u_info.find_one({'Email' : email}):
             print('Existed!')
-            pass
         else: 
+            student_id = email.split(".")[1].split("@")[0]
+            student_id.split('3')
             mdict = {'UID' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
             u_info.insert_one(mdict)
 
     def get(id_):
         return u_info.find_one({"UID": id_})
+    
+    def account_existed(id_):
+        if u_login.find_one({'UID' : id_}):
+            return True
+        return False
 
     def add_major(id_, major):
         item = u_info.find_one({'UID' : id_})

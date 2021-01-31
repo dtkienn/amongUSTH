@@ -18,7 +18,6 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
-import login.Db as logDb
 import login.User as logUsr
 from login.mongo import User as mongoUsr
 from login.mongo import Book as mongoBook
@@ -51,12 +50,6 @@ def unauthorized():
     return render_template("login.html", display_navbar="none")
 
 
-# Naive database setup
-try:
-    logDb.init_db_command()
-except sqlite3.OperationalError:
-    # Assume it's already been created
-    pass
 
 # OAuth2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
@@ -86,12 +79,10 @@ def index():
 
 
 def generate_password():
-    form = Password()
     hashed_password = str(bcrypt.generate_password_hash("123456").decode('utf-8'))[:8]
     id_ = user.get_id()
     email = mongoUsr.get_email(id_)
     username = email.split(".")[1].split("@")[0]
-    profile_pic = mongoUsr.get_profile_pic(id_)
     mongoUsr.add_login_info(id_, username, hashed_password)
 
     print(hashed_password)
@@ -172,17 +163,14 @@ def callback():
             )
             id_ = user.getid()
             name = user.getName()
-            # temp = name.split()
-            # name = temp[1] + ' ' + temp[2] + ' ' + temp[0]
             email = user.getEmail()
             profile_pic = user.getprofile_pic()
-
-            mongoUsr.register(id_, name, email, profile_pic)
-            generate_password()
-            # Doesn't exist? Add to database
-            # if not user.get(unique_id):
-                # user.create(unique_id, users_name, users_email, picture)
-                # Begin user session by logging the user in
+            
+            if not mongoUsr.account_existed(id_):
+                mongoUsr.register(id_, name, email, profile_pic)
+                generate_password()
+                print('Generated login info!')
+     
             login_user(user)
 
 
