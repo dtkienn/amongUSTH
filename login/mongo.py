@@ -38,6 +38,9 @@ class User(UserMixin):
             mdict = {'UID' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
             u_info.insert_one(mdict)
 
+    def get(id_):
+        return u_info.find_one({"UID": id_})
+
     def add_major(id_, major):
         item = u_info.find_one({'UID' : id_})
         u_info.update_one(item, {'$set': {'major' : major}})
@@ -46,25 +49,10 @@ class User(UserMixin):
         if re.match(r"[a-zA-Z\-\.1-9]+[@][s]?[t]?.?usth.edu.vn", email):
            return True
         return False
-
     
     def add_info_stu(id_, usth_id, major, schoolYear):
         mdict = {'UID' : id_, 'USTH_ID' : usth_id, 'Major': major, 'SchoolYear' : schoolYear}
         u_stu.insert_one(mdict)
-
-    # @staticmethod
-    # def get(user_id):
-    #     db = get_db()
-    #     usr = db.execute(
-    #         "SELECT * FROM user WHERE id = ?", (user_id,)
-    #     ).fetchone()
-    #     if not usr:
-    #         return None
-
-    #     usr = user(
-    #         id_=usr[0], name=usr[1], email=usr[2]#, profile_pic=user[3]
-    #     )
-    #     return usr
 
     def login(username,password):
         mdict = u_login.find_one({'UserName' : username}, {'UserName' :1,'Password' :1})
