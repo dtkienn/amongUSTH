@@ -44,6 +44,9 @@ class User(UserMixin):
 
     def get(id_):
         return u_info.find_one({"UID": id_})
+
+    def get_by_itself(self):
+        return u_info.find_one({"username": self.username})
     
     def account_existed(id_):
         if u_login.find_one({'UID' : id_}):
@@ -63,10 +66,12 @@ class User(UserMixin):
         mdict = {'UID' : id_, 'USTH_ID' : usth_id, 'Major': major, 'SchoolYear' : schoolYear}
         u_stu.insert_one(mdict)
 
-    def login(username, hashed_password):
-        mdict = u_login.find_one({'UserName' : username}, {'UserName' :1,'Password' :1})
-        printstr(mdict)
-        if hashed_password == mdict["Hased_password"]:
+    def login(bcrypt, username, password):
+        mdict = u_login.find_one({'UserName' : username}, {'UserName' :1,'Hashed_password' :1})
+        # print(str(mdict))
+        # print(str(mdict["Hashed_password"]))
+        check = bcrypt.check_password_hash(mdict["Hashed_password"], password)
+        if check:
             return User(username)
         return None
 
@@ -91,7 +96,7 @@ class User(UserMixin):
         return mdict['Email']
 
     def get_id(username):
-        mdict = u_login.find_one({'Username' : username})
+        mdict = u_login.find_one({'UserName' : username}, {"UID": 1, "_id" : 0})
         return mdict['UID']
 
 class Book():

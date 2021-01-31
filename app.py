@@ -58,13 +58,14 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
+    print('loaded')
     return logUsr.user_info.get(user_id)
 
 
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
-        form = Password()
+        # form = Password()
         id_ = user.get_id()
         name = mongoUsr.get_name(id_)
         email = mongoUsr.get_email(id_)
@@ -84,8 +85,8 @@ def generate_password():
     email = mongoUsr.get_email(id_)
     username = email.split(".")[1].split("@")[0]
     password = username
-    hashed_password = str(bcrypt.generate_password_hash(password).decode('utf-8'))
-    mongoUsr.add_login_info(id_, username, password, hashed_password)
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    mongoUsr.add_login_info(id_, username, hashed_password)
 
     print(hashed_password)
 from flask_login import login_user
@@ -95,11 +96,15 @@ def login():
     if request.method=="POST" :
         username = request.form["username"]
         password = request.form["password"]
-        hased_password = str(bcrypt.generate_password_hash(password).decode('utf-8'))
-        user = mongoUsr.login(username, hashed_password)
-        if user:
+        # hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        # print(hashed_password)
+        usr_checked = mongoUsr.login(bcrypt, username, password)
+        if usr_checked:
             # @login_manager.user_loader  
-            # login_user(user)
+            global user
+            id_ = mongoUsr.get_id(usr_checked.username)
+            user = logUsr.user_info.get(id_)
+            login_user(user)
             return redirect(url_for("index"))
         else:
             print("login failed")
