@@ -1,10 +1,17 @@
+from __future__ import print_function
 import json
 import os
 from re import template
 import sqlite3
 from datetime import timedelta
+import httplib2
+import os, io
 
-
+from apiclient import discovery
+from oauth2client import client
+from oauth2client import tools
+from oauth2client.file import Storage
+from apiclient.http import MediaFileUpload, MediaIoBaseDownload
 # Third party libraries
 from flask import Flask, render_template, redirect, request, url_for
 from flask_login import (
@@ -61,7 +68,22 @@ def load_user(user_id):
     print('loaded')
     return logUsr.user_info.get(user_id)
 
+try:
+    import argparse
+    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+except ImportError:
+    flags = None
+import googledrive_api.auth as auth
+# If modifying these scopes, delete your previously saved credentials
+# at ~/.credentials/drive-python-quickstart.json
+SCOPES = 'https://www.googleapis.com/auth/drive'
+CLIENT_SECRET_FILE = 'credentials.json'
+APPLICATION_NAME = 'Drive API Python Quickstart'
+authInst = auth.auth(SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
+credentials = authInst.getCredentials()
 
+http = credentials.authorize(httplib2.Http())
+drive_service = discovery.build('drive', 'v3', http=http)
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
@@ -249,6 +271,7 @@ def content():
         return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic)
     else:
         return render_template('login.html', text="You need to login!")
+
 @app.route('/book',methods=['GET','POST'])
 def new_book():
     form = BookPost()
@@ -261,11 +284,51 @@ def new_book():
         print("insert failed")
     return render_template('homepage.html',title='Created Post')
     # return render_template('homepage.html',title='BookPost',form=form)
+import cgi, os, cgitb, sys
+import googledrive_api.main as main_drive
 
-@app.route('/upload')
+def uploadFile(filename,filepath,mimetype):
+    file_metadata = {'name': filename}
+    media = MediaFileUpload(filepath,
+                            mimetype=mimetype)
+    file = drive_service.files().create(body=file_metadata,
+                                        media_body=media,
+                                        fields='id').execute()
+    print('File ID: %s' % file.get('id'))
+from pathlib import Path
+from werkzeug.utils import secure_filename
+# Path("C:/among_usth/upload").mkdir(parents=True, exist_ok=True)
+@app.route('/upload',methods=["GET","POST"])
 def upload():
+    if request.method == "POST":
+        if request.files:
+            fileitem = request.files["book_upload"]
+            filename = secure_filename(fileitem.filename)
+            new_path = os.path.abspath(filename)
+            uploadFile(filename=fileitem,filepath=new_path,mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            print('The file "' + fileitem + '"was uploaded successfully')
+            return redirect(request.url)
+    # cgitb.enable()
+    # try:
+    #     import msvcrt
+    #     msvcrt.setmode(0, os.O_BINARY)
+    #     msvcrt.setmode(1, os.O_BINARY)
+    # except ImportError:
+    #     pass
+    # form = cgi.FieldStorage()
+    # fileitem = form['filename']
+    # if fileitem.filename:
+    #     fn = os.path.basename(fileitem.filename)
+    #     main_drive.uploadFile(filename=fileitem.filename,filepath=fn,mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    #     print('The file "' + fn + '"was uploaded successfully')
+    # else:
+    #     print('No file was uploaded')
+    # # file = request.files['inputFile']
     return render_template('upload.html')
 
+# @app.route('/uploads')
+# def upFile():
+#     return file.filename
     
 if __name__ == '__main__':
     app.run(debug=True, ssl_context="adhoc")
