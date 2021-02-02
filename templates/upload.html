@@ -15,30 +15,45 @@
     {% include 'navbar.html' %}
     {% include 'warning.html' %}
 
-    <form class="box" method="POST" action="/upload">
+    <form class="box">
         <div class="drag-box-container">
             <h2 class="drag-box-title">Upload your book now!</h2>
-            <input type="file" class="upload-btn">
         </div>
     </form>
     <div class="upload-body">
         <div class="upload-info">
-            <form action="" method="POST">
+            <form action="upload/get_file" method="POST">
             <div class="upload-info-pic">
                 <img src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
             </div>
             <div class="upload-info-detail">
+                <div class="drag-box-container">
+                    <div class="upload-label">Type: </div>
+                    <select name="Type" id="Type">
+                        <option value=""></option>
+                        <option value="Book">Book</option>
+                        <option value="Document">Document</option>
+                        <option value="Slide">Slide</option>
+                    </select>
+                </div>
                 <div class="upload-input">
                     <div class="upload-label">Name: </div>
-                    <input class="upload-name" type="text">
+                    <input class="upload-author" name = "Name" type="text">
                 </div>
                 <div class="upload-input">
                     <div class="upload-label">Author: </div>
-                    <input class="upload-author" type="text">
+                    <input class="upload-author" name = "Author" type="text">
+                </div>
+                <div class="upload-input">
+                    <div class="upload-label">Subject: </div>
+                    <input class="upload-author" name = "Subject" type="text">
                 </div>
                 <div class="upload-input">
                     <div class="upload-label">Description: </div>
-                    <input class="upload-description" type="text">
+                    <input class="upload-description" name = "Description" type="text">
+                </div>
+                <div class="drag-box-container">
+                    <input type="file" name = 'file' class="upload-btn">
                 </div>
                 <div class="upload-submit">
                     <button type="submit">Submit!</button>
