@@ -104,11 +104,20 @@ class Book():
             print('Existed')
             pass
         else:
-            mdict = {'BID' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : page_number, 'link' : link, 'front' : front}
+            mdict = {'BID' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : page_number, 'link' : link, 'front' : front, 'download' : int('0'), 'upvote' : int('0'), 'downvote' : int('0')}
             try:
                 book.insert_one(mdict)
             except:
                 print("Insert failed")
+    
+    def count_download(id_):
+        return book.update_one({'BID' : id_}, { '$inc': {'download': 1} })
+        
+    def count_upvote(id_):
+        return book.update_one({'BID' : id_}, { '$inc': {'upvote': 1} })
+            
+    def count_downvote(id_):
+        book.update_one({'BID' : id_}, { '$inc': {'downvote': 1} })
 
     def get_file_name(id_):
         mdict = book.find_one({'BID' : id_})
@@ -141,6 +150,18 @@ class Book():
     def get_page_number(id_):
         mdict = book.find_one({'BID' : id_})
         return mdict['page_number']
+
+    def get_upvote(id_):
+        mdict = book.find_one({'BID' : id_})
+        return mdict['upvote']
+
+    def get_downvote(id_):
+        mdict = book.find_one({'BID' : id_})
+        return mdict['downvote']
+
+    def get_download(id_):
+        mdict = book.find_one({'BID' : id_})
+        return mdict['download']
 class Vote():
     def __init__(self, up, down):
         self.up = up
