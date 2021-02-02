@@ -24,6 +24,7 @@ from login.mongo import Book as mongoBook
 from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
 from login.mail import gmail
+from werkzeug.utils import secure_filename
 # Configuration
 import json
 
@@ -36,10 +37,18 @@ GOOGLE_CLIENT_ID = client_key
 GOOGLE_CLIENT_SECRET = client_secret
 GOOGLE_DISCOVERY_URL = discovery_url
 
+if not os.path.exists(os.getcwd() + "/fileseduocuploadvaoday"):
+    try:
+        os.mkdir("fileseduocuploadvaoday")
+    except:
+        print("can't create folder for download")
+    
+
 # Flask app setup
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-
+app.config["UPLOAD_FOLDER"] = os.getcwd() + "/fileseduocuploadvaoday"
+app.config["MAX_CONTENT_PATH"] = 16 * 1024**2 # Giới hạn độ lớn của file
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -252,20 +261,26 @@ def admin():
 @login_required
 def content():
     return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic)
-
-@app.route('/upload', methods = ['GET' , 'POST'])
+    
+@app.route('/upload')
 @login_required
-def upload():
+def upload_Test():
     return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
 
 @app.route('/upload/get_file', methods = ['GET', 'POST'])
-def get_file():
+def get_file_Test():
     if request.method == 'GET':
         pass
     elif request.method == 'POST':
-        file = request.form
-        print(file) 
+        file = request.files["file"]
+        file.save(os.path.join(os.getcwd() +"/fileseduocuploadvaoday", secure_filename(file.filename)))
+        print(file.filename)
+        ''' this is for temporary
+          -> After this, we're gonna upload this file (with another thread) to server and delete this local file. Or we could just upload from the form to drive instead of save local file.
+          Thanks! 
+        '''
+        print("successfully uploaded")
     return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
-    
+
 if __name__ == '__main__':
     app.run(debug=True, ssl_context="adhoc")
