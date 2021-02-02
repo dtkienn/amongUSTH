@@ -22,7 +22,7 @@
     </form>
     <div class="upload-body">
         <div class="upload-info">
-            <form action="upload/get_file" method="POST">
+            <form action="upload/get_file" method="POST" enctype="multipart/form-data">
             <div class="upload-info-pic">
                 <img src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
             </div>
@@ -53,7 +53,7 @@
                     <input class="upload-description" name = "Description" type="text">
                 </div>
                 <div class="drag-box-container">
-                    <input type="file" name = 'file' class="upload-btn">
+                    <input type="file" name='file' class="upload-btn">
                 </div>
                 <div class="upload-submit">
                     <button type="submit">Submit!</button>
