@@ -48,7 +48,7 @@ bcrypt = Bcrypt(app)
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return render_template("login.html", display_navbar="none")
+    return render_template("login.html", display_navbar="none", text="You need to login!")
 
 
 
@@ -103,8 +103,13 @@ def login():
         if usr_checked:
             # @login_manager.user_loader  
             global user
+            global first_Name
+            global profile_pic
             id_ = mongoUsr.get_id(usr_checked.username)
             user = logUsr.user_info.get(id_)
+            name = mongoUsr.get_name(id_)
+            first_Name = name.split(' ', 1)[0]
+            profile_pic = mongoUsr.get_profile_pic(id_)
             login_user(user)
             return redirect(url_for("index"))
         else:
@@ -170,11 +175,14 @@ def callback():
             user = logUsr.user_info(
                 id_=unique_id, name=users_name, email=users_email, profile_pic=picture
             )
+            global profile_pic 
+            global first_Name 
             id_ = user.getid()
             name = user.getName()
             email = user.getEmail()
             profile_pic = user.getprofile_pic()
             student_id = get_studentid(email)
+            first_Name = name.split(' ', 1)[0]
             
             if not mongoUsr.account_existed(id_):
                 mongoUsr.register(id_, name, email, student_id, profile_pic)
@@ -198,8 +206,6 @@ def get_studentid(email):
     student_id = email.split(".")[1].split("@")[0]
     student_id.split('3')
     return student_id
-
-      
 
 @app.route('/loginfail')
 def loginfail():
@@ -231,49 +237,35 @@ def homepage():
 
 
 @app.route('/browse')
+@login_required
 def browse():
-    if current_user.is_authenticated:
-        name = user.getName()
-        profile_pic = user.getprofile_pic()
-        first_Name = name.split(' ', 1)[0]
-
-        return render_template("browse.html", display_navbar="inline", name=first_Name, picture=profile_pic)
-    else:
-        return render_template('login.html', text="You need to login!")
+    return render_template("browse.html", display_navbar="inline", name=first_Name, picture=profile_pic)
 
 
 @app.route('/admin')
+@login_required
 def admin():
     return render_template("admin.html", display_navbar="none", name="ADMIN")
 
 
 @app.route('/content')
+@login_required
 def content():
-    if current_user.is_authenticated:
-        name = user.getName()
-        profile_pic = user.getprofile_pic()
-        first_Name = name.split(' ', 1)[0]
+    return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic)
 
-        return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic)
-    else:
-        return render_template('login.html', text="You need to login!")
-@app.route('/book',methods=['GET','POST'])
-def new_book():
-    form = BookPost()
-    # if form.validate_on_submit():
-        # book = Book(file_name=form.file_name.data,description=form.description.data,
-        #     file=form.file.data,author=current_user)
-    try:
-        mongoBook.post_book("213123","form.file_name.data","form.file.data","form.description.data")
-    except:
-        print("insert failed")
-    return render_template('homepage.html',title='Created Post')
-    # return render_template('homepage.html',title='BookPost',form=form)
-
-@app.route('/upload')
+@app.route('/upload', methods = ['GET' , 'POST'])
+@login_required
 def upload():
-    return render_template('upload.html')
+    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
 
+@app.route('/upload/get_file', methods = ['GET', 'POST'])
+def get_file():
+    if request.method == 'GET':
+        pass
+    elif request.method == 'POST':
+        file = request.form
+        print(file) 
+    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
     
 if __name__ == '__main__':
     app.run(debug=True, ssl_context="adhoc")
