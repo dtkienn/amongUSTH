@@ -133,7 +133,7 @@ def login():
 
         return redirect(url_for("index"))
         
-    elif request.method == 'GET' :
+    elif request.method == 'GET':
         google_provider_cfg = get_google_provider_cfg()
         authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
@@ -243,8 +243,16 @@ def homepage():
     else:
         return render_template("homepage.html", display_navbar="none", name='SIGN UP NOW!')
 
+def createFolder(name):
+    file_metadata = {
+    'name': name,
+    'mimeType': 'application/vnd.google-apps.folder'
+    }
+    file = drive_service.files().create(body=file_metadata,
+                                        fields='id').execute()
+    print ('Folder ID: %s' % file.get('id'))
 
-@app.route('/browse')
+@app.route('/browse', methods=['GET','POST'])
 def browse():
     if current_user.is_authenticated:
         name = user.getName()
@@ -254,7 +262,10 @@ def browse():
         return render_template("browse.html", display_navbar="inline", name=first_Name, picture=profile_pic)
     else:
         return render_template('login.html', text="You need to login!")
-
+def search():
+    if request.method== 'POST':
+        form = request.form
+        search_value = form['']
 
 @app.route('/admin')
 def admin():
@@ -285,16 +296,6 @@ def new_book():
     return render_template('homepage.html',title='Created Post')
     # return render_template('homepage.html',title='BookPost',form=form)
 import cgi, os, cgitb, sys
-import googledrive_api.main as main_drive
-
-def uploadFile(filename,filepath,mimetype):
-    file_metadata = {'name': filename}
-    media = MediaFileUpload(filepath,
-                            mimetype=mimetype)
-    file = drive_service.files().create(body=file_metadata,
-                                        media_body=media,
-                                        fields='id').execute()
-    print('File ID: %s' % file.get('id'))
 from pathlib import Path
 from werkzeug.utils import secure_filename
 # Path("C:/among_usth/upload").mkdir(parents=True, exist_ok=True)
@@ -303,9 +304,6 @@ def upload():
     if request.method == "POST":
         if request.files:
             fileitem = request.files["book_upload"]
-            filename = secure_filename(fileitem.filename)
-            new_path = os.path.abspath(filename)
-            uploadFile(filename=fileitem,filepath=new_path,mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
             print('The file "' + fileitem + '"was uploaded successfully')
             return redirect(request.url)
     # cgitb.enable()
