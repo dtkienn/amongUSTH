@@ -24,6 +24,8 @@ from login.mongo import Book as mongoBook
 from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
 from login.mail import gmail
+from tool.pdf_tool import PDF
+from googledrive_api.fs import uploadFile_image, uploadFile
 # Configuration
 import json
 
@@ -251,7 +253,14 @@ def admin():
 @app.route('/content')
 @login_required
 def content():
-    return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic)
+    file_id = '11Lr77wqxNYunPkKZLaAXDK9JEjHdQVLx'
+    image_id = mongoBook.get_front(file_id)
+    file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
+    image_link = "https://drive.google.com/uc?export=view&id=" + image_id
+    page_num = mongoBook.get_page_number(file_id)
+    description = mongoBook.get_description(file_id)
+    Author = mongoBook.get_author(file_id)
+    return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
 
 @app.route('/upload', methods = ['GET' , 'POST'])
 @login_required
@@ -263,9 +272,20 @@ def get_file():
     if request.method == 'GET':
         pass
     elif request.method == 'POST':
-        file = request.form
-        print(file) 
-    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
+        form = request.form
+        file = 'Fundamental of Physics, 10th edition (answer).pdf'
+        
+        folder_id = '1SyPrAUDJuLzHl2555KrduwowMXjNzoTS'
+        file_id = uploadFile(file, folder_id = folder_id)
+        link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
+        fl = PDF(file, file_id)
+        fl.get_front()
+        front = uploadFile_image("temp/image_" + file_id +".jpeg", folder_id = folder_id)
+        page_num = int(fl.get_page_count())
+        mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_num, link, front)
+
+        os.unlink("temp/image_" + file_id +".jpeg")
+    return redirect(url_for('upload'))
     
 if __name__ == '__main__':
-    app.run(debug=True, ssl_context="adhoc")
+    app.run(debug=True,ssl_context="adhoc")

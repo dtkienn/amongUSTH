@@ -21,7 +21,7 @@ u_stu = user['Student']
 u_lec = user['Lecturer']
 
 # db and collections of book
-book_db = client['Book']
+book_db = client['AmongUSTH']
 book  = book_db['Book_data']
 
 # db and collections of interaction: vote and comment.
@@ -99,33 +99,48 @@ class User(UserMixin):
         return mdict['UID']
 
 class Book():
-    def __init__(self, file_name, description):
-        self.file_name = file_name
-        self.description = description
-
-    def post_book(id_, file_name, file, description):
-        if book.find_one({'filename' : file_name}):
+    def post_book(id_, book_name, type_, subject, author, description, page_number, link, front):
+        if book.find_one({'book_name' : book_name}):
             print('Existed')
             pass
         else:
-            mdict = {'_id' : id_, 'filename' : file_name, 'file' : file, 'description' : description}
+            mdict = {'BID' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : page_number, 'link' : link, 'front' : front}
             try:
                 book.insert_one(mdict)
             except:
                 print("Insert failed")
 
     def get_file_name(id_):
-        mdict = book.find_one({'UID' : id_}, {'file_name' : 1, '_id' : 0})
-        return mdict['filename']
+        mdict = book.find_one({'BID' : id_})
+        return mdict['book name']
 
-    def get_file(id_):
-        mdict = u_login.find_one({'UID' : id_}, {'file' : 1, '_id' : 0})
-        return mdict['file']
+    def get_type(id_):
+        mdict = book.find_one({'BID' : id_})
+        return mdict['type']
+
+    def get_subject(id_):
+        mdict = book.find_one({'BID' : id_})
+        return mdict['subject']
+
+    def get_author(id_):
+        mdict = book.find_one({'BID' : id_})
+        return mdict['author']
 
     def get_description(id_):
-        mdict = u_login.find_one({'UID' : id_}, {'description' : 1, '_id' : 0})
+        mdict = book.find_one({'BID' : id_})
         return mdict['description']
 
+    def get_link(id_):
+        mdict = book.find_one({'BID' : id_})
+        return mdict['link']
+
+    def get_front(id_):
+        mdict = book.find_one({'BID' : id_})
+        return mdict['front']
+
+    def get_page_number(id_):
+        mdict = book.find_one({'BID' : id_})
+        return mdict['page_number']
 class Vote():
     def __init__(self, up, down):
         self.up = up
@@ -136,18 +151,18 @@ class Vote():
             print ("Existed")
             pass
         else :
-            mdict = {'_id':id_,'up':up,'down':down}
+            mdict = {'BID':_id,'up':up,'down':down}
             try:
                 vote.insert_one(mdict)
             except:
                 print("Insert failed")
 
     def get_up(id_):
-        mdict = vote.find_one({'_id' : id_}, {'up' : 1, '_id' : 0})
+        mdict = vote.find_one({'BID' : id_}, {'up' : 1, '_id' : 0})
         return mdict['up']
 
     def get_down(id_):
-        mdict = vote.find_one({'_id' : id_}, {'down' : 1, '_id' : 0})
+        mdict = vote.find_one({'BID' : id_}, {'down' : 1, '_id' : 0})
         return mdict['down']                        
 
 class Comment():
@@ -157,7 +172,7 @@ class Comment():
         self.comment_time = comment_time
         self.book_id = book_id
     
-    def post_comment(_id, user_id,book_id,content,comment_time):
+    def post_comment(id_, user_id,book_id,content,comment_time):
         if comment.find_one({'content': user_id}):
             print('Existed')
             pass
