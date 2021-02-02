@@ -48,7 +48,7 @@ if not os.path.exists(os.getcwd() + "/fileseduocuploadvaoday"):
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 app.config["UPLOAD_FOLDER"] = os.getcwd() + "/fileseduocuploadvaoday"
-app.config["MAX_CONTENT_PATH"] = 16 * 1024**2 # Giới hạn độ lớn của file
+app.config["MAX_CONTENT_PATH"] = 16 * 1024**2 # Maximize size of file
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -264,23 +264,23 @@ def content():
     
 @app.route('/upload')
 @login_required
-def upload_Test():
+def upload():
     return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
 
 @app.route('/upload/get_file', methods = ['GET', 'POST'])
-def get_file_Test():
+def get_file():
     if request.method == 'GET':
-        pass
+        return redirect(url_for('upload))
     elif request.method == 'POST':
         file = request.files["file"]
-        file.save(os.path.join(os.getcwd() +"/fileseduocuploadvaoday", secure_filename(file.filename)))
+        file.save(os.path.join(app["UPLOAD_FOLDER], secure_filename(file.filename)))
         print(file.filename)
         ''' this is for temporary
           -> After this, we're gonna upload this file (with another thread) to server and delete this local file. Or we could just upload from the form to drive instead of save local file.
           Thanks! 
         '''
         print("successfully uploaded")
-    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
+        return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
 
 if __name__ == '__main__':
     app.run(debug=True, ssl_context="adhoc")
