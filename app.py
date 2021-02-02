@@ -283,10 +283,11 @@ def upload():
 @app.route('/upload/get_file', methods = ['GET', 'POST'])
 def get_file():
     if request.method == 'GET':
-        return redirect(url_for('upload))
+        return redirect(url_for('upload'))
+
     elif request.method == 'POST':
         file = request.files["file"]
-        file.save(os.path.join(app["UPLOAD_FOLDER], secure_filename(file.filename)))
+        file.save(os.path.join(app["UPLOAD_FOLDER"], secure_filename(file.filename)))
         print(file.filename)
         ''' this is for temporary
           -> After this, we're gonna upload this file (with another thread) to server and delete this local file. Or we could just upload from the form to drive instead of save local file.
