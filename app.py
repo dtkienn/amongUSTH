@@ -26,6 +26,8 @@ from forms.forms import Password,BookPost
 from login.mail import gmail
 from tool.pdf_tool import PDF
 from googledrive_api.fs import uploadFile_image, uploadFile
+from werkzeug.utils import secure_filename
+
 # Configuration
 import json
 
@@ -38,10 +40,18 @@ GOOGLE_CLIENT_ID = client_key
 GOOGLE_CLIENT_SECRET = client_secret
 GOOGLE_DISCOVERY_URL = discovery_url
 
+if not os.path.exists(os.getcwd() + "/fileseduocuploadvaoday"):
+    try:
+        os.mkdir("fileseduocuploadvaoday")
+    except:
+        print("can't create folder for download")
+    
+
 # Flask app setup
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-
+app.config["UPLOAD_FOLDER"] = os.getcwd() + "/fileseduocuploadvaoday"
+app.config["MAX_CONTENT_PATH"] = 16 * 1024**2 # Maximize size of file
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -273,22 +283,17 @@ def upload():
 @app.route('/upload/get_file', methods = ['GET', 'POST'])
 def get_file():
     if request.method == 'GET':
-        pass
+        return redirect(url_for('upload))
     elif request.method == 'POST':
-        form = request.form
-        file = 'Fundamental of Physics, 10th edition (answer).pdf'
-        
-        folder_id = '1SyPrAUDJuLzHl2555KrduwowMXjNzoTS'
-        file_id = uploadFile(file, folder_id = folder_id)
-        link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
-        fl = PDF(file, file_id)
-        fl.get_front()
-        front = uploadFile_image("temp/image_" + file_id +".jpeg", folder_id = folder_id)
-        page_num = int(fl.get_page_count())
-        mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_num, link, front)
+        file = request.files["file"]
+        file.save(os.path.join(app["UPLOAD_FOLDER], secure_filename(file.filename)))
+        print(file.filename)
+        ''' this is for temporary
+          -> After this, we're gonna upload this file (with another thread) to server and delete this local file. Or we could just upload from the form to drive instead of save local file.
+          Thanks! 
+        '''
+        print("successfully uploaded")
+        return redirect(url_for('upload'))
 
-        os.unlink("temp/image_" + file_id +".jpeg")
-    return redirect(url_for('upload'))
-    
 if __name__ == '__main__':
     app.run(debug=True,ssl_context="adhoc")
