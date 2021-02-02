@@ -23,6 +23,7 @@ from login.mongo import User as mongoUsr
 from login.mongo import Book as mongoBook
 from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
+from login.mail import gmail
 # Configuration
 import json
 
@@ -173,11 +174,13 @@ def callback():
             name = user.getName()
             email = user.getEmail()
             profile_pic = user.getprofile_pic()
+            student_id = get_studentid(email)
             
             if not mongoUsr.account_existed(id_):
-                mongoUsr.register(id_, name, email, profile_pic)
+                mongoUsr.register(id_, name, email, student_id, profile_pic)
                 generate_password()
                 print('Generated login info!')
+                gmail.send(email, get_studentid(email))
      
             login_user(user)
 
@@ -190,6 +193,11 @@ def callback():
             return redirect(url_for('index'))   
         else:
             return redirect(url_for('loginfail'))
+
+def get_studentid(email):
+    student_id = email.split(".")[1].split("@")[0]
+    student_id.split('3')
+    return student_id
 
       
 

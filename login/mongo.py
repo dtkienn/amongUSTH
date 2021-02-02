@@ -29,16 +29,15 @@ interaction = client['Interact']
 vote = interaction['Vote']
 comment = interaction['Comment']
 
+
 class User(UserMixin):
     def __init__(self, username):
         self.username = username
 
-    def register(id_, name, email, profile_pic):
+    def register(id_, name, email, student_id, profile_pic):
         if u_info.find_one({'Email' : email}):
             print('Existed!')
         else: 
-            student_id = email.split(".")[1].split("@")[0]
-            student_id.split('3')
             mdict = {'UID' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
             u_info.insert_one(mdict)
 
