@@ -304,7 +304,7 @@ def admin():
 @app.route('/content')
 @login_required
 def content():
-    file_id = '1qwUqEjkLju0uemKqzf5Y0DDhYSbURmrx'
+	file_id = '1qwUqEjkLju0uemKqzf5Y0DDhYSbURmrx'
     image_id = mongoBook.get_front(file_id)
     file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
     image_link = "https://drive.google.com/uc?export=view&id=" + image_id
@@ -316,6 +316,22 @@ def content():
     downvote = mongoBook.get_downvote(file_id)
     return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
 
+@app.route('/book',methods=['GET','POST'])
+def new_book():
+    form = BookPost()
+    # if form.validate_on_submit():
+        # book = Book(file_name=form.file_name.data,description=form.description.data,
+        #     file=form.file.data,author=current_user)
+    try:
+        mongoBook.post_book("213123","form.file_name.data","form.file.data","form.description.data")
+    except:
+        print("insert failed")
+    return render_template('homepage.html',title='Created Post')
+    # return render_template('homepage.html',title='BookPost',form=form)
+import cgi, os, cgitb, sys
+from pathlib import Path
+from werkzeug.utils import secure_filename
+# Path("C:/among_usth/upload").mkdir(parents=True, exist_ok=True)
 @app.route('/upload', methods = ['GET' , 'POST'])
 @login_required
 def upload():
