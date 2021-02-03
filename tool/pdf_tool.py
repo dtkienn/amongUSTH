@@ -1,7 +1,7 @@
 import fitz # PyMuPDF
 import io
 from PIL import Image
-from fitz import Document
+# from fitz import Document
 
 class PDF():
     def __init__(self, pdf_file_path, file_id):

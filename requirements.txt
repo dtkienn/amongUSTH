@@ -6,6 +6,7 @@ cryptography
 dnspython
 pymongo
 PyPDF2
+PyMuPDF
 fitz
 tools
 frontend
