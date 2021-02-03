@@ -50,7 +50,7 @@ if not os.path.exists(os.getcwd() + "/fileseduocuploadvaoday"):
 # Flask app setup
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-app.config["UPLOAD_FOLDER"] = os.getcwd() + "/fileseduocuploadvaoday"
+UPLOAD_FOLDER = os.getcwd() + "/fileseduocuploadvaoday"
 app.config["MAX_CONTENT_PATH"] = 16 * 1024**2 # Maximize size of file
 
 login_manager = LoginManager()
@@ -284,10 +284,9 @@ def upload():
 def get_file():
     if request.method == 'GET':
         return redirect(url_for('upload'))
-
     elif request.method == 'POST':
         file = request.files["file"]
-        file.save(os.path.join(app["UPLOAD_FOLDER"], secure_filename(file.filename)))
+        file.save(os.path.join(UPLOAD_FOLDER, secure_filename(file.filename)))
         print(file.filename)
         ''' this is for temporary
           -> After this, we're gonna upload this file (with another thread) to server and delete this local file. Or we could just upload from the form to drive instead of save local file.
@@ -297,4 +296,4 @@ def get_file():
         return redirect(url_for('upload'))
 
 if __name__ == '__main__':
-    app.run(debug=True,ssl_context="adhoc")
+    app.run(debug=True, ssl_context="adhoc")
