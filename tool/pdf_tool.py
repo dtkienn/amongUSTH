@@ -2,6 +2,7 @@ import fitz # PyMuPDF
 import io
 from PIL import Image
 from fitz import Document
+import os
 
 class PDF():
     def __init__(self, pdf_file_path, file_id):
@@ -16,8 +17,8 @@ class PDF():
     def get_front(self):
         pdf_file = self.pdf_file
         file_id = self.file_id
+        front = ''
         page = pdf_file[0]
-        image_list = page.getImageList()
         for image_index, img in enumerate(page.getImageList(), start=1):
             # get the XREF of the image
             xref = img[0]
@@ -29,5 +30,10 @@ class PDF():
             # load it to PIL
             image = Image.open(io.BytesIO(image_bytes))
             # save it to local disk
-            image.save(open(f"temp/image_{file_id}.{image_ext}", "wb"))
+            image.save(open(('temp/image_' + file_id + '.' + image_ext), "wb"))
+            front = 'temp/image_' + file_id + '.' + image_ext
+            image.close()
+        return front
 
+# file = PDF('User_file\Fundamental_of_Physics_10th_edition_questions.pdf', '123')
+# print(file.get_page_count())

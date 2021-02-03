@@ -99,12 +99,14 @@ class User(UserMixin):
         return mdict['UID']
 
 class Book():
-    def post_book(id_, book_name, type_, subject, author, description, page_number, link, front):
+    def post_book(id_, book_name, type_, subject, author, description, page_number, front_id):
         if book.find_one({'book_name' : book_name}):
             print('Existed')
             pass
         else:
-            mdict = {'BID' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : page_number, 'link' : link, 'front' : front, 'download' : int('0'), 'upvote' : int('0'), 'downvote' : int('0')}
+            link =  'https://drive.google.com/file/d/' + id_ + '/view?usp=sharing'
+            front_link = "https://drive.google.com/uc?export=view&id=" + front_id
+            mdict = {'BID' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : page_number, 'link' : link, 'front' : front_link, 'download' : int('0'), 'upvote' : int('0'), 'downvote' : int('0')}
             try:
                 book.insert_one(mdict)
             except:
