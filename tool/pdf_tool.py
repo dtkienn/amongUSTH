@@ -32,7 +32,6 @@ class PDF():
             # save it to local disk
             image.save(open(('temp/image_' + file_id + '.' + image_ext), "wb"))
             front = 'temp/image_' + file_id + '.' + image_ext
-            image.close()
         return front
 
 # file = PDF('User_file\Fundamental_of_Physics_10th_edition_questions.pdf', '123')
