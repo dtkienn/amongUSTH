@@ -24,7 +24,10 @@ from login.mongo import Book as mongoBook
 from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
 from login.mail import gmail
+from tool.pdf_tool import PDF
+from googledrive_api.fs import uploadFile_image, uploadFile
 from werkzeug.utils import secure_filename
+
 # Configuration
 import json
 
@@ -260,9 +263,19 @@ def admin():
 @app.route('/content')
 @login_required
 def content():
-    return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic)
-    
-@app.route('/upload')
+    file_id = '1qwUqEjkLju0uemKqzf5Y0DDhYSbURmrx'
+    image_id = mongoBook.get_front(file_id)
+    file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
+    image_link = "https://drive.google.com/uc?export=view&id=" + image_id
+    page_num = mongoBook.get_page_number(file_id)
+    description = mongoBook.get_description(file_id)
+    Author = mongoBook.get_author(file_id)
+    download = mongoBook.get_download(file_id)
+    upvote = mongoBook.get_upvote(file_id)
+    downvote = mongoBook.get_downvote(file_id)
+    return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
+
+@app.route('/upload', methods = ['GET' , 'POST'])
 @login_required
 def upload():
     return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
@@ -270,17 +283,18 @@ def upload():
 @app.route('/upload/get_file', methods = ['GET', 'POST'])
 def get_file():
     if request.method == 'GET':
-        return redirect(url_for('upload))
+        return redirect(url_for('upload'))
+
     elif request.method == 'POST':
         file = request.files["file"]
-        file.save(os.path.join(app["UPLOAD_FOLDER], secure_filename(file.filename)))
+        file.save(os.path.join(app["UPLOAD_FOLDER"], secure_filename(file.filename)))
         print(file.filename)
         ''' this is for temporary
           -> After this, we're gonna upload this file (with another thread) to server and delete this local file. Or we could just upload from the form to drive instead of save local file.
           Thanks! 
         '''
         print("successfully uploaded")
-        return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
+        return redirect(url_for('upload'))
 
 if __name__ == '__main__':
-    app.run(debug=True, ssl_context="adhoc")
+    app.run(debug=True,ssl_context="adhoc")
