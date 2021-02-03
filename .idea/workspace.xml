@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3c6dab7a-7b9c-42fa-ab07-f6f09285289f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/googledrive_api/token.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/googledrive_api/token.pickle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tool/pdf_tool.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/pdf_tool.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
