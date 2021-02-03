@@ -306,8 +306,6 @@ def get_file():
         mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
         
         print("successfully uploaded")
-        file.close()
-        os.remove(UPLOAD_FOLDER)
         return redirect(url_for('upload'))
 
 host = '127.0.0.1'
