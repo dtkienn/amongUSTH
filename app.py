@@ -265,7 +265,9 @@ def browse():
 def search():
     if request.method== 'POST':
         form = request.form
-        search_value = form['']
+        search_value = form['search_string']
+        search = "%{}%".format(search_value)
+        
 
 @app.route('/admin')
 def admin():
@@ -304,6 +306,7 @@ def upload():
     if request.method == "POST":
         if request.files:
             fileitem = request.files["book_upload"]
+            createFolder(fileitem)
             print('The file "' + fileitem + '"was uploaded successfully')
             return redirect(request.url)
     # cgitb.enable()
