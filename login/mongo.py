@@ -57,7 +57,7 @@ class User(UserMixin):
         u_info.update_one(item, {'$set': {'major' : major}})
 
     def is_USTHer(email):
-        if re.match(r"[a-zA-Z\-\.1-9]+[@][s]?[t]?.?usth.edu.vn", email):
+        if re.match(r"[a-zA-Z\-\.0-9]+[@][s]?[t]?.?usth.edu.vn", email):
            return True
         return False
     
