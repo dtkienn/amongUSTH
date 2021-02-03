@@ -30,6 +30,11 @@ from login.mongo import User as mongoUsr
 from login.mongo import Book as mongoBook
 from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
+from login.mail import gmail
+from tool.pdf_tool import PDF
+from googledrive_api.fs import uploadFile_image, uploadFile
+from werkzeug.utils import secure_filename
+
 # Configuration
 import json
 
@@ -42,10 +47,18 @@ GOOGLE_CLIENT_ID = client_key
 GOOGLE_CLIENT_SECRET = client_secret
 GOOGLE_DISCOVERY_URL = discovery_url
 
+if not os.path.exists(os.getcwd() + "/fileseduocuploadvaoday"):
+    try:
+        os.mkdir("fileseduocuploadvaoday")
+    except:
+        print("can't create folder for download")
+    
+
 # Flask app setup
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-
+UPLOAD_FOLDER = os.getcwd() + "/fileseduocuploadvaoday"
+app.config["MAX_CONTENT_PATH"] = 16 * 1024**2 # Maximize size of file
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -54,7 +67,7 @@ bcrypt = Bcrypt(app)
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return render_template("login.html", display_navbar="none")
+    return render_template("login.html", display_navbar="none", text="You need to login!")
 
 
 
@@ -124,8 +137,13 @@ def login():
         if usr_checked:
             # @login_manager.user_loader  
             global user
+            global first_Name
+            global profile_pic
             id_ = mongoUsr.get_id(usr_checked.username)
             user = logUsr.user_info.get(id_)
+            name = mongoUsr.get_name(id_)
+            first_Name = name.split(' ', 1)[0]
+            profile_pic = mongoUsr.get_profile_pic(id_)
             login_user(user)
             return redirect(url_for("index"))
         else:
@@ -191,15 +209,20 @@ def callback():
             user = logUsr.user_info(
                 id_=unique_id, name=users_name, email=users_email, profile_pic=picture
             )
+            global profile_pic 
+            global first_Name 
             id_ = user.getid()
             name = user.getName()
             email = user.getEmail()
             profile_pic = user.getprofile_pic()
+            student_id = get_studentid(email)
+            first_Name = name.split(' ', 1)[0]
             
             if not mongoUsr.account_existed(id_):
-                mongoUsr.register(id_, name, email, profile_pic)
+                mongoUsr.register(id_, name, email, student_id, profile_pic)
                 generate_password()
                 print('Generated login info!')
+                gmail.send(email, get_studentid(email))
      
             login_user(user)
 
@@ -213,7 +236,10 @@ def callback():
         else:
             return redirect(url_for('loginfail'))
 
-      
+def get_studentid(email):
+    student_id = email.split(".")[1].split("@")[0]
+    student_id.split('3')
+    return student_id
 
 @app.route('/loginfail')
 def loginfail():
@@ -267,23 +293,27 @@ def search():
         form = request.form
         search_value = form['search_string']
         search = "%{}%".format(search_value)
-        
 
 @app.route('/admin')
+@login_required
 def admin():
     return render_template("admin.html", display_navbar="none", name="ADMIN")
 
 
 @app.route('/content')
+@login_required
 def content():
-    if current_user.is_authenticated:
-        name = user.getName()
-        profile_pic = user.getprofile_pic()
-        first_Name = name.split(' ', 1)[0]
-
-        return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic)
-    else:
-        return render_template('login.html', text="You need to login!")
+	file_id = '1qwUqEjkLju0uemKqzf5Y0DDhYSbURmrx'
+    image_id = mongoBook.get_front(file_id)
+    file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
+    image_link = "https://drive.google.com/uc?export=view&id=" + image_id
+    page_num = mongoBook.get_page_number(file_id)
+    description = mongoBook.get_description(file_id)
+    Author = mongoBook.get_author(file_id)
+    download = mongoBook.get_download(file_id)
+    upvote = mongoBook.get_upvote(file_id)
+    downvote = mongoBook.get_downvote(file_id)
+    return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
 
 @app.route('/book',methods=['GET','POST'])
 def new_book():
@@ -301,35 +331,25 @@ import cgi, os, cgitb, sys
 from pathlib import Path
 from werkzeug.utils import secure_filename
 # Path("C:/among_usth/upload").mkdir(parents=True, exist_ok=True)
-@app.route('/upload',methods=["GET","POST"])
+@app.route('/upload', methods = ['GET' , 'POST'])
+@login_required
 def upload():
-    if request.method == "POST":
-        if request.files:
-            fileitem = request.files["book_upload"]
-            createFolder(fileitem)
-            print('The file "' + fileitem + '"was uploaded successfully')
-            return redirect(request.url)
-    # cgitb.enable()
-    # try:
-    #     import msvcrt
-    #     msvcrt.setmode(0, os.O_BINARY)
-    #     msvcrt.setmode(1, os.O_BINARY)
-    # except ImportError:
-    #     pass
-    # form = cgi.FieldStorage()
-    # fileitem = form['filename']
-    # if fileitem.filename:
-    #     fn = os.path.basename(fileitem.filename)
-    #     main_drive.uploadFile(filename=fileitem.filename,filepath=fn,mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-    #     print('The file "' + fn + '"was uploaded successfully')
-    # else:
-    #     print('No file was uploaded')
-    # # file = request.files['inputFile']
-    return render_template('upload.html')
+    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
 
-# @app.route('/uploads')
-# def upFile():
-#     return file.filename
-    
+@app.route('/upload/get_file', methods = ['GET', 'POST'])
+def get_file():
+    if request.method == 'GET':
+        return redirect(url_for('upload'))
+    elif request.method == 'POST':
+        file = request.files["file"]
+        file.save(os.path.join(UPLOAD_FOLDER, secure_filename(file.filename)))
+        print(file.filename)
+        ''' this is for temporary
+          -> After this, we're gonna upload this file (with another thread) to server and delete this local file. Or we could just upload from the form to drive instead of save local file.
+          Thanks! 
+        '''
+        print("successfully uploaded")
+        return redirect(url_for('upload'))
+        
 if __name__ == '__main__':
     app.run(debug=True, ssl_context="adhoc")
