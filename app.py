@@ -47,17 +47,18 @@ GOOGLE_CLIENT_ID = client_key
 GOOGLE_CLIENT_SECRET = client_secret
 GOOGLE_DISCOVERY_URL = discovery_url
 
-if not os.path.exists(os.getcwd() + "/fileseduocuploadvaoday"):
+if not os.path.exists(os.getcwd() + "/temp"):
     try:
-        os.mkdir("fileseduocuploadvaoday")
+        os.mkdir("temp")
+        print('Folder for download created')
     except:
         print("can't create folder for download")
-    
+
 
 # Flask app setup
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-UPLOAD_FOLDER = os.getcwd() + "/fileseduocuploadvaoday"
+UPLOAD_FOLDER = os.getcwd() + "/temp"
 app.config["MAX_CONTENT_PATH"] = 16 * 1024**2 # Maximize size of file
 
 login_manager = LoginManager()
@@ -314,7 +315,8 @@ def content():
     download = mongoBook.get_download(file_id)
     upvote = mongoBook.get_upvote(file_id)
     downvote = mongoBook.get_downvote(file_id)
-    return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
+    title = mongoBook.get_file_name(file_id)
+    return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
 
 @app.route('/book',methods=['GET','POST'])
 def new_book():
@@ -344,13 +346,25 @@ def get_file():
     elif request.method == 'POST':
         file = request.files["file"]
         file.save(os.path.join(UPLOAD_FOLDER, secure_filename(file.filename)))
-        print(file.filename)
-        ''' this is for temporary
-          -> After this, we're gonna upload this file (with another thread) to server and delete this local file. Or we could just upload from the form to drive instead of save local file.
-          Thanks! 
-        '''
+
+        form = request.form
+
+        new_file = 'temp/' + secure_filename(file.filename)
+        print(new_file)
+        
+        file_id = uploadFile(new_file)
+        print('file id: ' + file_id)
+        new_pdffile = PDF(new_file, file_id)
+        first_page = new_pdffile.get_front()
+        front = uploadFile_image(first_page)
+        page_count = new_pdffile.get_page_count()
+        print('front id: ' + front)
+
+        mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
+        
         print("successfully uploaded")
         return redirect(url_for('upload'))
 
+host = '127.0.0.1'
 if __name__ == '__main__':
-    app.run(debug=True, ssl_context="adhoc")
+    app.run(debug=True, ssl_context="adhoc", host = host)

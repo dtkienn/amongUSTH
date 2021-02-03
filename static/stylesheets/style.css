@@ -890,6 +890,18 @@ nav a:active {
   height: 10vh;
   margin-top: 25px;
 }
+.download a{
+  color: white;
+}
+.download a:hover{
+  color: white;
+  text-decoration: none;
+}
+.download a:target{
+  color: white;
+  text-decoration: none;
+}
+
 
 .middle_container {
   display: flex;
@@ -1090,7 +1102,8 @@ nav a:active {
 .upload-body{
   display: grid;
   place-items: center;
-  height: 500px;
+  height: 65vh;
+  width: 100%;
   padding-top: 2%;
 }
 .upload-info{
@@ -1137,10 +1150,9 @@ nav a:active {
   padding-left: 10px;
   padding-right: 200px;
 }
-.upload-submit{
-  display: flex;
-  padding-top: 15%;
-  width: 100%;
+.upload-info-detail button{
+  margin-top: 1vh;
+  margin-left: 3.5vw;
 }
 .upload-input input{
   float: left;
@@ -1160,6 +1172,11 @@ nav a:active {
   height: 150px;
   text-align: top;
   word-wrap: break-word;
+}
+.upload-input select{
+  text-align: center;
+  box-sizing: border-box;
+  border: 1px solid black;
 }
 
 
