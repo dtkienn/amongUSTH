@@ -1,17 +1,10 @@
-from __future__ import print_function
 import json
 import os
 from re import template
 import sqlite3
 from datetime import timedelta
-import httplib2
-import os, io
 
-from apiclient import discovery
-from oauth2client import client
-from oauth2client import tools
-from oauth2client.file import Storage
-from apiclient.http import MediaFileUpload, MediaIoBaseDownload
+
 # Third party libraries
 from flask import Flask, render_template, redirect, request, url_for
 from flask_login import (
@@ -82,22 +75,7 @@ def load_user(user_id):
     print('loaded')
     return logUsr.user_info.get(user_id)
 
-try:
-    import argparse
-    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-except ImportError:
-    flags = None
-import googledrive_api.auth as auth
-# If modifying these scopes, delete your previously saved credentials
-# at ~/.credentials/drive-python-quickstart.json
-SCOPES = 'https://www.googleapis.com/auth/drive'
-CLIENT_SECRET_FILE = 'credentials.json'
-APPLICATION_NAME = 'Drive API Python Quickstart'
-authInst = auth.auth(SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
-credentials = authInst.getCredentials()
 
-http = credentials.authorize(httplib2.Http())
-drive_service = discovery.build('drive', 'v3', http=http)
 @app.route("/index")
 def index():
     if current_user.is_authenticated:
@@ -270,14 +248,6 @@ def homepage():
     else:
         return render_template("homepage.html", display_navbar="none", name='SIGN UP NOW!')
 
-def createFolder(name):
-    file_metadata = {
-    'name': name,
-    'mimeType': 'application/vnd.google-apps.folder'
-    }
-    file = drive_service.files().create(body=file_metadata,
-                                        fields='id').execute()
-    print ('Folder ID: %s' % file.get('id'))
 
 @app.route('/browse', methods=['GET','POST'])
 @login_required
@@ -305,7 +275,7 @@ def admin():
 @app.route('/content')
 @login_required
 def content():
-	file_id = '1qwUqEjkLju0uemKqzf5Y0DDhYSbURmrx'
+    file_id = '1qwUqEjkLju0uemKqzf5Y0DDhYSbURmrx'
     image_id = mongoBook.get_front(file_id)
     file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
     image_link = "https://drive.google.com/uc?export=view&id=" + image_id
@@ -330,10 +300,7 @@ def new_book():
         print("insert failed")
     return render_template('homepage.html',title='Created Post')
     # return render_template('homepage.html',title='BookPost',form=form)
-import cgi, os, cgitb, sys
-from pathlib import Path
-from werkzeug.utils import secure_filename
-# Path("C:/among_usth/upload").mkdir(parents=True, exist_ok=True)
+
 @app.route('/upload', methods = ['GET' , 'POST'])
 @login_required
 def upload():
