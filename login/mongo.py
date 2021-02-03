@@ -121,6 +121,10 @@ class Book():
     def count_downvote(id_):
         book.update_one({'BID' : id_}, { '$inc': {'downvote': 1} })
 
+    def get_book_search(book_name ,type_,subject,author,):
+        mdict = book.find_one({'book_name' : book_name,'type_' : type_, 'subject' : subject, 'author' : author})
+        return mdict['book name']
+
     def get_file_name(id_):
         mdict = book.find_one({'BID' : id_})
         return mdict['book name']

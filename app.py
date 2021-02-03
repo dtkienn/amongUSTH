@@ -264,7 +264,14 @@ def search():
     if request.method== 'POST':
         form = request.form
         search_value = form['search_string']
-        search = "%{}%".format(search_value)
+        type_book = form['filter-type_book'].target.value
+        subject_book = form['filter-type_subject'].target.value
+        author_book = form['filter-type_author'].target.value
+        search = "%{0}%".format(search_value)
+        result = mongoBook.get_book_search(book_name=search,type_=type_book,subject=subject_book,author=author_book)
+        return render_template('browse.html',display_navbar="inline",book_name=result)
+    else:
+        redirect('/browse')
 
 @app.route('/admin')
 @login_required
