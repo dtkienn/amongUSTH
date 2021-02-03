@@ -1,4 +1,3 @@
-    
 from flask_login import UserMixin
 from login.mongo import User as mongo
 
@@ -11,7 +10,7 @@ class user_info(UserMixin):
 
     @staticmethod
     def get(user_id):
-        usr = mongo.get_db(user_id)
+        usr = mongo.get(user_id)
         if not usr:
             return None
         usr = user_info(
@@ -30,25 +29,25 @@ class user_info(UserMixin):
     def getprofile_pic(self):
         return self.profile_pic
     def getid(self):
-        return self.id_
+        return self.id
 
 class user_login(UserMixin):
-    def __init__(self, id_, username, password):
+    def __init__(self, id_, username, hashed_password):
         self.username = username
-        self.password = password
+        self.hashed_password = hashed_password
         self.id = id_
         self.name = mongo.get_name(id_)
         self.email = mongo.get_email(id_)
         self.profile_pic = mongo.get_profile_pic(id_)
 
     def verify(self):
-        mdict = mongo.login(self.username, self.password)
+        mdict = mongo.login(self.username, self.hashed_password)
         if mdict:
             return True
         return False
 
     def getid(self):
-        return self.id_
+        return self.id
     def getName(self):
         return self.name
     def getEmail(self):
