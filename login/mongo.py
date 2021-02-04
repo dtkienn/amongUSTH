@@ -128,7 +128,7 @@ class Book():
 
     def get_file_name(id_):
         mdict = book.find_one({'BID' : id_})
-        return mdict['book name']
+        return mdict['book_name']
 
     def get_type(id_):
         mdict = book.find_one({'BID' : id_})

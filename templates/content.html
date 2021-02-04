@@ -22,10 +22,10 @@
         <div class="right_contain_up">
          <div class="book_title">{{title}}</div>
          <div class="author">{{Author}}</div>
-         <button class="download">
-          <a class="" href = {{file_link}} target = "_blank">DOWNLOAD</a>
-         </button>
-       </div>
+          <form action = '/content/download'>
+            <input type = "submit" class="download" value = 'DOWNLOAD'></input>
+          </form>
+          </div>
        </section>
     <!-- Mid container -->
        <section class="middle_container">

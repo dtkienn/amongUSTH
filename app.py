@@ -16,6 +16,7 @@ from flask_login import (
 )
 from oauthlib.oauth2 import WebApplicationClient
 import requests
+import webbrowser
 
 # Internal imports
 import login.User as logUsr
@@ -264,20 +265,42 @@ def admin():
 @app.route('/content')
 @login_required
 def content():
-    file_id = '1eR3t5tNgW5Qo-WMIZtFSNVRGIQf8Tstb'
-    image_id = mongoBook.get_front(file_id)
+    global file_id
+    file_id = '1QUQGdJWjZXkDOO7GjIWCRd0FqyGcHh06'
+    image_link = mongoBook.get_front(file_id)
+    download_count = mongoBook.get_download(file_id)
     file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
-    image_link = "https://drive.google.com/uc?export=view&id=" + image_id
     page_num = mongoBook.get_page_number(file_id)
     description = mongoBook.get_description(file_id)
     Author = mongoBook.get_author(file_id)
-    download = mongoBook.get_download(file_id)
     upvote = mongoBook.get_upvote(file_id)
     downvote = mongoBook.get_downvote(file_id)
     title = mongoBook.get_file_name(file_id)
-    return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
 
-@app.route('/upload', methods = ['GET' , 'POST'])
+    if request.method == 'POST':
+        if request.form['button'] == 'download':
+            download(file_id)
+
+    return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
+
+def upvote(id_):
+    mongoBook.count_upvote(id_)
+    print('Upvoted!')
+
+def downvote(id_):
+    mongoBook.count_downvote(id_)
+    print('Downvoted!')
+
+
+@app.route('/content/download')
+@login_required
+def download():
+    link = mongoBook.get_link(file_id)
+    mongoBook.count_download(file_id)
+    webbrowser.open_new_tab(link)
+    return redirect(url_for('content'))
+
+@app.route('/upload')
 @login_required
 def upload():
     return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
@@ -301,11 +324,12 @@ def get_file():
                 page_count = new_pdffile.get_page_count()
                 front = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=' + file_id
                 print("successfully uploaded")
+                
                 mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
             except Exception:
                 print (Exception)
                 print('Cannot upload file!')
-                
+
         return redirect(url_for('upload'))
 
 host = '127.0.0.1'
