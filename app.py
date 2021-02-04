@@ -25,7 +25,7 @@ from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
 from login.mail import gmail
 from tool.pdf_tool import PDF
-from googledrive_api.fs import uploadFile_image, uploadFile
+from googledrive_api.fs import uploadFile
 from werkzeug.utils import secure_filename
 
 # Configuration
@@ -264,7 +264,7 @@ def admin():
 @app.route('/content')
 @login_required
 def content():
-    file_id = '1qwUqEjkLju0uemKqzf5Y0DDhYSbURmrx'
+    file_id = '1eR3t5tNgW5Qo-WMIZtFSNVRGIQf8Tstb'
     image_id = mongoBook.get_front(file_id)
     file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
     image_link = "https://drive.google.com/uc?export=view&id=" + image_id
@@ -294,18 +294,26 @@ def get_file():
 
         new_file = 'temp/' + secure_filename(file.filename)
         print(new_file)
-        
-        file_id = uploadFile(new_file)
-        print('file id: ' + file_id)
-        new_pdffile = PDF(new_file, file_id)
-        first_page = new_pdffile.get_front()
-        front = uploadFile_image(first_page)
-        page_count = new_pdffile.get_page_count()
-        print('front id: ' + front)
-
-        mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
-        
-        print("successfully uploaded")
+        if '.pdf' in new_file:
+            try:
+                file_id = uploadFile(new_file, form['Name'])
+                print('file id: ' + file_id)
+                new_pdffile = PDF(new_file)
+                page_count = new_pdffile.get_page_count()
+                front = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=' + file_id
+                print("successfully uploaded")
+                mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
+            except Exception:
+                print (Exception)
+                print('Cannot upload file!')
+            file_id = uploadFile(new_file, form['Name'])
+            print('file id: ' + file_id)
+            new_pdffile = PDF(new_file)
+            page_count = new_pdffile.get_page_count()
+            front = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=' + file_id
+            print("successfully uploaded")
+            mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
+            
         return redirect(url_for('upload'))
 
 host = '127.0.0.1'
