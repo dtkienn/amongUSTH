@@ -297,7 +297,6 @@ def get_file():
         if '.pdf' in new_file:
             try:
                 file_id = uploadFile(new_file, form['Name'])
-                print('file id: ' + file_id)
                 new_pdffile = PDF(new_file)
                 page_count = new_pdffile.get_page_count()
                 front = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=' + file_id
@@ -306,14 +305,7 @@ def get_file():
             except Exception:
                 print (Exception)
                 print('Cannot upload file!')
-            file_id = uploadFile(new_file, form['Name'])
-            print('file id: ' + file_id)
-            new_pdffile = PDF(new_file)
-            page_count = new_pdffile.get_page_count()
-            front = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=' + file_id
-            print("successfully uploaded")
-            mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
-            
+                
         return redirect(url_for('upload'))
 
 host = '127.0.0.1'

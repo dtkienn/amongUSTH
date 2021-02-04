@@ -80,7 +80,7 @@ def searchFile(name, type_):
                 return False
             
             elif file_id != '':
-                break
+                return file_id
 
     elif type_ == 'pdf':
         response = drive_service.files().list(q="mimeType='application/pdf'",
@@ -99,14 +99,13 @@ def searchFile(name, type_):
                 return False
             
             elif file_id != '':
-                break
-    return file_id
+                return file_id
 
 folder_id = searchFile('AmongUSTH', 'folder')
 
 def uploadFile(filepath, filename, folder_id = folder_id, mimetype = "application/pdf"): # "test.txt" , "document"
     type_ = filename.split('.')[-1]
-    if not searchFile(filename, type_):
+    if searchFile(filename, type_):
         print('File exsits')
     else:
         file_metadata = {'name': filename, "parents": [folder_id]}
