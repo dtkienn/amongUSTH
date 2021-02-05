@@ -120,11 +120,17 @@ class Book():
     def count_download(id_):
         return book.update_one({'BID' : id_}, { '$inc': {'download': 1} })
         
-    def count_upvote(id_):
+    def upvote(id_):
         return book.update_one({'BID' : id_}, { '$inc': {'upvote': 1} })
+
+    def upvote_(id_):
+        return book.update_one({'BID' : id_}, { '$inc': {'upvote': -1} })    
             
-    def count_downvote(id_):
+    def downvote(id_):
         book.update_one({'BID' : id_}, { '$inc': {'downvote': 1} })
+
+    def downvote_(id_):
+        book.update_one({'BID' : id_}, { '$inc': {'downvote': -1} })
 
     def get_file_name(id_):
         mdict = book.find_one({'BID' : id_})

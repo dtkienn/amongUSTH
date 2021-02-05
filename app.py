@@ -266,6 +266,11 @@ def admin():
 @login_required
 def content():
     global file_id
+    global up_count, down_count
+    global upvote
+    global downvote
+    up_count = 0
+    down_count = 0
     file_id = '1QUQGdJWjZXkDOO7GjIWCRd0FqyGcHh06'
     image_link = mongoBook.get_front(file_id)
     download_count = mongoBook.get_download(file_id)
@@ -277,10 +282,6 @@ def content():
     downvote = mongoBook.get_downvote(file_id)
     title = mongoBook.get_file_name(file_id)
 
-    if request.method == 'POST':
-        if request.form['button'] == 'download':
-            download(file_id)
-
     return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
 
 def upvote(id_):
@@ -291,6 +292,38 @@ def downvote(id_):
     mongoBook.count_downvote(id_)
     print('Downvoted!')
 
+
+@app.route("/up", methods=["POST"])
+def upvote():
+    global up_count 
+    global upvote
+    global down_count
+    up_count += 1
+    if up_count % 2 == 0: 
+        mongoBook.upvote_(file_id)
+        upvote -= 1
+        print('not up anymore')
+    elif up_count % 2 != 0:
+        mongoBook.upvote(file_id)
+        upvote += 1
+        print('up')
+    return str(upvote)
+
+@app.route("/down", methods=["POST"])
+def downvote():
+    global down_count
+    global downvote
+    global up_count
+    down_count += 1 
+    if down_count % 2 == 0: 
+        mongoBook.upvote_(file_id)
+        downvote -= 1
+        print('not down anymore')
+    elif down_count % 2 != 0:
+        mongoBook.upvote(file_id)
+        downvote += 1
+        print('down')
+    return str(downvote)
 
 @app.route('/content/download')
 @login_required
