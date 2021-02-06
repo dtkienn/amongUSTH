@@ -97,16 +97,21 @@ class User(UserMixin):
     def get_id(username):
         mdict = u_login.find_one({'UserName' : username}, {"UID": 1, "_id" : 0})
         return mdict['UID']
+    
+    def set_status(id_, status):
+        u_login.update_many({'UID' : id_}, {'$set' : {'status' : status}})
+
+    def get_online():
+        u_login.find_many({'status' : 'active'})
 
 class Book():
-    def post_book(id_, book_name, type_, subject, author, description, page_number, front_id):
+    def post_book(id_, book_name, type_, subject, author, description, page_number, front_link):
         if book.find_one({'book_name' : book_name}):
             print('Existed')
             pass
         else:
             link =  'https://drive.google.com/file/d/' + id_ + '/view?usp=sharing'
-            front_link = "https://drive.google.com/uc?export=view&id=" + front_id
-            mdict = {'BID' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : page_number, 'link' : link, 'front' : front_link, 'download' : int('0'), 'upvote' : int('0'), 'downvote' : int('0')}
+            mdict = {'BID' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : page_number, 'link' : link, 'front' : front_link, 'download' : int('0'), 'upvote' : int('0'), 'downvote' : int('0'), 'status' : 'pending'}
             try:
                 book.insert_one(mdict)
             except:
@@ -115,15 +120,21 @@ class Book():
     def count_download(id_):
         return book.update_one({'BID' : id_}, { '$inc': {'download': 1} })
         
-    def count_upvote(id_):
+    def upvote(id_):
         return book.update_one({'BID' : id_}, { '$inc': {'upvote': 1} })
+
+    def upvote_(id_):
+        return book.update_one({'BID' : id_}, { '$inc': {'upvote': -1} })    
             
-    def count_downvote(id_):
+    def downvote(id_):
         book.update_one({'BID' : id_}, { '$inc': {'downvote': 1} })
+
+    def downvote_(id_):
+        book.update_one({'BID' : id_}, { '$inc': {'downvote': -1} })
 
     def get_file_name(id_):
         mdict = book.find_one({'BID' : id_})
-        return mdict['book name']
+        return mdict['book_name']
 
     def get_type(id_):
         mdict = book.find_one({'BID' : id_})
@@ -164,6 +175,14 @@ class Book():
     def get_download(id_):
         mdict = book.find_one({'BID' : id_})
         return mdict['download']
+
+    def set_status(id_, status):
+        book.update_one({'BID' : id_}, {'$set' : {'status' : status}})
+
+    def get_pending():
+        mdict = book.find_many({'status' : 'pending'})
+        return mdict
+
 class Vote():
     def __init__(self, up, down):
         self.up = up
