@@ -61,44 +61,13 @@
     <div class="title">BOOKS</div>
     <!-- Flickity HTML init -->
     <div class="carousel" data-flickity='{ "initialIndex ": 3 }'>
+        {% for book in books %}
       <div class="carousel-cell">
-          <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-          <div class="carousel-caption">Book name here</div>
+          <img class="carousel-inner" src='{{book["front"]}}' alt="book_image">
+          <div class="carousel-caption">{{book["book_name"]}}</div>
       </div>
-      <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
     </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    </div>
-    </div>
+        {% endfor %}
     <!--Document-->
     <div class="browse-book-container">
     <div class="title">DOCUMENTS</div>

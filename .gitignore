@@ -73,3 +73,4 @@ static/stylesheets/*.scss
 
 # Ignore temporary folder
 /temp
+/test
