@@ -14,6 +14,27 @@
     {% include 'navbar.html' %}
     {% include 'warning.html' %}
     <!--Up container-->
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', () => {
+          document.querySelectorAll('input').forEach(input => {
+              input.onclick = () => {
+                  const request = new XMLHttpRequest();
+                  request.open('POST', `/${input.id}`);
+                  request.onload = () => {
+                      const response = request.responseText;
+                      if (input.id == "up")
+                      {
+                        document.getElementById('upvote_count').innerHTML = response;
+                      }
+                      else if (input.id == "down"){
+                        document.getElementById('downvote_count').innerHTML = response;
+                      }
+                    }; 
+                  request.send();
+              };
+          });
+      });
+  </script>
     <section class="up_container">
         <div class="book_image">
          <img class="carousel-inner" src={{image_link}} alt="">
@@ -22,8 +43,10 @@
         <div class="right_contain_up">
          <div class="book_title">{{title}}</div>
          <div class="author">{{Author}}</div>
-         <a class="download" href = {{file_link}} target = "_blank">DOWNLOAD</a>
-       </div>
+          <form action = '/content/download'>
+            <input type = "submit" class="download" value = 'DOWNLOAD'></input>
+          </form>
+          </div>
        </section>
     <!-- Mid container -->
        <section class="middle_container">
@@ -31,10 +54,10 @@
            <ul class="list-unstyled">
              <li>Pages: {{page_num}}</li>
              <li>Downloads: {{download_count}}</li>
-             <li><span><img src="static/images/up.png" alt="upvote"></span>
-             <span>{{upvote_count}}</span></li>
-             <li><span><img src="static/images/down.png" alt="downvote"></span>
-             <span>{{downvote_count}}</span></li>
+             <li><span><input type = "image" id = "up" src="static/images/up.png" alt="upvote"></span>
+             <span id = "upvote_count">{{upvote_count}}</span></li>
+             <li><span><input type = "image" id = "down" src="static/images/down.png" alt="downvote"></span>
+             <span id = "downvote_count">{{downvote_count}}</span></li>
 
            </ul>
          </div>

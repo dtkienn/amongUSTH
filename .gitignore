@@ -70,3 +70,7 @@ test.py
 # Test files
 static/stylesheets/*.map
 static/stylesheets/*.scss
+
+# Ignore temporary folder
+/temp
+/test

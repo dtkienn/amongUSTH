@@ -16,6 +16,7 @@ from flask_login import (
 )
 from oauthlib.oauth2 import WebApplicationClient
 import requests
+import webbrowser
 
 # Internal imports
 import login.User as logUsr
@@ -25,7 +26,7 @@ from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
 from login.mail import gmail
 from tool.pdf_tool import PDF
-from googledrive_api.fs import uploadFile_image, uploadFile
+from googledrive_api.fs import uploadFile
 from werkzeug.utils import secure_filename
 
 # Configuration
@@ -40,17 +41,18 @@ GOOGLE_CLIENT_ID = client_key
 GOOGLE_CLIENT_SECRET = client_secret
 GOOGLE_DISCOVERY_URL = discovery_url
 
-if not os.path.exists(os.getcwd() + "/fileseduocuploadvaoday"):
+if not os.path.exists(os.getcwd() + "/temp"):
     try:
-        os.mkdir("fileseduocuploadvaoday")
+        os.mkdir("temp")
+        print('Folder for download created')
     except:
         print("can't create folder for download")
-    
+
 
 # Flask app setup
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-UPLOAD_FOLDER = os.getcwd() + "/fileseduocuploadvaoday"
+UPLOAD_FOLDER = os.getcwd() + "/temp"
 app.config["MAX_CONTENT_PATH"] = 16 * 1024**2 # Maximize size of file
 
 login_manager = LoginManager()
@@ -251,7 +253,8 @@ def homepage():
 @app.route('/browse')
 @login_required
 def browse():
-    return render_template("browse.html", display_navbar="inline", name=first_Name, picture=profile_pic)
+    books = list(book for book in mongoBook.get_all_books())
+    return render_template("browse.html", display_navbar="inline", name=first_Name, picture=profile_pic, books = books)
 
 
 @app.route('/admin')
@@ -263,19 +266,75 @@ def admin():
 @app.route('/content')
 @login_required
 def content():
-    file_id = '1qwUqEjkLju0uemKqzf5Y0DDhYSbURmrx'
-    image_id = mongoBook.get_front(file_id)
+    global file_id
+    global up_count, down_count
+    global upvote
+    global downvote
+    up_count = 0
+    down_count = 0
+    file_id = '1QUQGdJWjZXkDOO7GjIWCRd0FqyGcHh06'
+    image_link = mongoBook.get_front(file_id)
+    download_count = mongoBook.get_download(file_id)
     file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
-    image_link = "https://drive.google.com/uc?export=view&id=" + image_id
     page_num = mongoBook.get_page_number(file_id)
     description = mongoBook.get_description(file_id)
     Author = mongoBook.get_author(file_id)
-    download = mongoBook.get_download(file_id)
     upvote = mongoBook.get_upvote(file_id)
     downvote = mongoBook.get_downvote(file_id)
-    return render_template("content.html", display_navbar="inline", name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
+    title = mongoBook.get_file_name(file_id)
 
-@app.route('/upload', methods = ['GET' , 'POST'])
+    return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
+
+def upvote(id_):
+    mongoBook.count_upvote(id_)
+    print('Upvoted!')
+
+def downvote(id_):
+    mongoBook.count_downvote(id_)
+    print('Downvoted!')
+
+
+@app.route("/up", methods=["POST"])
+def upvote():
+    global up_count 
+    global upvote
+    global down_count
+    up_count += 1
+    if up_count % 2 == 0: 
+        mongoBook.upvote_(file_id)
+        upvote -= 1
+        print('not up anymore')
+    elif up_count % 2 != 0:
+        mongoBook.upvote(file_id)
+        upvote += 1
+        print('up')
+    return str(upvote)
+
+@app.route("/down", methods=["POST"])
+def downvote():
+    global down_count
+    global downvote
+    global up_count
+    down_count += 1 
+    if down_count % 2 == 0: 
+        mongoBook.upvote_(file_id)
+        downvote -= 1
+        print('not down anymore')
+    elif down_count % 2 != 0:
+        mongoBook.upvote(file_id)
+        downvote += 1
+        print('down')
+    return str(downvote)
+
+@app.route('/content/download')
+@login_required
+def download():
+    link = mongoBook.get_link(file_id)
+    mongoBook.count_download(file_id)
+    webbrowser.open_new_tab(link)
+    return redirect(url_for('content'))
+
+@app.route('/upload')
 @login_required
 def upload():
     return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
@@ -287,13 +346,26 @@ def get_file():
     elif request.method == 'POST':
         file = request.files["file"]
         file.save(os.path.join(UPLOAD_FOLDER, secure_filename(file.filename)))
-        print(file.filename)
-        ''' this is for temporary
-          -> After this, we're gonna upload this file (with another thread) to server and delete this local file. Or we could just upload from the form to drive instead of save local file.
-          Thanks! 
-        '''
-        print("successfully uploaded")
+
+        form = request.form
+
+        new_file = 'temp/' + secure_filename(file.filename)
+        print(new_file)
+        if '.pdf' in new_file:
+            try:
+                file_id = uploadFile(new_file, form['Name'])
+                new_pdffile = PDF(new_file)
+                page_count = new_pdffile.get_page_count()
+                front = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=' + file_id
+                print("successfully uploaded")
+                
+                mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
+            except Exception:
+                print (Exception)
+                print('Cannot upload file!')
+
         return redirect(url_for('upload'))
 
+host = '127.0.0.1'
 if __name__ == '__main__':
-    app.run(debug=True, ssl_context="adhoc")
+    app.run(debug=True, ssl_context="adhoc", host = host)
