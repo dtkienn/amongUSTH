@@ -1,9 +1,9 @@
 import httplib2
 import os, io
 
-from apiclient import discovery
+from googleapiclient import discovery
 from oauth2client import tools
-from apiclient.http import MediaFileUpload, MediaIoBaseDownload
+from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 try:
     import argparse
     flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
@@ -78,7 +78,7 @@ while True:
 
 folder_id = '1QDaiExHWPfQLh5lUa0gd9tsIVzojQkmP'
 def uploadFile(filepath, folder_id = folder_id, mimetype = "application/pdf"): # "test.txt" , "document"
-    filename = filepath.split('/')[1]
+    filename = filepath.split('/')[-1]
     file_metadata = {'name': filename, "parents": [folder_id]}
     media = MediaFileUpload(filepath,
                             mimetype=mimetype)
@@ -90,7 +90,7 @@ def uploadFile(filepath, folder_id = folder_id, mimetype = "application/pdf"): #
 
 def uploadFile_image(filepath, folder_id = folder_id, mimetype = "image/jpeg"): # "test.txt" , "document"
     filename = filepath
-    filename = filepath.split('/')[1]
+    filename = filepath.split('/')[-1]
     file_metadata = {'name': filename, "parents": [folder_id]}
     media = MediaFileUpload(filepath,
                             mimetype=mimetype)

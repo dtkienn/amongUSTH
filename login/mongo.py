@@ -8,7 +8,7 @@ dat = json.load(open('login/mongo.json'))
 data = dat
 username = data['read_write'][0]['username']
 password = data['read_write'][0]['password']
-client = pymongo.MongoClient("mongodb+srv://" + username + ":" + password + "@cluster0.3ihx5.mongodb.net/?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb+srv://" + username + ":" + password + "@cluster0.3ihx5.mongodb.net/?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE")
 pymongo.MongoClient()
 
 # Create database for User
