@@ -3,6 +3,7 @@ import pymongo
 from flask_login import UserMixin
 import json
 import re
+import datetime
 
 dat = json.load(open('login/mongo.json'))
 data = dat
@@ -25,9 +26,8 @@ book_db = client['AmongUSTH']
 book  = book_db['Book_data']
 
 # db and collections of interaction: vote and comment.
-interaction = client['Interact']
-vote = interaction['Vote']
-comment = interaction['Comment']
+vote = client['Vote']
+comment = client['Comment']
 
 
 class User(UserMixin):
@@ -38,7 +38,7 @@ class User(UserMixin):
         if u_info.find_one({'Email' : email}):
             print('Existed!')
         else: 
-            mdict = {'UID' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
+            mdict = {'UID' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic, 'role' : 'member'}
             u_info.insert_one(mdict)
 
     def get(id_):
@@ -103,14 +103,7 @@ class User(UserMixin):
 
     def get_online():
         u_login.find_many({'status' : 'active'})
-    
-    def get_user_all():
-        cursor = book.find({})
-        i = 0
-        for element in cursor:
-            print(element)
-            i += 1
-        print(i)
+
 # User.get_user_all()
 class Book():
     def post_book(id_, book_name, type_, subject, author, description, page_number, front_link):
@@ -186,19 +179,6 @@ class Book():
 
     def set_status(id_, status):
         book.update_one({'BID' : id_}, {'$set' : {'status' : status}})
-
-    def get_pending():
-        mdict = book.find_many({'status' : 'pending'})
-        return mdict
-
-    def get_book_all():
-        cursor = book.find({})
-        i = 0
-        for document in cursor:
-            i += 1
-            print(document)
-        print(i)
-
 # Book.get_book_all()
 class Vote():
     def __init__(self, up, down):
@@ -225,38 +205,52 @@ class Vote():
         return mdict['down']                        
 
 class Comment():
-    def __init__(self, content, user_id, comment_time,book_id):
-        self.content = content
-        self.user_id = user_id
-        self.comment_time = comment_time
-        self.book_id = book_id
-    
     def post_comment(id_, user_id,book_id,content,comment_time):
         if comment.find_one({'content': user_id}):
             print('Existed')
             pass
         else :
-            mdict = {'_id':id_,'book_id':book_id,'user_id':user_id,'content':content,'comment_time':comment_time}
+            comment_time = datetime.datetime.now()
+            comment_time_date = comment_time.day() + '/' + comment_time.month()
+            mdict = {'_id':id_,'book_id':book_id,'user_id':user_id,'content':content,'date' :comment_time_date}
             try:
                 comment.insert_one(mdict)
             except:
-                print("Insert failed")
+                print("Comment: Insert failed")
 
     def get_content(id_):
         mdict = book.find_one({'_id' : id_}, {'content' : 1, '_id' : 0})
         return mdict['content']
+        
     def get_file(id_):
         mdict = u_login.find_one({'UID' : id_}, {'file' : 1, '_id' : 0})
         return mdict['file']
 
-    def get_description(id_):
-        mdict = u_login.find_one({'UID' : id_}, {'description' : 1, '_id' : 0})
-        return mdict['description'] 
     def get_comment_time(id_):
         mdict = u_login.find_one({'_id' : id_}, {'comment_time' : 1, '_id' : 0})
         return mdict['comment_time']
+    
+    def delete_comment(id_):
+        mdict = book.find_one({'_id' : id_})
+        comment.delete_one(mdict)
 
-    def set_active(id_, status):
-        if status == 'Active':
+class Admin():
+    def is_admin(id_):
+        mdict = u_info.find_one({'UID' : id_})
+        if mdict['role'] == 'admin':
             return True
         return False
+
+    def total_materials():
+        cursor = book.find({})
+        num = 0
+        for document in cursor:
+            num += 1
+        return num
+    
+    def total_users():
+        cursor = u_info.find({})
+        num = 0
+        for document in cursor:
+            num += 1
+        return num

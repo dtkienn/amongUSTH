@@ -22,6 +22,7 @@ import webbrowser
 import login.User as logUsr
 from login.mongo import User as mongoUsr
 from login.mongo import Book as mongoBook
+from login.mongo import Admin as mongoAdmin
 from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
 from login.mail import gmail
@@ -86,8 +87,12 @@ def index():
         email = mongoUsr.get_email(id_)
         profile_pic = mongoUsr.get_profile_pic(id_)
         first_Name = name.split(' ', 1)[0]
+        if mongoAdmin.is_admin(id_):
+            role = 'admin'
+        else:
+            role = 'member'
         print("Logged in")
-        return render_template('profile.html', name=first_Name, email=email, picture=profile_pic, display_navbar="inline")
+        return render_template('profile.html', name=first_Name, email=email, picture=profile_pic, role = role, display_navbar="inline")
 
     else:
         print("Not logged in")
@@ -259,10 +264,9 @@ def browse():
 @app.route('/admin')
 @login_required
 def admin():
-    # online = 
-    # user = 
-    # materials = 
-    return render_template("admin.html", display_navbar="none", name="ADMIN")
+    materials = mongoAdmin.total_materials()
+    users = mongoAdmin.total_users()
+    return render_template("admin.html", display_navbar="none", name=first_Name, users = users, materials = materials)
 
 
 @app.route('/content')
@@ -274,7 +278,7 @@ def content():
     global downvote
     up_count = 0
     down_count = 0
-    file_id = '1obwjMNLegP8wAkWAuyDNfP0vIBIGwmWE'
+    file_id = '10MAQtNMRDLG-GY_9CiSPPE9HTYe5qkUd'
     image_link = mongoBook.get_front(file_id)
     download_count = mongoBook.get_download(file_id)
     file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
@@ -287,13 +291,7 @@ def content():
 
     return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
 
-def upvote(id_):
-    mongoBook.count_upvote(id_)
-    print('Upvoted!')
 
-def downvote(id_):
-    mongoBook.count_downvote(id_)
-    print('Downvoted!')
 
 
 @app.route("/up", methods=["POST"])
