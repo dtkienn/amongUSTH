@@ -267,7 +267,23 @@ def admin():
     materials = mongoAdmin.total_materials()
     users = mongoAdmin.total_users()
     online = mongoAdmin.total_online()
-    return render_template("admin.html", display_navbar="none", name=first_Name, users = users, materials = materials, online = online)
+
+    online_list = []
+    offline_list = []
+    offline_last = []
+    users_id = mongoAdmin.get_all_id()
+
+    for ele in users_id:
+        name = mongoUsr.get_name(ele)
+        if mongoAdmin.is_online(ele) == 'Active':
+            online_list.append(name)
+        else:
+            offline_list.append(name)
+            offline_last.append(mongoAdmin.is_online(ele))
+
+    online_list.sort()
+
+    return render_template("admin.html", display_navbar="none", name=first_Name, users = users, materials = materials, online = online, online_list = online_list, offline_list = offline_list, len_online = len(online_list), len_offline = len(offline_list), offline_last = offline_last)
 
 
 @app.route('/content')

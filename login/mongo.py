@@ -104,7 +104,7 @@ class User(UserMixin):
         u_login.update_one({'UID' : id_}, {'$set' : {'Last_active' : str(now)}})
 
     def get_last_active(id_):
-        return u_login.find_one({'UID' : id_})
+        return u_login.find_one({'UID' : id_})['Last_active']
 
 # User.get_user_all()
 class Book():
@@ -257,6 +257,13 @@ class Admin():
             num += 1
         return num
 
+    def get_all_id():
+        arr = []
+        cursor = u_login.find({})
+        for doc in cursor:
+            arr.append(doc['UID'])
+        return arr
+
     def is_online(id_):
         cursor = u_login.find_one({'UID' : id_})
         now = datetime.now()
@@ -286,7 +293,7 @@ class Admin():
         if status != '':
             return status
         elif time_long != '':
-            return 'Last active: ' + str(time_long) + ' ' + unit + ' ago'
+            return str(time_long) + ' ' + unit + ' ago'
 
     def total_online():
         cursor = u_login.find({})

@@ -6,12 +6,33 @@
     </head>
 <body>
     {% include 'navbar.html' %}
+    
     <div class="box">
         <h2>Admin</h2>
         <h3>Total no. of users: {{users}}</h3>
         <h3>Online users: {{online}}</h3>
         <h3>Total materials: {{materials}}</h3>
         <h3>Something...</h3>
+    </div>
+    <div class="box" style="text-align: left; position: relative;">
+        {%for i in range (0, len_online)%}
+            <table style="width:100%; color: white;">
+                <tr>
+                    <td>{{online_list[i]}}</td>
+                    <td style="text-align: right;">Active</td>
+                </tr>
+            </table>
+        {%endfor%}
+        <br>
+        
+        {%for i in range (0, len_offline)%}
+            <table style="width: 100%; color: white;">
+                <tr>
+                    <td>{{offline_list[i]}}</td>
+                    <td style="text-align: right;">{{offline_last[i]}}</td>
+                </tr>
+            </table>
+        {%endfor%}
     </div>
     {% include 'footer.html' %}
 </body>
