@@ -3,7 +3,7 @@ import pymongo
 from flask_login import UserMixin
 import json
 import re
-import datetime
+from datetime import datetime
 
 dat = json.load(open('login/mongo.json'))
 data = dat
@@ -79,7 +79,8 @@ class User(UserMixin):
         u_lec.insert_one(mdict)
 
     def add_login_info(id_, username, hased_password):
-        mdict = {'UID' : id_, 'UserName' : username, "Hashed_password": hased_password}  
+        now = datetime.now()
+        mdict = {'UID' : id_, 'UserName' : username, "Hashed_password": hased_password, 'Last_active' : now}  
         u_login.insert_one(mdict)
 
     def get_profile_pic(id_):
@@ -98,11 +99,12 @@ class User(UserMixin):
         mdict = u_login.find_one({'UserName' : username}, {"UID": 1, "_id" : 0})
         return mdict['UID']
     
-    def set_status(id_, status):
-        u_login.update_many({'UID' : id_}, {'$set' : {'status' : status}})
+    def set_last_active(id_):
+        now = datetime.now()
+        u_login.update_one({'UID' : id_}, {'$set' : {'Last_active' : str(now)}})
 
-    def get_online():
-        u_login.find_many({'status' : 'active'})
+    def get_last_active(id_):
+        return u_login.find_one({'UID' : id_})
 
 # User.get_user_all()
 class Book():
@@ -210,7 +212,7 @@ class Comment():
             print('Existed')
             pass
         else :
-            comment_time = datetime.datetime.now()
+            comment_time = datetime.now()
             comment_time_date = comment_time.day() + '/' + comment_time.month()
             mdict = {'_id':id_,'book_id':book_id,'user_id':user_id,'content':content,'date' :comment_time_date}
             try:
@@ -253,4 +255,44 @@ class Admin():
         num = 0
         for document in cursor:
             num += 1
+        return num
+
+    def is_online(id_):
+        cursor = u_login.find_one({'UID' : id_})
+        now = datetime.now()
+        status = ''
+        time_long = ''
+        unit = ''
+        hour = None
+        minute = None
+        last_active = datetime.strptime(cursor['Last_active'], '%Y-%m-%d %H:%M:%S.%f')
+        time = now - last_active
+        if time.days > 0:
+            time_long = time.days
+            unit = 'day(s)'
+        elif time.days == 0:
+            hour = int(time.seconds/3600)
+            unit = 'hour(s)'
+            if hour >= 1:
+                time_long = hour
+            elif hour < 1:
+                minute = int(time.seconds/60)
+                unit = 'minute(s)'
+                if minute == 0:
+                    status = 'Active'
+                elif minute != 0:
+                    time_long = minute
+
+        if status != '':
+            return status
+        elif time_long != '':
+            return 'Last active: ' + str(time_long) + ' ' + unit + ' ago'
+
+    def total_online():
+        cursor = u_login.find({})
+        num = 0
+        for doc in cursor:
+            id_ = doc['UID']
+            if Admin.is_online(id_) == 'Active':
+                num += 1
         return num

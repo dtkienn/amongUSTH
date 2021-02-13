@@ -1,7 +1,5 @@
 import json
 import os
-from re import template
-import sqlite3
 from datetime import timedelta
 
 
@@ -75,6 +73,8 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 @login_manager.user_loader
 def load_user(user_id):
     print('loaded')
+    # Maintain 'active' status
+    mongoUsr.set_last_active(user_id)
     return logUsr.user_info.get(user_id)
 
 
@@ -266,7 +266,8 @@ def browse():
 def admin():
     materials = mongoAdmin.total_materials()
     users = mongoAdmin.total_users()
-    return render_template("admin.html", display_navbar="none", name=first_Name, users = users, materials = materials)
+    online = mongoAdmin.total_online()
+    return render_template("admin.html", display_navbar="none", name=first_Name, users = users, materials = materials, online = online)
 
 
 @app.route('/content')
