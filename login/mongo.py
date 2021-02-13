@@ -103,7 +103,15 @@ class User(UserMixin):
 
     def get_online():
         u_login.find_many({'status' : 'active'})
-
+    
+    def get_user_all():
+        cursor = book.find({})
+        i = 0
+        for element in cursor:
+            print(element)
+            i += 1
+        print(i)
+# User.get_user_all()
 class Book():
     def post_book(id_, book_name, type_, subject, author, description, page_number, front_link):
         if book.find_one({'book_name' : book_name}):
@@ -111,7 +119,7 @@ class Book():
             pass
         else:
             link =  'https://drive.google.com/file/d/' + id_ + '/view?usp=sharing'
-            mdict = {'BID' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : page_number, 'link' : link, 'front' : front_link, 'download' : int('0'), 'upvote' : int('0'), 'downvote' : int('0'), 'status' : 'pending'}
+            mdict = {'BID' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : page_number, 'link' : link, 'front' : front_link, 'download' : int('0'), 'upvote' : int('0'), 'downvote' : int('0')}
             try:
                 book.insert_one(mdict)
             except:
@@ -183,6 +191,15 @@ class Book():
         mdict = book.find_many({'status' : 'pending'})
         return mdict
 
+    def get_book_all():
+        cursor = book.find({})
+        i = 0
+        for document in cursor:
+            i += 1
+            print(document)
+        print(i)
+
+# Book.get_book_all()
 class Vote():
     def __init__(self, up, down):
         self.up = up

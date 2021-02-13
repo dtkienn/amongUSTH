@@ -131,7 +131,7 @@ def login():
 
         return redirect(url_for("index"))
         
-    elif request.method == 'GET' :
+    elif request.method == 'GET':
         google_provider_cfg = get_google_provider_cfg()
         authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
@@ -259,6 +259,9 @@ def browse():
 @app.route('/admin')
 @login_required
 def admin():
+    # online = 
+    # user = 
+    # materials = 
     return render_template("admin.html", display_navbar="none", name="ADMIN")
 
 
@@ -271,7 +274,7 @@ def content():
     global downvote
     up_count = 0
     down_count = 0
-    file_id = '1QUQGdJWjZXkDOO7GjIWCRd0FqyGcHh06'
+    file_id = '1obwjMNLegP8wAkWAuyDNfP0vIBIGwmWE'
     image_link = mongoBook.get_front(file_id)
     download_count = mongoBook.get_download(file_id)
     file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
@@ -362,9 +365,7 @@ def get_file():
             except Exception:
                 print (Exception)
                 print('Cannot upload file!')
-
         return redirect(url_for('upload'))
 
-host = '127.0.0.1'
 if __name__ == '__main__':
-    app.run(debug=True, ssl_context="adhoc", host = host)
+    app.run(debug=True, ssl_context="adhoc")
