@@ -3,6 +3,7 @@ import pymongo
 from flask_login import UserMixin
 import json
 import re
+from datetime import datetime
 
 dat = json.load(open('login/mongo.json'))
 data = dat
@@ -25,9 +26,8 @@ book_db = client['AmongUSTH']
 book  = book_db['Book_data']
 
 # db and collections of interaction: vote and comment.
-interaction = client['Interact']
-vote = interaction['Vote']
-comment = interaction['Comment']
+vote = client['Vote']
+comment = client['Comment']
 
 
 class User(UserMixin):
@@ -38,7 +38,7 @@ class User(UserMixin):
         if u_info.find_one({'Email' : email}):
             print('Existed!')
         else: 
-            mdict = {'UID' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic}
+            mdict = {'UID' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic, 'role' : 'member'}
             u_info.insert_one(mdict)
 
     def get(id_):
@@ -79,7 +79,8 @@ class User(UserMixin):
         u_lec.insert_one(mdict)
 
     def add_login_info(id_, username, hased_password):
-        mdict = {'UID' : id_, 'UserName' : username, "Hashed_password": hased_password}  
+        now = datetime.now()
+        mdict = {'UID' : id_, 'UserName' : username, "Hashed_password": hased_password, 'Last_active' : now}  
         u_login.insert_one(mdict)
 
     def get_profile_pic(id_):
@@ -98,12 +99,14 @@ class User(UserMixin):
         mdict = u_login.find_one({'UserName' : username}, {"UID": 1, "_id" : 0})
         return mdict['UID']
     
-    def set_status(id_, status):
-        u_login.update_many({'UID' : id_}, {'$set' : {'status' : status}})
+    def set_last_active(id_):
+        now = datetime.now()
+        u_login.update_one({'UID' : id_}, {'$set' : {'Last_active' : str(now)}})
 
-    def get_online():
-        u_login.find_many({'status' : 'active'})
+    def get_last_active(id_):
+        return u_login.find_one({'UID' : id_})['Last_active']
 
+# User.get_user_all()
 class Book():
     def post_book(id_, book_name, type_, subject, author, description, page_number, front_link):
         if book.find_one({'book_name' : book_name}):
@@ -111,7 +114,7 @@ class Book():
             pass
         else:
             link =  'https://drive.google.com/file/d/' + id_ + '/view?usp=sharing'
-            mdict = {'BID' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : page_number, 'link' : link, 'front' : front_link, 'download' : int('0'), 'upvote' : int('0'), 'downvote' : int('0'), 'status' : 'pending'}
+            mdict = {'BID' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : page_number, 'link' : link, 'front' : front_link, 'download' : int('0'), 'upvote' : int('0'), 'downvote' : int('0')}
             try:
                 book.insert_one(mdict)
             except:
@@ -178,11 +181,7 @@ class Book():
 
     def set_status(id_, status):
         book.update_one({'BID' : id_}, {'$set' : {'status' : status}})
-
-    def get_pending():
-        mdict = book.find_many({'status' : 'pending'})
-        return mdict
-
+# Book.get_book_all()
 class Vote():
     def __init__(self, up, down):
         self.up = up
@@ -208,38 +207,99 @@ class Vote():
         return mdict['down']                        
 
 class Comment():
-    def __init__(self, content, user_id, comment_time,book_id):
-        self.content = content
-        self.user_id = user_id
-        self.comment_time = comment_time
-        self.book_id = book_id
-    
     def post_comment(id_, user_id,book_id,content,comment_time):
         if comment.find_one({'content': user_id}):
             print('Existed')
             pass
         else :
-            mdict = {'_id':id_,'book_id':book_id,'user_id':user_id,'content':content,'comment_time':comment_time}
+            comment_time = datetime.now()
+            comment_time_date = comment_time.day() + '/' + comment_time.month()
+            mdict = {'_id':id_,'book_id':book_id,'user_id':user_id,'content':content,'date' :comment_time_date}
             try:
                 comment.insert_one(mdict)
             except:
-                print("Insert failed")
+                print("Comment: Insert failed")
 
     def get_content(id_):
         mdict = book.find_one({'_id' : id_}, {'content' : 1, '_id' : 0})
         return mdict['content']
+        
     def get_file(id_):
         mdict = u_login.find_one({'UID' : id_}, {'file' : 1, '_id' : 0})
         return mdict['file']
 
-    def get_description(id_):
-        mdict = u_login.find_one({'UID' : id_}, {'description' : 1, '_id' : 0})
-        return mdict['description'] 
     def get_comment_time(id_):
         mdict = u_login.find_one({'_id' : id_}, {'comment_time' : 1, '_id' : 0})
         return mdict['comment_time']
+    
+    def delete_comment(id_):
+        mdict = book.find_one({'_id' : id_})
+        comment.delete_one(mdict)
 
-    def set_active(id_, status):
-        if status == 'Active':
+class Admin():
+    def is_admin(id_):
+        mdict = u_info.find_one({'UID' : id_})
+        if mdict['role'] == 'admin':
             return True
         return False
+
+    def total_materials():
+        cursor = book.find({})
+        num = 0
+        for document in cursor:
+            num += 1
+        return num
+    
+    def total_users():
+        cursor = u_info.find({})
+        num = 0
+        for document in cursor:
+            num += 1
+        return num
+
+    def get_all_id():
+        arr = []
+        cursor = u_login.find({})
+        for doc in cursor:
+            arr.append(doc['UID'])
+        return arr
+
+    def is_online(id_):
+        cursor = u_login.find_one({'UID' : id_})
+        now = datetime.now()
+        status = ''
+        time_long = ''
+        unit = ''
+        hour = None
+        minute = None
+        last_active = datetime.strptime(cursor['Last_active'], '%Y-%m-%d %H:%M:%S.%f')
+        time = now - last_active
+        if time.days > 0:
+            time_long = time.days
+            unit = 'day(s)'
+        elif time.days == 0:
+            hour = int(time.seconds/3600)
+            unit = 'hour(s)'
+            if hour >= 1:
+                time_long = hour
+            elif hour < 1:
+                minute = int(time.seconds/60)
+                unit = 'minute(s)'
+                if minute == 0:
+                    status = 'Active'
+                elif minute != 0:
+                    time_long = minute
+
+        if status != '':
+            return status
+        elif time_long != '':
+            return str(time_long) + ' ' + unit + ' ago'
+
+    def total_online():
+        cursor = u_login.find({})
+        num = 0
+        for doc in cursor:
+            id_ = doc['UID']
+            if Admin.is_online(id_) == 'Active':
+                num += 1
+        return num

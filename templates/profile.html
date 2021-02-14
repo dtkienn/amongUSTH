@@ -21,7 +21,19 @@
         Your password: <span>*******</span
         ><span><a href="#change-password-modal">Change</a></span>
       </h3>
+      <h3>
+        Role: <span id = "get_role">{{role}}</span>
+      </h3>
+
       <a href="/browse" style="color: #2251ff">Click here to browse things</a>
+      <h3><a href="/admin" id = "admin_button" name = "admin_button" style="color: #2251ff">Click here to visit Admin's page</a></h3>
+      <script>
+        if (document.getElementById("get_role").innerHTML != "admin"){
+          document.getElementById("admin_button").style.display = "none";
+          console.log("This is an admin!");
+        }
+        // console.log(document.getElementById("get_role").innerHTML)
+      </script>
       <h4><a href="/logout" style="color: #2251ff">Logout</a></h4>
     </div>
 
