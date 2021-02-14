@@ -4,17 +4,22 @@
         {% include 'head.html' %}
         {% include 'warning.html' %}
     </head>
+    <style>
+        header{
+            background-image: url(https://wallpapercave.com/wp/wp2508415.jpg);
+        }
+    </style>
 <body>
     {% include 'navbar.html' %}
     
-    <div class="box">
+    <!-- <div class="box">
         <h2>Admin</h2>
         <h3>Total no. of users: {{users}}</h3>
         <h3>Online users: {{online}}</h3>
         <h3>Total materials: {{materials}}</h3>
         <h3>Something...</h3>
-    </div>
-    <div class="box" style="text-align: left; position: relative;">
+    </div> -->
+    <!-- <div class="box" style="text-align: left; position: relative;">
         {%for i in range (0, len_online)%}
             <table style="width:100%; color: white;">
                 <tr>
@@ -33,6 +38,36 @@
                 </tr>
             </table>
         {%endfor%}
+    </div> -->
+    <div class="admin-container">
+        <div class="admin-box">
+            <h2>General</h2>
+            <h3>Total no. of users: {{users}}</h3>
+            <h3>Online users: {{online}}</h3>
+            <h3>Total materials: {{materials}}</h3>
+            <h3>Something...</h3>    
+        </div>
+        <div class="admin-box">
+            <h2>Online users</h2>
+            {% for i in range (0, len_online) %}
+            <h3>{{online_list[i]}}</h3>
+            {% endfor %}
+        </div>
+        <div class="admin-box">
+            <h2>Offline users</h2>
+            {% for i in range (0, len_offline) %}
+            <h3>{{offline_list[i]}}</h3>
+            {% endfor %}
+        </div>
+
+        <!-- <div class="admin-box">
+            <h2>Admin</h2>
+            <h3>Total no. of users: {{users}}</h3>
+            <h3>Online users: {{online}}</h3>
+            <h3>Total materials: {{materials}}</h3>
+            <h3>Something...</h3>    
+        </div> -->
+
     </div>
     {% include 'footer.html' %}
 </body>
