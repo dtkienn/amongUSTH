@@ -85,19 +85,19 @@ class User(UserMixin):
         u_login.insert_one(mdict)
 
     def get_profile_pic(id_):
-        mdict = u_info.find_one({'_id' : id_}, {'Profile_pic' : 1, '_id' : 0})
+        mdict = u_info.find_one({'_id' : id_})
         return mdict['Profile_pic']
 
     def get_name(id_):
-        mdict = u_info.find_one({'_id' : id_}, {'Fullname' : 1, '_id' : 0})
+        mdict = u_info.find_one({'_id' : id_})
         return mdict['Fullname']
 
     def get_email(id_):
-        mdict = u_info.find_one({'_id' : id_}, {'Email' : 1, '_id' : 0})
+        mdict = u_info.find_one({'_id' : id_})
         return mdict['Email']
 
     def get_id(username):
-        mdict = u_login.find_one({'UserName' : username}, {"_id": 1, "_id" : 0})
+        mdict = u_login.find_one({'UserName' : username})
         return mdict['_id']
     
     def set_last_active(id_):
