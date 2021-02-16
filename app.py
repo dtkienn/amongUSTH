@@ -207,7 +207,7 @@ def callback():
                 mongoUsr.register(id_, name, email, student_id, profile_pic)
                 generate_password()
                 print('Generated login info!')
-                gmail.send(email, get_studentid(email))
+                gmail.send(email, get_studentid(email), first_Name)
      
             login_user(user)
 
