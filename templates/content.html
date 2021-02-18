@@ -14,47 +14,56 @@
     {% include 'navbar.html' %}
     {% include 'warning.html' %}
     <!--Up container-->
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', () => {
+          document.querySelectorAll('input').forEach(input => {
+              input.onclick = () => {
+                  const request = new XMLHttpRequest();
+                  request.open('POST', `/${input.id}`);
+                  request.onload = () => {
+                      const response = request.responseText;
+                      if (input.id == "up")
+                      {
+                        document.getElementById('upvote_count').innerHTML = response;
+                      }
+                      else if (input.id == "down"){
+                        document.getElementById('downvote_count').innerHTML = response;
+                      }
+                    }; 
+                  request.send();
+              };
+          });
+      });
+  </script>
     <section class="up_container">
         <div class="book_image">
-         <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+         <img class="carousel-inner" src={{image_link}} alt="">
          </div>
         </div>
         <div class="right_contain_up">
-         <div class="book_title">Book cover design formula</div>
-         <div class="author">ANITA NIPALE</div>
-         <button class="download">DOWNLOAD</button>
-       </div>
+         <div class="book_title">{{title}}</div>
+         <div class="author">{{Author}}</div>
+          <form action = '/content/download'>
+            <input type = "submit" class="download" value = 'DOWNLOAD'></input>
+          </form>
+          </div>
        </section>
     <!-- Mid container -->
        <section class="middle_container">
          <div class="left_contain_mid">
            <ul class="list-unstyled">
-             <li>Published: 2000</li>
-             <li>Pages: 180</li>
-             <li>Downloads: 400</li>
-             <li><span><img src="static/images/up.png" alt="upvote"></span>
-             <span>100</span></li>
-             <li><span><img src="static/images/down.png" alt="downvote"></span>
-             <span>40</span></li>
+             <li>Pages: {{page_num}}</li>
+             <li>Downloads: {{download_count}}</li>
+             <li><span><input type = "image" id = "up" src="static/images/up.png" alt="upvote"></span>
+             <span id = "upvote_count">{{upvote_count}}</span></li>
+             <li><span><input type = "image" id = "down" src="static/images/down.png" alt="downvote"></span>
+             <span id = "downvote_count">{{downvote_count}}</span></li>
 
            </ul>
          </div>
          <div class="right_contain_mid">
            <div class="description">
-             <p>In this fully revised second edition of the best-selling classic Automate the Boring Stuff with Python, you’ll learn how to use Python to write programs that do in minutes what would take you hours to do by hand—no prior programming experience required. You'll learn the basics of Python and explore Python’s rich library of modules for performing specific tasks, like scraping data off websites, reading PDF and Word documents, and automating clicking and typing tasks.
-   
-               The second edition of this international fan favorite includes a brand-new chapter on input validation, as well as tutorials on automating Gmail and Google Sheets, plus tips on automatically updating CSV files. You’ll learn how to create programs that effortlessly perform useful feats of automation to:
-               
-               Search for text in a file or across multiple files
-               Create, update, move, and rename files and folders
-               Search the Web and download online content
-               Update and format data in Excel spreadsheets of any size
-               Split, merge, watermark, and encrypt PDFs
-               Send email responses and text notifications
-               Fill out online forms
-               Step-by-step instructions walk you through each program, and updated practice projects at the end of each chapter challenge you to improve those programs and use your newfound skills to automate similar tasks.
-               
-               Don't spend your time doing work a well-trained monkey could do. Even if you've never written a line of code, you can make your computer do the grunt work. Learn how in Automate the Boring Stuff with Python, 2nd Edition.
+             <p>{{description}}
              </p>
            </div>
          </div>
@@ -75,8 +84,8 @@
                 <span>40</span>  
               </div>
               <div class="profile">
-                <img class="avatar" src="https://avatar-ex-swe.nixcdn.com/singer/avatar/2021/01/06/8/9/d/3/1609921911553_600.jpg" alt="">
-                <div class="username">LTH</div>
+                <img class="avatar" src={{profile_pic}} alt="">
+                <div class="username">{{username}}</div>
               </div>
               <div class="scroll comment_content">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset ....</div>
             </div>

@@ -5,3 +5,13 @@ requests
 cryptography
 dnspython
 pymongo
+PyPDF2
+fitz
+tools
+frontend
+apiclient
+oauth2client
+google-api-python-client
+flask_bcrypt
+flask_wtf
+google_auth_oauthlib
