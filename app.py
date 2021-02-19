@@ -21,6 +21,7 @@ import login.User as logUsr
 from login.mongo import User as mongoUsr
 from login.mongo import Book as mongoBook
 from login.mongo import Admin as mongoAdmin
+from login.mongo import book
 from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
 from login.mail import gmail
@@ -100,7 +101,7 @@ def index():
 
 
 def generate_password():
-    
+
     id_ = user.get_id()
     email = mongoUsr.get_email(id_)
     username = email.split(".")[1].split("@")[0]
@@ -135,7 +136,7 @@ def login():
             print("login failed")
 
         return redirect(url_for("index"))
-        
+
     elif request.method == 'GET':
         google_provider_cfg = get_google_provider_cfg()
         authorization_endpoint = google_provider_cfg["authorization_endpoint"]
@@ -187,28 +188,28 @@ def callback():
         users_email = userinfo_response.json()["email"]
         picture = userinfo_response.json()["picture"]
         users_name = userinfo_response.json()["name"]
-        
+
         if mongoUsr.is_USTHer(users_email):
             # Add user information to Online database
-            global user            
+            global user
             user = logUsr.user_info(
                 id_=unique_id, name=users_name, email=users_email, profile_pic=picture
             )
-            global profile_pic 
-            global first_Name 
+            global profile_pic
+            global first_Name
             id_ = user.getid()
             name = user.getName()
             email = user.getEmail()
             profile_pic = user.getprofile_pic()
             student_id = get_studentid(email)
             first_Name = name.split(' ', 1)[0]
-            
+
             if not mongoUsr.account_existed(id_):
                 mongoUsr.register(id_, name, email, student_id, profile_pic)
                 generate_password()
                 print('Generated login info!')
                 gmail.send(email, get_studentid(email), first_Name)
-     
+
             login_user(user)
 
 
@@ -216,8 +217,8 @@ def callback():
             time = timedelta(minutes=60)
             # User will automagically kicked from session after 'time'
             app.permanent_session_lifetime = time
-            
-            return redirect(url_for('index'))   
+
+            return redirect(url_for('index'))
         else:
             return redirect(url_for('loginfail'))
 
@@ -270,14 +271,18 @@ def search():
     if request.method== 'POST':
         form = request.form
         search_value = form['search_string']
-        type_book = form['filter-type_book'].target.value
-        subject_book = form['filter-type_subject'].target.value
-        author_book = form['filter-type_author'].target.value
+        # type_book = form['filter-type_book'].target.value
+        # subject_book = form['filter-type_subject'].target.value
+        # author_book = form['filter-type_author'].target.value
         search = "%{0}%".format(search_value)
-        result = mongoBook.get_book_search(book_name=search,type_=type_book,subject=subject_book,author=author_book)
-        return render_template('browse.html',display_navbar="inline",book_name=result)
-    else:
-        redirect('/browse')
+        # result = mongoBook.get_book_search(book_name=search,type_=type_book,subject=subject_book,author=author_book)
+        check_db = book.find()
+        for mongoBook in check_db:
+            if(mongoBook['book_name']==search):
+                return 'book found'
+            else:
+                return 'book not found'
+        return render_template('browse.html',display_navbar="inline")
 
 @app.route('/admin')
 @login_required
@@ -345,11 +350,11 @@ def content():
 
 @app.route("/up", methods=["POST"])
 def upvote():
-    global up_count 
+    global up_count
     global upvote
     global down_count
     up_count += 1
-    if up_count % 2 == 0: 
+    if up_count % 2 == 0:
         mongoBook.upvote_(file_id)
         upvote -= 1
         print('not up anymore')
@@ -364,8 +369,8 @@ def downvote():
     global down_count
     global downvote
     global up_count
-    down_count += 1 
-    if down_count % 2 == 0: 
+    down_count += 1
+    if down_count % 2 == 0:
         mongoBook.upvote_(file_id)
         downvote -= 1
         print('not down anymore')
@@ -407,7 +412,7 @@ def get_file():
                 page_count = new_pdffile.get_page_count()
                 front = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=' + file_id
                 print("successfully uploaded")
-                
+
                 mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
             except Exception:
                 print (Exception)
