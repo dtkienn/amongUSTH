@@ -184,6 +184,10 @@ class Book():
         mdict = book.find_one({'_id' : id_})
         return mdict['download']
 
+    def get_id(book_name):
+        mdict = u_login.find_one({'book_name' : book_name})
+        return mdict['_id']
+
     def set_status(id_, status):
         book.update_one({'_id' : id_}, {'$set' : {'status' : status}})
 # Book.get_book_all()

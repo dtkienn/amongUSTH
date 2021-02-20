@@ -267,6 +267,8 @@ def browse():
         return render_template("browse.html", display_navbar="inline", name=first_Name, picture=profile_pic)
     else:
         return render_template('login.html', text="You need to login!")
+
+@app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method== 'POST':
         form = request.form
@@ -274,15 +276,15 @@ def search():
         # type_book = form['filter-type_book'].target.value
         # subject_book = form['filter-type_subject'].target.value
         # author_book = form['filter-type_author'].target.value
-        search = "%{0}%".format(search_value)
+        search = "{0}".format(search_value)
         # result = mongoBook.get_book_search(book_name=search,type_=type_book,subject=subject_book,author=author_book)
         check_db = book.find()
         for mongoBook in check_db:
             if(mongoBook['book_name']==search):
-                return 'book found'
+                print(mongoBook['_id'])
+                return render_template('browse.html',display_navbar="inline")
             else:
-                return 'book not found'
-        return render_template('browse.html',display_navbar="inline")
+                return render_template('browse.html',text="Book not found")
 
 @app.route('/admin')
 @login_required
