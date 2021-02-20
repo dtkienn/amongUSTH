@@ -1,4 +1,3 @@
-from typing import final
 import pymongo
 #from login.User import User as usr
 from flask_login import UserMixin
@@ -188,13 +187,12 @@ class Vote():
     #     cursor = vote.find_one({'_id' : id_})
 
     #     if vote_type == 'upvote':
-    def create(id_):
-        vote.insert_one({'_id': id_, 'upvote' : [], 'downvote': []})
+    
     def up(id_, _id):
         vote.update_one({'_id' : id_}, {'$push': {'upvote' : _id}})
 
     def down(id_, _id):
-        vote.update({'_id' : id_}, {'$push': {'downvote' : _id}})
+        vote.update_one({'_id' : id_}, {'$push': {'downvote' : _id}})
 
     def get_up(id_):
         mdict = vote.find_one({'_id' : id_}, {'up' : 1, '_id' : 0})
@@ -283,10 +281,10 @@ class Admin():
             elif hour < 1:
                 minute = int(time.seconds/60)
                 unit = 'minute(s)'
-                if minute == 0:
+                if minute <= 3:
                     status = 'Active'
                 elif minute != 0:
-                    time_long = minute
+                    time_long = minute - 3
 
         if status != '':
             return status

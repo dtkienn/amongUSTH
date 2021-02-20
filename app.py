@@ -50,6 +50,7 @@ if not os.path.exists(os.getcwd() + "/temp"):
 
 # Flask app setup
 app = Flask(__name__)
+app.name = 'AmongUSTH'
 app.secret_key = os.urandom(24)
 UPLOAD_FOLDER = os.getcwd() + "/temp"
 app.config["MAX_CONTENT_PATH"] = 16 * 1024**2 # Maximize size of file
@@ -283,7 +284,7 @@ def admin():
 
     online_list.sort()
 
-    return render_template("admin.html", display_navbar="none", name=first_Name, users = users, materials = materials, online = online, online_list = online_list, offline_list = offline_list, len_online = len(online_list), len_offline = len(offline_list), offline_last = offline_last)
+    return render_template("admin.html", display_navbar="inline", name=first_Name, users = users, materials = materials, online = online, online_list = online_list, offline_list = offline_list, len_online = len(online_list), len_offline = len(offline_list), offline_last = offline_last, profile_pic = profile_pic)
 
 
 @app.route('/content')
@@ -295,7 +296,7 @@ def content():
     global downvote
     up_count = 0
     down_count = 0
-    file_id = '10MAQtNMRDLG-GY_9CiSPPE9HTYe5qkUd'
+    file_id = '1bewkL4nOB0bgz9-gxYJd9u9PJQ2gXwQc'
     image_link = mongoBook.get_front(file_id)
     download_count = mongoBook.get_download(file_id)
     file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
@@ -377,10 +378,11 @@ def get_file():
                 print("successfully uploaded")
                 
                 mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
-            except Exception:
-                print (Exception)
+            except Exception as e:
+                print (e)
                 print('Cannot upload file!')
         return redirect(url_for('upload'))
 
 if __name__ == '__main__':
-    app.run(debug=True, ssl_context="adhoc")
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, ssl_context="adhoc",\ port = port)

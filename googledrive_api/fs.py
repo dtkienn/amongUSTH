@@ -35,11 +35,15 @@ def callback(request_id, response, exception):
         else:
             print ("Permission Id: %s" % response.get('id'))
 
-def searchFile(name):
+def searchFile(name, file_type):
     page_token = None
     file_id = ''
+    if file_type == 'folder':
+        mime = 'application/vnd.google-apps.folder'
+    elif file_type == 'pdf':
+        mime = 'application/pdf'
     while True:
-        response = drive_service.files().list(q="mimeType='application/vnd.google-apps.folder'",
+        response = drive_service.files().list(q="mimeType='{}'".format(mime),
                                             spaces='drive',
                                             fields='nextPageToken, files(id, name)',
                                             pageToken=page_token).execute()
@@ -100,7 +104,7 @@ def createFolder():
 def uploadFile(filepath, filename, mimetype = "application/pdf"):
     folder_id = createFolder()
     print('Upload: ' + folder_id)
-    if searchFile(filename) != '':
+    if searchFile(filename, 'pdf') != '':
         print('File exsits')
         return None
     else:

@@ -8,7 +8,6 @@ pymongo
 PyPDF2
 fitz
 tools
-frontend
 apiclient
 oauth2client
 google-api-python-client
