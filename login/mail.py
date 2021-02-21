@@ -4,19 +4,17 @@ from email.mime.text import MIMEText
 
 
 class gmail():
-    def send(receiver, u_names):
+    def send(receiver, u_names, first_name):
         dat = json.load(open('login/mail.json'))
-        data = dat
-        email = data['sender'][0]['email']
-        password = data['sender'][0]['password']
+        email = dat['sender'][0]['email']
+        password = dat['sender'][0]['password']
     
         from_addr = "AmongUSTH"
 
-        to_addr = receiver
+        msg = MIMEText('Hi {},\nYou can use this following info for future loggings in \n\n\tUsername: {} \n\tPassword: {}'.format(first_name, u_names, u_names))
 
-        msg = MIMEText('Hi user,\nYou can use this following info for future loggings in \n\n\tUsername: ' + u_names + '\n\tPassword: ' + u_names)
         msg['From'] = from_addr + '<nhanlq.bi9178@st.usth.edu.vn>'
-        msg['To'] = to_addr
+        msg['To'] = receiver
         msg['Subject'] = "Account Login Information"
 
         try:

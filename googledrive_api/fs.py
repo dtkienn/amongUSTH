@@ -24,7 +24,8 @@ credentials = authInst.getCredentials()
 http = credentials.authorize(httplib2.Http())
 drive_service = discovery.build('drive', 'v3', http=http)
 
-global mimeType
+global folder_id
+folder_id = ''
 mimeType = ["application/pdf",'application/vnd.google-apps.folder']
 
 def callback(request_id, response, exception):
@@ -34,79 +35,74 @@ def callback(request_id, response, exception):
         else:
             print ("Permission Id: %s" % response.get('id'))
 
-def createFolder(name):
-    file_metadata = {
-    'name': name,
-    'mimeType': 'application/vnd.google-apps.folder'
-    }
-    file = drive_service.files().create(body=file_metadata,
-                                        fields='id').execute()
-    print ('Folder ID: %s' % file.get('id'))
-
-    batch = drive_service.new_batch_http_request(callback=callback)
-    domain_permission = {
-        'type': 'domain',
-        'role': 'reader',
-        'domain': 'st.usth.edu.vn'
-    }
-    batch.add(drive_service.permissions().create(
-            fileId=file.get('id'),
-            body=domain_permission,
-            fields='id',
-    ))
-    batch.execute()
-
-    return file.get('id')
-
-def searchFile(name, type_):
+def searchFile(name):
     page_token = None
     file_id = ''
-    file_mimeType = ''
-    if type_ == 'folder':
+    while True:
         response = drive_service.files().list(q="mimeType='application/vnd.google-apps.folder'",
                                             spaces='drive',
                                             fields='nextPageToken, files(id, name)',
                                             pageToken=page_token).execute()
-        while True:
-            for file in response.get('files', []):
-                # Process change
-                if file.get('name') == name:
-                    file_id = file.get('id')
-                    print ('Found file: %s (%s)' % (file.get('name'), file.get('id')))
-                    break
-            page_token = response.get('nextPageToken', None)
-            if page_token is None and file_id == '':  
-                print('No file found!')
-                return False
-            
-            elif file_id != '':
-                return file_id
+        for file in response.get('files', []):
+            if file.get('name') == name:
+                print ('Found file: %s (%s)' % (file.get('name'), file.get('id')))
+                file_id = file.get('id')
+        page_token = response.get('nextPageToken', None)
+        if page_token is None:
+            print(file_id)
+            break
+    return file_id
 
-    elif type_ == 'pdf':
-        response = drive_service.files().list(q="mimeType='application/pdf'",
+def createFolder():
+    page_token = None
+    file_id = ''
+    while True:
+        response = drive_service.files().list(q="mimeType='application/vnd.google-apps.folder'",
                                             spaces='drive',
                                             fields='nextPageToken, files(id, name)',
                                             pageToken=page_token).execute()
-        while True:
-            for file in response.get('files', []):
-                if file.get('name') == name:
-                    file_id = file.get('id')
-                    print ('Found file: %s (%s)' % (file.get('name'), file.get('id')))
-                    break
-            page_token = response.get('nextPageToken', None)
-            if page_token is None and file_id == '':  
-                print('No file found!')
-                return False
-            
-            elif file_id != '':
-                return file_id
+        for file in response.get('files', []):
+            if file.get('name') == 'AmongUSTH':
+                print ('Found file: %s (%s)' % (file.get('name'), file.get('id')))
+                file_id = file.get('id')
+                break
+        page_token = response.get('nextPageToken', None)
+        if page_token is None or file_id != '':
+            print(file_id)
+            break
 
-folder_id = searchFile('AmongUSTH', 'folder')
+    if file_id != '':
+        return file_id
 
-def uploadFile(filepath, filename, folder_id = folder_id, mimetype = "application/pdf"): # "test.txt" , "document"
-    type_ = filename.split('.')[-1]
-    if searchFile(filename, type_):
+    else:
+        file_metadata = {
+        'name': 'AmongUSTH',
+        'mimeType': 'application/vnd.google-apps.folder'
+        }
+        file = drive_service.files().create(body=file_metadata,
+                                            fields='id').execute()
+        print ('Folder ID: %s' % file.get('id'))
+
+        batch = drive_service.new_batch_http_request(callback=callback)
+        domain_permission = {
+            'type': 'anyone',
+            'role': 'reader'
+        }
+        batch.add(drive_service.permissions().create(
+                fileId=file.get('id'),
+                body=domain_permission,
+                fields='id',
+        ))
+        batch.execute()
+        return file.get('id')
+
+
+def uploadFile(filepath, filename, mimetype = "application/pdf"):
+    folder_id = createFolder()
+    print('Upload: ' + folder_id)
+    if searchFile(filename) != '':
         print('File exsits')
+        return None
     else:
         file_metadata = {'name': filename, "parents": [folder_id]}
         media = MediaFileUpload(filepath,
@@ -116,5 +112,4 @@ def uploadFile(filepath, filename, folder_id = folder_id, mimetype = "applicatio
                                             fields='id').execute()
         print('File ID: %s' % file.get('id'))
         return file.get('id')
-
 

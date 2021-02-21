@@ -63,11 +63,14 @@
     <div class="carousel" data-flickity='{ "initialIndex ": 3 }'>
         {% for book in books %}
       <div class="carousel-cell">
+          <a href="{{ url_for('content_detail', bID=book['_id']) }} " target="_parent">
           <img class="carousel-inner" src='{{book["front"]}}' alt="book_image">
-          <div class="carousel-caption">{{book["book_name"]}}</div>
+          <div class="carousel-caption">{{ book["book_name"] }}</div>
+          </a>
       </div>
+      {% endfor %}
     </div>
-        {% endfor %}
+        
     <!--Document-->
     <div class="browse-book-container">
     <div class="title">DOCUMENTS</div>

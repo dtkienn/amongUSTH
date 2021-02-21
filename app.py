@@ -1,7 +1,5 @@
 import json
 import os
-from re import template
-import sqlite3
 from datetime import timedelta
 
 
@@ -22,6 +20,7 @@ import webbrowser
 import login.User as logUsr
 from login.mongo import User as mongoUsr
 from login.mongo import Book as mongoBook
+from login.mongo import Admin as mongoAdmin
 from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
 from login.mail import gmail
@@ -74,6 +73,8 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 @login_manager.user_loader
 def load_user(user_id):
     print('loaded')
+    # Maintain 'active' status
+    mongoUsr.set_last_active(user_id)
     return logUsr.user_info.get(user_id)
 
 
@@ -86,8 +87,12 @@ def index():
         email = mongoUsr.get_email(id_)
         profile_pic = mongoUsr.get_profile_pic(id_)
         first_Name = name.split(' ', 1)[0]
+        if mongoAdmin.is_admin(id_):
+            role = 'admin'
+        else:
+            role = 'member'
         print("Logged in")
-        return render_template('profile.html', name=first_Name, email=email, picture=profile_pic, display_navbar="inline")
+        return render_template('profile.html', name=first_Name, email=email, picture=profile_pic, role = role, display_navbar="inline")
 
     else:
         print("Not logged in")
@@ -131,7 +136,7 @@ def login():
 
         return redirect(url_for("index"))
         
-    elif request.method == 'GET' :
+    elif request.method == 'GET':
         google_provider_cfg = get_google_provider_cfg()
         authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
@@ -202,7 +207,7 @@ def callback():
                 mongoUsr.register(id_, name, email, student_id, profile_pic)
                 generate_password()
                 print('Generated login info!')
-                gmail.send(email, get_studentid(email))
+                gmail.send(email, get_studentid(email), first_Name)
      
             login_user(user)
 
@@ -260,19 +265,38 @@ def browse():
 @app.route('/admin')
 @login_required
 def admin():
-    return render_template("admin.html", display_navbar="none", name="ADMIN")
+    materials = mongoAdmin.total_materials()
+    users = mongoAdmin.total_users()
+    online = mongoAdmin.total_online()
+
+    online_list = []
+    offline_list = []
+    offline_last = []
+    users_id = mongoAdmin.get_all_id()
+
+    for ele in users_id:
+        name = mongoUsr.get_name(ele)
+        if mongoAdmin.is_online(ele) == 'Active':
+            online_list.append(name)
+        else:
+            offline_list.append(name)
+            offline_last.append(mongoAdmin.is_online(ele))
+
+    online_list.sort()
+
+    return render_template("admin.html", display_navbar="none", name=first_Name, users = users, materials = materials, online = online, online_list = online_list, offline_list = offline_list, len_online = len(online_list), len_offline = len(offline_list), offline_last = offline_last)
 
 
 @app.route('/content')
 @login_required
 def content():
-    global file_id
-    global up_count, down_count
-    global upvote
-    global downvote
+    # global file_id
+    # global up_count, down_count
+    # global upvote
+    # global downvote
     up_count = 0
     down_count = 0
-    file_id = '1QUQGdJWjZXkDOO7GjIWCRd0FqyGcHh06'
+    file_id = '1ArSB7DUAsUgxppF-Oc99n5BrztO7s-Ti'
     image_link = mongoBook.get_front(file_id)
     download_count = mongoBook.get_download(file_id)
     file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
@@ -285,13 +309,32 @@ def content():
 
     return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
 
-def upvote(id_):
-    mongoBook.count_upvote(id_)
-    print('Upvoted!')
+@app.route("/content/<string:bID>")
+@login_required
+def content_detail(bID):
+    global file_id
+    global up_count, down_count
+    global upvote
+    global downvote
+    global book
+    up_count = 0
+    down_count = 0
+    file_id = str(bID)
+    book = mongoBook.get_book(file_id)
+    print(book)
+    print(type(book))
+    image_link = book["front"]
+    # image_link = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1ArSB7DUAsUgxppF-Oc99n5BrztO7s-Ti'
+    download_count = book["download"]
+    file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
+    page_num = book["page_number"]
+    description = book["description"]
+    Author = book["author"]
+    upvote = book["upvote"]
+    downvote = book["downvote"]
+    title = book["book_name"]
 
-def downvote(id_):
-    mongoBook.count_downvote(id_)
-    print('Downvoted!')
+    return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description, file_id=bID)       
 
 
 @app.route("/up", methods=["POST"])
@@ -326,13 +369,15 @@ def downvote():
         print('down')
     return str(downvote)
 
-@app.route('/content/download')
+@app.route('/content/download/<string:bID>', methods=["GET","POST"])
 @login_required
-def download():
-    link = mongoBook.get_link(file_id)
-    mongoBook.count_download(file_id)
-    webbrowser.open_new_tab(link)
-    return redirect(url_for('content'))
+def download(bID):
+    if request.method=="POST":
+        file_id = bID
+        link = mongoBook.get_link(file_id)
+        mongoBook.count_download(file_id)
+        webbrowser.open_new_tab(link)
+    return redirect(url_for('content_detail', bID=bID))
 
 @app.route('/upload')
 @login_required
@@ -363,9 +408,7 @@ def get_file():
             except Exception:
                 print (Exception)
                 print('Cannot upload file!')
-
         return redirect(url_for('upload'))
 
-host = '127.0.0.1'
 if __name__ == '__main__':
-    app.run(debug=True, ssl_context="adhoc", host = host)
+    app.run(debug=True, ssl_context="adhoc")

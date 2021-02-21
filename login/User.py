@@ -14,7 +14,7 @@ class user_info(UserMixin):
         if not usr:
             return None
         usr = user_info(
-            id_=usr['UID'], name=usr['Fullname'], email=usr['Email'], profile_pic=usr['Profile_pic']
+            id_=usr['_id'], name=usr['Fullname'], email=usr['Email'], profile_pic=usr['Profile_pic']
         )
         return usr
 
