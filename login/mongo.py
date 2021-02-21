@@ -70,9 +70,12 @@ class User(UserMixin):
         mdict = u_login.find_one({'UserName' : username}, {'UserName' :1,'Hashed_password' :1})
         # print(str(mdict))
         # print(str(mdict["Hashed_password"]))
-        check = bcrypt.check_password_hash(mdict["Hashed_password"], password)
-        if check:
-            return User(username)
+        
+        if mdict:
+            check = bcrypt.check_password_hash(mdict["Hashed_password"], password)
+            if check:
+                return User(username)
+        
         return None
 
     def add_info_lec(id_, department):
