@@ -258,7 +258,8 @@ def homepage():
 @app.route('/browse')
 @login_required
 def browse():
-    return render_template("browse.html", display_navbar="inline", name=first_Name, picture=profile_pic)
+    books = list(book for book in mongoBook.get_all_books())
+    return render_template("browse.html", display_navbar="inline", name=first_Name, picture=profile_pic, books = books)
 
 
 @app.route('/admin')
@@ -289,13 +290,13 @@ def admin():
 @app.route('/content')
 @login_required
 def content():
-    global file_id
-    global up_count, down_count
-    global upvote
-    global downvote
+    # global file_id
+    # global up_count, down_count
+    # global upvote
+    # global downvote
     up_count = 0
     down_count = 0
-    file_id = '10MAQtNMRDLG-GY_9CiSPPE9HTYe5qkUd'
+    file_id = '1ArSB7DUAsUgxppF-Oc99n5BrztO7s-Ti'
     image_link = mongoBook.get_front(file_id)
     download_count = mongoBook.get_download(file_id)
     file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
@@ -308,7 +309,32 @@ def content():
 
     return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
 
+@app.route("/content/<string:bID>")
+@login_required
+def content_detail(bID):
+    global file_id
+    global up_count, down_count
+    global upvote
+    global downvote
+    global book
+    up_count = 0
+    down_count = 0
+    file_id = str(bID)
+    book = mongoBook.get_book(file_id)
+    print(book)
+    print(type(book))
+    image_link = book["front"]
+    # image_link = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1ArSB7DUAsUgxppF-Oc99n5BrztO7s-Ti'
+    download_count = book["download"]
+    file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
+    page_num = book["page_number"]
+    description = book["description"]
+    Author = book["author"]
+    upvote = book["upvote"]
+    downvote = book["downvote"]
+    title = book["book_name"]
 
+    return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description, file_id=bID)       
 
 
 @app.route("/up", methods=["POST"])
@@ -343,13 +369,15 @@ def downvote():
         print('down')
     return str(downvote)
 
-@app.route('/content/download')
+@app.route('/content/download/<string:bID>', methods=["GET","POST"])
 @login_required
-def download():
-    link = mongoBook.get_link(file_id)
-    mongoBook.count_download(file_id)
-    webbrowser.open_new_tab(link)
-    return redirect(url_for('content'))
+def download(bID):
+    if request.method=="POST":
+        file_id = bID
+        link = mongoBook.get_link(file_id)
+        mongoBook.count_download(file_id)
+        webbrowser.open_new_tab(link)
+    return redirect(url_for('content_detail', bID=bID))
 
 @app.route('/upload')
 @login_required

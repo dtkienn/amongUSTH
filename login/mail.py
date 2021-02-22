@@ -22,8 +22,9 @@ class gmail():
             server.starttls()
             server.login(email, password)
             text = msg.as_string()
-            server.sendmail(email, receiver, text)
+            server.sendmail(email, to_addr, text)
             print('Email sent!')
             server.quit()
         except:
-            print('cannot send email!')
+            print('Cannot send email!')
+        
