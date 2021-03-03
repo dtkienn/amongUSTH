@@ -50,7 +50,6 @@ if not os.path.exists(os.getcwd() + "/temp"):
 
 # Flask app setup
 app = Flask(__name__)
-app.name = 'AmongUSTH'
 app.secret_key = os.urandom(24)
 UPLOAD_FOLDER = os.getcwd() + "/temp"
 app.config["MAX_CONTENT_PATH"] = 16 * 1024**2 # Maximize size of file
@@ -284,8 +283,7 @@ def admin():
 
     online_list.sort()
 
-    return render_template("admin.html", display_navbar="inline", name=first_Name, users = users, materials = materials, online = online, online_list = online_list, offline_list = offline_list, len_online = len(online_list), len_offline = len(offline_list), offline_last = offline_last, profile_pic = profile_pic)
-
+    return render_template("admin.html", display_navbar="none", name=first_Name, users = users, materials = materials, online = online, online_list = online_list, offline_list = offline_list, len_online = len(online_list), len_offline = len(offline_list), offline_last = offline_last)
 
 @app.route('/content')
 @login_required
