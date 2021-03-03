@@ -77,8 +77,8 @@
          <div class="comment_section">
            <!-- User comment -->
           <div class="comment">
-            <form action="" method="post">
-              <input placeholder="Say something.." id="cmt-input" type="text">
+            <form action="comment/{{file_id}}" method="POST">
+              <input placeholder="Say something.." id="cmt-input" name = 'content' type="text">
               <button id="cmt-submit" type="submit">COMMENT!</button>
             </form>
           </div>
@@ -166,6 +166,6 @@
          </div>
        </section>
     <!--Footer-->
-    {% include 'footer.html' %}
+    {% include 'footer.html' %} 
 </body>
 </html>
