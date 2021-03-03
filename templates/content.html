@@ -37,13 +37,13 @@
   </script>
     <section class="up_container">
         <div class="book_image">
-         <img class="carousel-inner" src={{image_link}} alt="">
+         <img class="carousel-inner" src={{image_link}} alt="" width="2px"/>
          </div>
         </div>
         <div class="right_contain_up">
          <div class="book_title">{{title}}</div>
          <div class="author">{{Author}}</div>
-          <form action = '/content/download'>
+          <form action='download/{{file_id}}' method='POST'>
             <input type = "submit" class="download" value = 'DOWNLOAD'></input>
           </form>
           </div>
@@ -54,9 +54,9 @@
            <ul class="list-unstyled">
              <li>Pages: {{page_num}}</li>
              <li>Downloads: {{download_count}}</li>
-             <li><span><input type = "image" id = "up" src="static/images/up.png" alt="upvote"></span>
+             <li><span><input type = "image" id = "up" src="{{url_for('static', filename='images/up.png')}}" alt="upvote"></span>
              <span id = "upvote_count">{{upvote_count}}</span></li>
-             <li><span><input type = "image" id = "down" src="static/images/down.png" alt="downvote"></span>
+             <li><span><input type = "image" id = "down" src="{{url_for('static', filename='images/down.png')}}" alt="downvote"></span>
              <span id = "downvote_count">{{downvote_count}}</span></li>
 
            </ul>
@@ -78,9 +78,9 @@
           <div class="comment">
             <div class="comment-upper">
               <div class="vote">
-                <span><img src="static/images/up.png" alt="upvote"></span>
+                <span><img src="{{url_for('static', filename='images/up.png')}}" alt="upvote"></span>
                 <span>100</span>
-                <span><img src="static/images/down.png" alt="downvote"></span>
+                <span><img src="{{url_for('static', filename='images/down.png')}}" alt="downvote"></span>
                 <span>40</span>  
               </div>
               <div class="profile">
@@ -93,9 +93,9 @@
            <div class="comment">
             <div class="comment-upper">
               <div class="vote">
-                <span><img src="static/images/up.png" alt="upvote"></span>
+                <span><img src="{{url_for('static', filename='images/up.png')}}" alt="upvote"></span>
                 <span>100</span>
-                <span><img src="static/images/down.png" alt="downvote"></span>
+                <span><img src="{{url_for('static', filename='images/down.png')}}" alt="downvote"></span>
                 <span>40</span>  
               </div>
               <div class="profile">
@@ -108,9 +108,9 @@
            <div class="comment">
             <div class="comment-upper">
               <div class="vote">
-                <span><img src="static/images/up.png" alt="upvote"></span>
+                <span><img src="{{url_for('static', filename='images/up.png')}}" alt="upvote"></span>
                 <span>100</span>
-                <span><img src="static/images/down.png" alt="downvote"></span>
+                <span><img src="{{url_for('static', filename='images/down.png')}}" alt="downvote"></span>
                 <span>40</span>  
               </div>
               <div class="profile">
@@ -123,9 +123,9 @@
            <div class="comment">
             <div class="comment-upper">
               <div class="vote">
-                <span><img src="static/images/up.png" alt="upvote"></span>
+                <span><img src="{{url_for('static', filename='images/up.png')}}" alt="upvote"></span>
                 <span>100</span>
-                <span><img src="static/images/down.png" alt="downvote"></span>
+                <span><img src="{{url_for('static', filename='images/down.png')}}" alt="downvote"></span>
                 <span>40</span>  
               </div>
               <div class="profile">
@@ -138,9 +138,9 @@
            <div class="comment">
             <div class="comment-upper">
               <div class="vote">
-                <span><img src="static/images/up.png" alt="upvote"></span>
+                <span><img src="{{url_for('static', filename='images/up.png')}}" alt="upvote"></span>
                 <span>100</span>
-                <span><img src="static/images/down.png" alt="downvote"></span>
+                <span><img src="{{url_for('static', filename='images/down.png')}}" alt="downvote"></span>
                 <span>40</span>  
               </div>
               <div class="profile">
