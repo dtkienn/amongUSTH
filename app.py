@@ -324,8 +324,8 @@ def content_detail(bID):
     down_count = 0
     file_id = str(bID)
     book = mongoBook.get_book(file_id)
-    print(book)
-    print(type(book))
+    # print(book)
+    # print(type(book))
     image_link = book["front"]
     # image_link = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1ArSB7DUAsUgxppF-Oc99n5BrztO7s-Ti'
     download_count = book["download"]
@@ -337,7 +337,25 @@ def content_detail(bID):
     downvote = book["downvote"]
     title = book["book_name"]
 
-    return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description, file_id=bID)       
+    #Display comments
+    comment_content = []
+    comment_user_name = []
+    comment_user_profilepic = []
+    comment_time = []
+    data = mongoComment.get_all_comment(file_id)
+    print(data)
+    for cursor in data:
+        comment_content.append(cursor['content'])
+        comment_user_profilepic.append(mongoUsr.get_profile_pic(cursor['user_id']))
+        comment_user_name.append(mongoUsr.get_name(cursor['user_id']))
+        comment_time.append(cursor['time'])
+        
+    comment_content.reverse()
+    comment_user_name.reverse()
+    comment_time.reverse()
+    comment_user_profilepic.reverse()
+
+    return render_template("content.html", comment_numb = len(comment_content), content = comment_content, time = comment_time, cusername = comment_user_name, cprofile_pic = comment_user_profilepic, display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description, file_id=bID)       
 
 @app.route("/content/comment/<string:bID>", methods = ['POST'])
 @login_required

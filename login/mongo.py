@@ -246,6 +246,9 @@ class Comment():
         mdict = comment.find_one({'_id' : _id})
         comment.delete_one(mdict)
 
+    def get_all_comment(_id):
+        return comment.find({'book_id' : _id})
+
     def total_comment():
         seq = 0
         for cursor in comment.find():
