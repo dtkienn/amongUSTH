@@ -1,9 +1,9 @@
 import httplib2
 import os, io
 
-from apiclient import discovery
+from googleapiclient import discovery
 from oauth2client import tools
-from apiclient.http import MediaFileUpload, MediaIoBaseDownload
+from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 try:
     import argparse
     flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
