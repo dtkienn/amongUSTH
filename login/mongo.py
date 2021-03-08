@@ -10,7 +10,7 @@ dat = json.load(open('login/mongo.json'))
 data = dat
 username = data['read_write'][0]['username']
 password = data['read_write'][0]['password']
-client = pymongo.MongoClient("mongodb+srv://" + username + ":" + password + "@cluster0.3ihx5.mongodb.net/?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb+srv://" + username + ":" + password + "@cluster0.3ihx5.mongodb.net/?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE")
 pymongo.MongoClient()
 
 # Create database for User
@@ -25,7 +25,6 @@ u_lec = user['Lecturer']
 # db and collections of book
 book_db = client['AmongUSTH']
 book  = book_db['Book_data']
-
 # db and collections of interaction: vote and comment.
 vote = client['AmongUSTH']['Vote']
 comment = client['AmongUSTH']['Comment']
@@ -70,9 +69,12 @@ class User(UserMixin):
         mdict = u_login.find_one({'UserName' : username}, {'UserName' :1,'Hashed_password' :1})
         # print(str(mdict))
         # print(str(mdict["Hashed_password"]))
-        check = bcrypt.check_password_hash(mdict["Hashed_password"], password)
-        if check:
-            return User(username)
+        
+        if mdict:
+            check = bcrypt.check_password_hash(mdict["Hashed_password"], password)
+            if check:
+                return User(username)
+        
         return None
 
     def add_info_lec(id_, department):
@@ -141,47 +143,47 @@ class Book():
         return mdict['book name']
 
     def get_file_name(id_):
-        mdict = book.find_one({'_id' : id_})
+        mdict = book.find_one({'_id' : id_}, {"book_name": 1})
         return mdict['book_name']
 
     def get_type(id_):
-        mdict = book.find_one({'_id' : id_})
+        mdict = book.find_one({'_id' : id_}, {"type": 1})
         return mdict['type']
 
     def get_subject(id_):
-        mdict = book.find_one({'_id' : id_})
+        mdict = book.find_one({'_id' : id_}, {"subject": 1})
         return mdict['subject']
 
     def get_author(id_):
-        mdict = book.find_one({'_id' : id_})
+        mdict = book.find_one({'_id' : id_}, {"author": 1})
         return mdict['author']
 
     def get_description(id_):
-        mdict = book.find_one({'_id' : id_})
+        mdict = book.find_one({'_id' : id_}, {'description': 1})
         return mdict['description']
 
     def get_link(id_):
-        mdict = book.find_one({'_id' : id_})
+        mdict = book.find_one({'_id' : id_}, {'link': 1})
         return mdict['link']
 
     def get_front(id_):
-        mdict = book.find_one({'_id' : id_})
+        mdict = book.find_one({'_id' : id_}, {'front': 1})
         return mdict['front']
 
     def get_page_number(id_):
-        mdict = book.find_one({'_id' : id_})
+        mdict = book.find_one({'_id' : id_}, {'page_number': 1})
         return mdict['page_number']
 
     def get_upvote(id_):
-        mdict = book.find_one({'_id' : id_})
+        mdict = book.find_one({'_id' : id_}, {'upvote': 1})
         return mdict['upvote']
 
     def get_downvote(id_):
-        mdict = book.find_one({'_id' : id_})
+        mdict = book.find_one({'_id' : id_}, {"downvote": 1})
         return mdict['downvote']
 
     def get_download(id_):
-        mdict = book.find_one({'_id' : id_})
+        mdict = book.find_one({'_id' : id_}, {"download" : 1})
         return mdict['download']
 
     def get_id(book_name):
@@ -189,8 +191,18 @@ class Book():
         return mdict['_id']
 
     def set_status(id_, status):
-        book.update_one({'_id' : id_}, {'$set' : {'status' : status}})
-# Book.get_book_all()
+        book.update_one({'BID' : id_}, {'$set' : {'status' : status}})
+
+    def get_pending():
+        mdict = book.find_many({'status' : 'pending'})
+        return mdict
+
+    def get_book(id_):
+        return book.find_one({"_id": id_})
+
+    def get_all_books():
+        mdict = book.find()
+        return mdict
 class Vote():
     # def get_num(vote_type, id_):
     #     cursor = vote.find_one({'_id' : id_})
@@ -309,3 +321,9 @@ class Admin():
             if Admin.is_online(id_) == 'Active':
                 num += 1
         return num
+
+if __name__ == "__main__":
+    # a = book.find()
+    # print(a['BID'])
+    for book in Book.get_all_books():
+        print(book["front"])
