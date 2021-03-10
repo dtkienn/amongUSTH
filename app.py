@@ -414,7 +414,7 @@ def download(bID):
 @app.route('/upload')
 @login_required
 def upload():
-    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
+    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="none", uploadNoti="Successfully uploaded to AmongUSTH")
 
 @app.route('/upload/get_file', methods = ['GET', 'POST'])
 def get_file():
@@ -435,11 +435,14 @@ def get_file():
                 page_count = new_pdffile.get_page_count()
                 front = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=' + file_id
                 print("successfully uploaded")
+                return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block")
                 
                 mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
             except Exception:
                 print (Exception)
                 print('Cannot upload file!')
+                return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block", uploadNoti="Upload failed! Please try again or contact us!")
+
         return redirect(url_for('upload'))
 
 if __name__ == '__main__':
