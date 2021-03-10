@@ -1,4 +1,3 @@
-from typing import final
 import pymongo
 #from login.User import User as usr
 from flask_login import UserMixin
@@ -16,17 +15,13 @@ pymongo.MongoClient()
 # Create database for User
 
 # db and collections of user:
-user = client['AmongUSTH']
-u_info = user['User_info']
-u_login = user['Login_info']
-u_stu = user['Student']
-u_lec = user['Lecturer']
+db = client['AmongUSTH']
+user = db['User_info']
 
 # db and collections of book
-book_db = client['AmongUSTH']
-book  = book_db['Book_data']
+book  = db['Book_data']
 # db and collections of interaction: vote and comment.
-vote = client['AmongUSTH']['Vote']
+vote = db['Vote']
 comment = client['AmongUSTH']['Comment']
 
 
@@ -35,41 +30,30 @@ class User(UserMixin):
         self.username = username
 
     def register(id_, name, email, student_id, profile_pic):
-        if u_info.find_one({'Email' : email}):
+        if user.find_one({'Email' : email}):
             print('Existed!')
         else: 
-            mdict = {'_id' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic, 'role' : 'member'}
-            u_info.insert_one(mdict)
+            mdict = {'_id' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic, 'role' : 'member', 'UserName' : None, 'Hashed_password' : None, 'Last_active': None}
+            user.insert_one(mdict)
 
     def get(id_):
-        return u_info.find_one({"_id": id_})
+        return user.find_one({"_id": id_})
 
     def get_by_itself(self):
-        return u_info.find_one({"username": self.username})
+        return user.find_one({"username": self.username})
     
     def account_existed(id_):
-        if u_login.find_one({'_id' : id_}):
+        if user.find_one({'_id' : id_}):
             return True
         return False
-
-    def add_major(id_, major):
-        item = u_info.find_one({'_id' : id_})
-        u_info.update_one(item, {'$set': {'major' : major}})
 
     def is_USTHer(email):
         if re.match(r"[a-zA-Z\-\.0-9]+[@][s]?[t]?.?usth.edu.vn", email):
            return True
         return False
-    
-    def add_info_stu(id_, usth_id, major, schoolYear):
-        mdict = {'_id' : id_, 'USTH_ID' : usth_id, 'Major': major, 'SchoolYear' : schoolYear}
-        u_stu.insert_one(mdict)
 
     def login(bcrypt, username, password):
-        mdict = u_login.find_one({'UserName' : username}, {'UserName' :1,'Hashed_password' :1})
-        # print(str(mdict))
-        # print(str(mdict["Hashed_password"]))
-        
+        mdict = user.find_one({'UserName' : username}, {'UserName' :1,'Hashed_password' :1})
         if mdict:
             check = bcrypt.check_password_hash(mdict["Hashed_password"], password)
             if check:
@@ -77,45 +61,40 @@ class User(UserMixin):
         
         return None
 
-    def add_info_lec(id_, department):
-        mdict = {'_id' : id_, 'Department' : department}
-        u_lec.insert_one(mdict)
-
     def add_login_info(id_, username, hased_password):
         now = datetime.now()
-        mdict = {'_id' : id_, 'UserName' : username, "Hashed_password": hased_password, 'Last_active' : now}  
-        u_login.insert_one(mdict)
+        new_value = {'UserName' : username, "Hashed_password": hased_password, 'Last_active' : now}  
+        user.update_one({'_id' : id_}, new_value)
 
     def get_profile_pic(id_):
-        mdict = u_info.find_one({'_id' : id_})
+        mdict = user.find_one({'_id' : id_})
         return mdict['Profile_pic']
 
     def get_name(id_):
-        mdict = u_info.find_one({'_id' : id_})
+        mdict = user.find_one({'_id' : id_})
         return mdict['Fullname']
 
     def get_email(id_):
-        mdict = u_info.find_one({'_id' : id_})
+        mdict = user.find_one({'_id' : id_})
         return mdict['Email']
 
     def get_id(username):
-        mdict = u_login.find_one({'UserName' : username})
+        mdict = user.find_one({'UserName' : username})
         return mdict['_id']
     
     def set_last_active(id_):
         now = datetime.now()
-        u_login.update_one({'_id' : id_}, {'$set' : {'Last_active' : str(now)}})
+        user.update_one({'_id' : id_}, {'$set' : {'Last_active' : str(now)}})
 
     def get_last_active(id_):
-        return u_login.find_one({'_id' : id_})['Last_active']
+        return user.find_one({'_id' : id_})['Last_active']
 
 # User.get_user_all()
 class Book():
     def post_book(id_, book_name, type_, subject, author, description, page_number, front_link):
         if book.find_one({'book_name' : book_name}):
             print('Existed')
-            pass
-        else:   
+        else:
             link =  'https://drive.google.com/file/d/' + id_ + '/view?usp=sharing'
             mdict = {'_id' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : int(page_number), 'link' : [link], 'front' : front_link, 'download' : int('0'), 'upvote' : int('0'), 'downvote' : int('0')}
             try:
@@ -185,10 +164,6 @@ class Book():
     def set_status(id_, status):
         book.update_one({'BID' : id_}, {'$set' : {'status' : status}})
 
-    def get_pending():
-        mdict = book.find_many({'status' : 'pending'})
-        return mdict
-
     def get_book(id_):
         return book.find_one({"_id": id_})
 
@@ -205,13 +180,12 @@ class Vote():
     #     cursor = vote.find_one({'_id' : id_})
 
     #     if vote_type == 'upvote':
-    def create(id_):
-        vote.insert_one({'_id': id_, 'upvote' : [], 'downvote': []})
+    
     def up(id_, _id):
         vote.update_one({'_id' : id_}, {'$push': {'upvote' : _id}})
 
     def down(id_, _id):
-        vote.update({'_id' : id_}, {'$push': {'downvote' : _id}})
+        vote.update_one({'_id' : id_}, {'$push': {'downvote' : _id}})
 
     def get_up(id_):
         mdict = vote.find_one({'_id' : id_}, {'up' : 1, '_id' : 0})
@@ -262,7 +236,7 @@ class Comment():
 
 class Admin():
     def is_admin(id_):
-        mdict = u_info.find_one({'_id' : id_})
+        mdict = user.find_one({'_id' : id_})
         if mdict['role'] == 'admin':
             return True
         return False
@@ -275,7 +249,7 @@ class Admin():
         return num
     
     def total_users():
-        cursor = u_info.find({})
+        cursor = user.find({})
         num = 0
         for document in cursor:
             num += 1
@@ -283,13 +257,13 @@ class Admin():
 
     def get_all_id():
         arr = []
-        cursor = u_login.find({})
+        cursor = user.find({})
         for doc in cursor:
             arr.append(doc['_id'])
         return arr
 
     def is_online(id_):
-        cursor = u_login.find_one({'_id' : id_})
+        cursor = user.find_one({'_id' : id_})
         now = datetime.now()
         status = ''
         time_long = ''
@@ -309,10 +283,10 @@ class Admin():
             elif hour < 1:
                 minute = int(time.seconds/60)
                 unit = 'minute(s)'
-                if minute == 0:
+                if minute <= 3:
                     status = 'Active'
                 elif minute != 0:
-                    time_long = minute
+                    time_long = minute - 3
 
         if status != '':
             return status
@@ -320,7 +294,7 @@ class Admin():
             return str(time_long) + ' ' + unit + ' ago'
 
     def total_online():
-        cursor = u_login.find({})
+        cursor = user.find({})
         num = 0
         for doc in cursor:
             id_ = doc['_id']
@@ -331,5 +305,4 @@ class Admin():
 if __name__ == "__main__":
     # a = book.find()
     # print(a['BID'])
-    for book in Book.get_all_books():
-        print(book["front"])
+    print(User.get('105528251893670234146'))
