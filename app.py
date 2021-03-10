@@ -414,7 +414,7 @@ def download(bID):
 @app.route('/upload')
 @login_required
 def upload():
-    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="none", uploadNoti="Successfully uploaded to AmongUSTH")
+    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="none", uploadNoti="Actually you should not see this")
 
 @app.route('/upload/get_file', methods = ['GET', 'POST'])
 def get_file():
@@ -435,7 +435,7 @@ def get_file():
                 page_count = new_pdffile.get_page_count()
                 front = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=' + file_id
                 print("successfully uploaded")
-                return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block")
+                return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block", uploadNoti="Successfully uploaded to AmongUSTH")
                 
                 mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
             except Exception:
