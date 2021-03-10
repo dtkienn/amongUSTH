@@ -117,3 +117,15 @@ def uploadFile(filepath, filename, mimetype = "application/pdf"):
         print('File ID: %s' % file.get('id'))
         return file.get('id')
 
+def uploadFile_duplicate(filepath, filename, mimetype = "application/pdf"):
+    folder_id = createFolder()
+    file_metadata = {'name': filename, "parents": [folder_id]}
+    media = MediaFileUpload(filepath,
+                            mimetype=mimetype)
+    file = drive_service.files().create(body=file_metadata,
+                                        media_body=media,
+                                        fields='id').execute()
+    print('File ID: %s' % file.get('id'))
+    return file.get('id')
+
+

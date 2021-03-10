@@ -72,7 +72,7 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
-def load_user(user_id):
+def LOAD_USER(user_id):
     print('loaded')
     # Maintain 'active' status
     mongoUsr.set_last_active(user_id)
@@ -357,6 +357,27 @@ def content_detail(bID):
 
     return render_template("content.html", comment_numb = len(comment_content), content = comment_content, time = comment_time, cusername = comment_user_name, cprofile_pic = comment_user_profilepic, display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description, file_id=bID)       
 
+@app.route('/content/get_file', methods = ['GET', 'POST'])
+def getfile():
+    if request.method == 'GET':
+        return redirect(url_for('upload'))
+    elif request.method == 'POST':
+        file = request.files["file"]
+        file.save(os.path.join(UPLOAD_FOLDER, secure_filename(file.filename)))
+
+        new_file = 'temp/' + secure_filename(file.filename)
+        print(new_file)
+        if '.pdf' in new_file:
+            try:
+                new_file_id = uploadFile(new_file, mongoBook.get_file_name(file_id))
+                print("successfully uploaded")
+                
+                mongoBook.append_link(file_id, new_file_id)
+            except Exception:
+                print (Exception)
+                print('Cannot upload file!')
+        return redirect(url_for('upload'))
+
 @app.route("/content/comment/<string:bID>", methods = ['POST'])
 @login_required
 def comment(bID):
@@ -408,8 +429,8 @@ def download(bID):
         file_id = bID
         link = mongoBook.get_link(file_id)
         mongoBook.count_download(file_id)
-        webbrowser.open_new_tab(link)
-    return redirect(url_for('content_detail', bID=bID))
+
+    return render_template('download.html', len = len(link), link = link)
 
 @app.route('/upload')
 @login_required
