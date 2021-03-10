@@ -115,9 +115,9 @@ class Book():
         if book.find_one({'book_name' : book_name}):
             print('Existed')
             pass
-        else:
+        else:   
             link =  'https://drive.google.com/file/d/' + id_ + '/view?usp=sharing'
-            mdict = {'_id' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : page_number, 'link' : link, 'front' : front_link, 'download' : int('0'), 'upvote' : int('0'), 'downvote' : int('0')}
+            mdict = {'_id' : id_, 'book_name' : book_name, 'type' : type_, 'subject' : subject, 'author' : author, 'description' : description, 'page_number' : int(page_number), 'link' : [link], 'front' : front_link, 'download' : int('0'), 'upvote' : int('0'), 'downvote' : int('0')}
             try:
                 book.insert_one(mdict)
             except:
@@ -195,6 +195,11 @@ class Book():
     def get_all_books():
         mdict = book.find()
         return mdict
+
+    def append_link(id_, new_file_id):
+        link =  'https://drive.google.com/file/d/' + id_ + '/view?usp=sharing'
+        book.update_one({'_id' : id_}, {'$push': {'link' : link}})
+        
 class Vote():
     # def get_num(vote_type, id_):
     #     cursor = vote.find_one({'_id' : id_})
