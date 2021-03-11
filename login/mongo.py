@@ -176,7 +176,7 @@ class Book():
         return mdict
 
     def append_link(id_, new_file_id):
-        link =  'https://drive.google.com/file/d/' + id_ + '/view?usp=sharing'
+        link =  'https://drive.google.com/file/d/' + new_file_id + '/view?usp=sharing'
         book.update_one({'_id' : id_}, {'$push': {'link' : link}})
         
 class Vote():
