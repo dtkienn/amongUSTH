@@ -21,6 +21,7 @@ import login.User as logUsr
 from login.mongo import User as mongoUsr
 from login.mongo import Book as mongoBook
 from login.mongo import Admin as mongoAdmin
+from login.mongo import Comment as mongoComment
 from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
 from login.mail import gmail
@@ -71,7 +72,7 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
-def load_user(user_id):
+def LOAD_USER(user_id):
     print('loaded')
     # Maintain 'active' status
     mongoUsr.set_last_active(user_id)
@@ -98,17 +99,6 @@ def index():
         print("Not logged in")
         return render_template("login.html", text="Login", display_noti="none", display_navbar="none", name="SIGN UP NOW!")
 
-
-def generate_password():
-    
-    id_ = user.get_id()
-    email = mongoUsr.get_email(id_)
-    username = email.split(".")[1].split("@")[0]
-    password = username
-    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-    mongoUsr.add_login_info(id_, username, hashed_password)
-
-    print(hashed_password)
 from flask_login import login_user
 @app.route("/login", methods = ['GET', 'POST'])
 def login():
@@ -124,6 +114,7 @@ def login():
             global user
             global first_Name
             global profile_pic
+            global id_
             id_ = mongoUsr.get_id(usr_checked.username)
             user = logUsr.user_info.get(id_)
             name = mongoUsr.get_name(id_)
@@ -196,16 +187,17 @@ def callback():
             )
             global profile_pic 
             global first_Name 
+            global id_
             id_ = user.getid()
             name = user.getName()
             email = user.getEmail()
             profile_pic = user.getprofile_pic()
             student_id = get_studentid(email)
             first_Name = name.split(' ', 1)[0]
+            password = bcrypt.generate_password_hash(student_id).decode('utf-8')
             
             if not mongoUsr.account_existed(id_):
-                mongoUsr.register(id_, name, email, student_id, profile_pic)
-                generate_password()
+                mongoUsr.register(id_, name, email, student_id, profile_pic, password)
                 print('Generated login info!')
                 gmail.send(email, get_studentid(email), first_Name)
      
@@ -287,27 +279,27 @@ def admin():
     return render_template("admin.html", display_navbar="none", name=first_Name, users = users, materials = materials, online = online, online_list = online_list, offline_list = offline_list, len_online = len(online_list), len_offline = len(offline_list), offline_last = offline_last)
 
 
-@app.route('/content')
-@login_required
-def content():
-    # global file_id
-    # global up_count, down_count
-    # global upvote
-    # global downvote
-    up_count = 0
-    down_count = 0
-    file_id = '1ArSB7DUAsUgxppF-Oc99n5BrztO7s-Ti'
-    image_link = mongoBook.get_front(file_id)
-    download_count = mongoBook.get_download(file_id)
-    file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
-    page_num = mongoBook.get_page_number(file_id)
-    description = mongoBook.get_description(file_id)
-    Author = mongoBook.get_author(file_id)
-    upvote = mongoBook.get_upvote(file_id)
-    downvote = mongoBook.get_downvote(file_id)
-    title = mongoBook.get_file_name(file_id)
+# @app.route('/content')
+# @login_required
+# def content():
+#     # global file_id
+#     # global up_count, down_count
+#     # global upvote
+#     # global downvote
+#     up_count = 0
+#     down_count = 0
+#     file_id = '1ArSB7DUAsUgxppF-Oc99n5BrztO7s-Ti'
+#     image_link = mongoBook.get_front(file_id)
+#     download_count = mongoBook.get_download(file_id)
+#     file_link = 'https://drive.google.com/file/d/' + file_id + '/view?usp=sharing'
+#     page_num = mongoBook.get_page_number(file_id)
+#     description = mongoBook.get_description(file_id)
+#     Author = mongoBook.get_author(file_id)
+#     upvote = mongoBook.get_upvote(file_id)
+#     downvote = mongoBook.get_downvote(file_id)
+#     title = mongoBook.get_file_name(file_id)
 
-    return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
+#     return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
 
 @app.route("/content/<string:bID>")
 @login_required
@@ -321,8 +313,8 @@ def content_detail(bID):
     down_count = 0
     file_id = str(bID)
     book = mongoBook.get_book(file_id)
-    print(book)
-    print(type(book))
+    # print(book)
+    # print(type(book))
     image_link = book["front"]
     # image_link = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1ArSB7DUAsUgxppF-Oc99n5BrztO7s-Ti'
     download_count = book["download"]
@@ -334,7 +326,57 @@ def content_detail(bID):
     downvote = book["downvote"]
     title = book["book_name"]
 
-    return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description, file_id=bID)       
+    #Display comments
+    comment_content = []
+    comment_user_name = []
+    comment_user_profilepic = []
+    comment_time = []
+    data = mongoComment.get_all_comment(file_id)
+    print(data)
+    for cursor in data:
+        comment_content.append(cursor['content'])
+        comment_user_profilepic.append(mongoUsr.get_profile_pic(cursor['user_id']))
+        comment_user_name.append(mongoUsr.get_name(cursor['user_id']))
+        comment_time.append(cursor['time'])
+        
+    comment_content.reverse()
+    comment_user_name.reverse()
+    comment_time.reverse()
+    comment_user_profilepic.reverse()
+
+    return render_template("content.html", comment_numb = len(comment_content), content = comment_content, time = comment_time, cusername = comment_user_name, cprofile_pic = comment_user_profilepic, display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description, file_id=bID)       
+
+@app.route('/content/get_file', methods = ['GET', 'POST'])
+def getfile():
+    if request.method == 'GET':
+        return redirect(url_for('upload'))
+    elif request.method == 'POST':
+        file = request.files["file"]
+        file.save(os.path.join(UPLOAD_FOLDER, secure_filename(file.filename)))
+
+        new_file = 'temp/' + secure_filename(file.filename)
+        print(new_file)
+        if '.pdf' in new_file:
+            try:
+                new_file_id = uploadFile(new_file, mongoBook.get_file_name(file_id))
+                print("successfully uploaded")
+                
+                mongoBook.append_link(file_id, new_file_id)
+            except Exception:
+                print (Exception)
+                print('Cannot upload file!')
+        return redirect(url_for('upload'))
+
+@app.route("/content/comment/<string:bID>", methods = ['POST'])
+@login_required
+def comment(bID):
+    if request.method == 'POST':
+        user_id = id_
+        content = request.form['content']
+        mongoComment.post_comment(user_id, file_id, content)
+        print('Comment: ' + content)
+
+    return redirect(url_for('content_detail', bID=bID))
 
 
 @app.route("/up", methods=["POST"])
@@ -376,13 +418,13 @@ def download(bID):
         file_id = bID
         link = mongoBook.get_link(file_id)
         mongoBook.count_download(file_id)
-        webbrowser.open_new_tab(link)
-    return redirect(url_for('content_detail', bID=bID))
+
+    return render_template('download.html', len = len(link), link = link)
 
 @app.route('/upload')
 @login_required
 def upload():
-    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic)
+    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="none", uploadNoti="Successfully uploaded to AmongUSTH")
 
 @app.route('/upload/get_file', methods = ['GET', 'POST'])
 def get_file():
@@ -405,10 +447,13 @@ def get_file():
                 print("successfully uploaded")
                 
                 mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
-            except Exception:
-                print (Exception)
+                return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block", uploadNoti="Successfully uploaded to AmongUSTH")
+            except Exception as e:
+                print (e)
                 print('Cannot upload file!')
-        return redirect(url_for('upload'))
+                return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block", uploadNoti="Upload failed! Please try again or contact us!")
+
+        
 
 if __name__ == '__main__':
     app.run(debug=True, ssl_context="adhoc")
