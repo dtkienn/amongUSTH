@@ -60,50 +60,22 @@
     <div class="browse-book-container">
     <div class="title">BOOKS</div>
     <!-- Flickity HTML init -->
-    <div class="carousel" data-flickity='{ "initialIndex": 3 }'>
+    <div class="carousel" data-flickity='{ "initialIndex ": 3 }'>
+        {% for book in books %}
       <div class="carousel-cell">
-          <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-          <div class="carousel-caption">Book name here</div>
+          <a href="{{ url_for('content_detail', bID=book['_id']) }} " target="_parent">
+          <img class="carousel-inner" src='{{book["front"]}}' alt="book_image">
+          <div class="carousel-caption">{{ book["book_name"] }}</div>
+          </a>
       </div>
-      <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
+      {% endfor %}
     </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    <div class="carousel-cell">
-        <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
-        <div class="carousel-caption">Book name here</div>
-    </div>
-    </div>
-    </div>
+        
     <!--Document-->
     <div class="browse-book-container">
     <div class="title">DOCUMENTS</div>
     <!-- Flickity HTML init -->
-    <div class="carousel"  data-flickity='{ "initialIndex": 3 }'>
+    <div class="carousel"  data-flickity='{ "initialIndex ": 0 }'>
         <div class="carousel-cell">
             <a href="/content">
                 <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
@@ -165,7 +137,7 @@
     <div class="browse-book-container">
     <div class="title">SLIDES</div>
     <!-- Flickity HTML init -->
-    <div class="carousel" data-flickity='{ "initialIndex": 3 }'>
+    <div class="carousel" data-flickity='{ "groupCells": true }'>
         <div class="carousel-cell">
             <img class="carousel-inner" src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
             <div class="carousel-caption">Slide name here</div>
