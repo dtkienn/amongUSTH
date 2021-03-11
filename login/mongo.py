@@ -29,13 +29,17 @@ class User(UserMixin):
     def __init__(self, username):
         self.username = username
 
-    def register(id_, name, email, student_id, profile_pic):
+    def register(id_, name, email, student_id, profile_pic, password):
         if user.find_one({'Email' : email}):
             print('Existed!')
         else: 
-            mdict = {'_id' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic, 'role' : 'member', 'UserName' : None, 'Hashed_password' : None, 'Last_active': None}
+            username = email.split(".")[1].split("@")[0]
+            hashed_password = password
+            mdict = {'_id' : id_, 'Student_ID' : student_id, 'Fullname' : name, 'Email' : email, 'Profile_pic' : profile_pic, 'role' : 'member', 'UserName' : username, 'Hashed_password' : hashed_password, 'Last_active': None}
             user.insert_one(mdict)
 
+    
+    
     def get(id_):
         return user.find_one({"_id": id_})
 
@@ -64,7 +68,7 @@ class User(UserMixin):
     def add_login_info(id_, username, hased_password):
         now = datetime.now()
         new_value = {'UserName' : username, "Hashed_password": hased_password, 'Last_active' : now}  
-        user.update_one({'_id' : id_}, new_value)
+        user.update_one({'_id' : id_}, {'$set', new_value})
 
     def get_profile_pic(id_):
         mdict = user.find_one({'_id' : id_})

@@ -99,17 +99,6 @@ def index():
         print("Not logged in")
         return render_template("login.html", text="Login", display_noti="none", display_navbar="none", name="SIGN UP NOW!")
 
-
-def generate_password():
-    
-    id_ = user.get_id()
-    email = mongoUsr.get_email(id_)
-    username = email.split(".")[1].split("@")[0]
-    password = username
-    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-    mongoUsr.add_login_info(id_, username, hashed_password)
-
-    print(hashed_password)
 from flask_login import login_user
 @app.route("/login", methods = ['GET', 'POST'])
 def login():
@@ -205,10 +194,10 @@ def callback():
             profile_pic = user.getprofile_pic()
             student_id = get_studentid(email)
             first_Name = name.split(' ', 1)[0]
+            password = bcrypt.generate_password_hash(student_id).decode('utf-8')
             
             if not mongoUsr.account_existed(id_):
-                mongoUsr.register(id_, name, email, student_id, profile_pic)
-                generate_password()
+                mongoUsr.register(id_, name, email, student_id, profile_pic, password)
                 print('Generated login info!')
                 gmail.send(email, get_studentid(email), first_Name)
      
@@ -435,7 +424,7 @@ def download(bID):
 @app.route('/upload')
 @login_required
 def upload():
-    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="none", uploadNoti="Actually you should not see this")
+    return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="none", uploadNoti="Successfully uploaded to AmongUSTH")
 
 @app.route('/upload/get_file', methods = ['GET', 'POST'])
 def get_file():
@@ -456,15 +445,15 @@ def get_file():
                 page_count = new_pdffile.get_page_count()
                 front = 'https://drive.google.com/thumbnail?authuser=0&sz=w320&id=' + file_id
                 print("successfully uploaded")
-                return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block", uploadNoti="Successfully uploaded to AmongUSTH")
                 
                 mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'], form['Author'], form['Description'], page_count, front)
-            except Exception:
-                print (Exception)
+                return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block", uploadNoti="Successfully uploaded to AmongUSTH")
+            except Exception as e:
+                print (e)
                 print('Cannot upload file!')
                 return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block", uploadNoti="Upload failed! Please try again or contact us!")
 
-        return redirect(url_for('upload'))
+        
 
 if __name__ == '__main__':
     app.run(debug=True, ssl_context="adhoc")
