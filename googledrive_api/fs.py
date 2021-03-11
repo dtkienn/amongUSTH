@@ -66,7 +66,7 @@ def createFolder():
                                             fields='nextPageToken, files(id, name)',
                                             pageToken=page_token).execute()
         for file in response.get('files', []):
-            if file.get('name') == 'AmongUSTH':
+            if file.get('name') == 'AmongUSTH_data':
                 print ('Found file: %s (%s)' % (file.get('name'), file.get('id')))
                 file_id = file.get('id')
                 break
@@ -80,7 +80,7 @@ def createFolder():
 
     else:
         file_metadata = {
-        'name': 'AmongUSTH',
+        'name': 'AmongUSTH_data',
         'mimeType': 'application/vnd.google-apps.folder'
         }
         file = drive_service.files().create(body=file_metadata,
