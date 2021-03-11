@@ -26,7 +26,7 @@ from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
 from login.mail import gmail
 from tool.pdf_tool import PDF
-from googledrive_api.fs import uploadFile
+from googledrive_api.fs import uploadFile, uploadFile_duplicate
 from werkzeug.utils import secure_filename
 
 # Configuration
@@ -362,10 +362,10 @@ def getfile():
         print(new_file)
         if '.pdf' in new_file:
             try:
-                new_file_id = uploadFile(new_file, mongoBook.get_file_name(file_id))
-                print("successfully uploaded")
+                new_file_id = uploadFile_duplicate(new_file, mongoBook.get_file_name(file_id))
                 
                 mongoBook.append_link(file_id, new_file_id)
+                print("successfully uploaded")
                 return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block", uploadNoti="Successfully uploaded to AmongUSTH")
                 
             except Exception:
