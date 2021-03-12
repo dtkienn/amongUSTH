@@ -9,7 +9,7 @@
         background-size: cover;
     }
 </style>
-<body>
+<body onload="check_vote()">
     <!--Navbar-->
     {% include 'navbar.html' %}
     {% include 'warning.html' %}
@@ -26,22 +26,14 @@
                       {
                         document.getElementById('upvote_count').innerHTML = response;
                         // console.log("Up!!!")
-                        if (document.getElementById('downvote_container').style.display == 'none'){
-                          // console.log("Status: Hidden")
-                          document.getElementById('downvote_container').style.display = 'block';
-                        }
-                        else if (document.getElementById('downvote_container').style.display == 'block' && document.getElementById('upvote_container').style.display == 'block'){
-                          document.getElementById('downvote_container').style.display = 'none';
+                        if (document.getElementById("down").disable == true){
+                          document.getElementById("down").disable == false
                         }
                       }
                       else if (input.id == "down"){
                         document.getElementById('downvote_count').innerHTML = response;
-                        if (document.getElementById('upvote_container').style.display == 'none'){
-                          // console.log("Status: Hidden")
-                          document.getElementById('upvote_container').style.display = 'block';
-                        }
-                        else if (document.getElementById('downvote_container').style.display == 'block' && document.getElementById('upvote_container').style.display == 'block'){
-                          document.getElementById('upvote_container').style.display = 'none';
+                        if (document.getElementById("up").disable == true){
+                          document.getElementById("up").disable == false
                         }
                       }
                     }; 
@@ -70,10 +62,15 @@
            <ul class="list-unstyled">
              <li>Pages: {{page_num}}</li>
              <li>Downloads: {{download_count}}</li>
-             <li id = "upvote_container" style="display:{{up_status}}"><span><input type = "image" id = "up" src="{{url_for('static', filename='images/up.png')}}" alt="upvote"></span>
-             <span id = "upvote_count">{{upvote_count}}</span></li>
-             <li id = "downvote_container" style="display:{{down_status}}"><span><input type = "image" id = "down" src="{{url_for('static', filename='images/down.png')}}" alt="downvote"></span>
-             <span id = "downvote_count">{{downvote_count}}</span></li>
+             <li id = "upvote_container"><span><input type = "image" id = "up" src="{{url_for('static', filename='images/up.png')}}" alt="upvote"></span>
+              <span id = "upvote_count">{{upvote_count}}</span>
+              <span id = 'upvote_status' style = 'font-size: 0;'>{{up_status}}</span>
+                
+            </li>
+             <li id = "downvote_container"><span><input button" type = "image" id = "down" src="{{url_for('static', filename='images/down.png')}}" alt="downvote"></span>
+             <span id = "downvote_count">{{downvote_count}}</span>
+             <span id = 'downvote_status' style = 'font-size: 0;'>{{down_status}}</span>
+            </li>
 
            </ul>
          </div>

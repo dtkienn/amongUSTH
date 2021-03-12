@@ -306,7 +306,7 @@ def admin():
 
 #     return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
 
-@app.route("/content/<string:bID>")
+@app.route("/content/<string:bID>", methods = ['POST', 'GET'])
 @login_required
 def content_detail(bID):
     global file_id
@@ -350,12 +350,12 @@ def content_detail(bID):
     comment_time.reverse()
     comment_user_profilepic.reverse()
 
-    up_status = down_status = 'block'
+    up_status = down_status = 'true'
 
     if id_ in mongoBook.get_up(file_id):
-        down_status = 'none'
+        down_status = 'false'
     elif id_ in mongoBook.get_down(file_id):
-        up_status = 'none'
+        up_status = 'false'
 
     return render_template("content.html", comment_numb=len(comment_content), content=comment_content, time=comment_time, cusername=comment_user_name, cprofile_pic=comment_user_profilepic, display_navbar="inline", title=title, name=first_Name, picture=profile_pic, upvote_count=upvote, downvote_count=downvote, download_count=download_count, Author=Author, file_link=file_link, image_link=image_link, page_num=page_num, description=description, file_id=bID, up_status = up_status, down_status = down_status)
 
@@ -415,8 +415,8 @@ def upvote():
     elif user_id not in mongoBook.get_up(file_id) and user_id not in mongoBook.get_down(file_id):
         mongoBook.upvote(file_id, user_id)
         print('up')
-    elif user_id in mongoBook.get_down(file_id):
-        return "You already downvoted!"
+    # elif user_id in mongoBook.get_down(file_id):
+    #     return "You already downvoted!"
 
     return str(len(mongoBook.get_up(file_id)))
 
@@ -434,8 +434,8 @@ def downvote():
     elif user_id not in mongoBook.get_down(file_id) and user_id not in mongoBook.get_up(file_id):
         mongoBook.downvote(file_id, user_id)
         print('down')
-    elif user_id in mongoBook.get_up(file_id):
-        return "You already upvoted!"
+    # elif user_id in mongoBook.get_up(file_id):
+    #     return "You already upvoted!"
 
     return str(len(mongoBook.get_down(file_id)))
 
