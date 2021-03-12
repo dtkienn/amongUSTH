@@ -218,8 +218,10 @@ def callback():
             # User will automagically kicked from session after 'time'
             app.permanent_session_lifetime = time
             
-            if last_url:
+            try:
                 return redirect(last_url[-1])
+            except:
+                return redirect(url_for('index'))
 
         else:
             return redirect(url_for('loginfail'))
