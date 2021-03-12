@@ -61,14 +61,18 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 bcrypt = Bcrypt(app)
 
-
+global last_url
+last_url = []
 @login_manager.unauthorized_handler
 def unauthorized():
+    last_url.append(request.url)
+    print(last_url[-1])
     return render_template("login.html", display_navbar="none", text="You need to login!")
 
 
 # OAuth2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
+
 
 
 # Flask-Login helper to retrieve a user from our db
@@ -122,7 +126,10 @@ def login():
             first_Name = name.split(' ', 1)[0]
             profile_pic = mongoUsr.get_profile_pic(id_)
             login_user(user)
-            return redirect(url_for("index"))
+            try:
+                return redirect(last_url[-1])
+            except: 
+                return redirect(url_for("index"))
         else:
             print("login failed")
 
@@ -210,8 +217,12 @@ def callback():
             time = timedelta(minutes=60)
             # User will automagically kicked from session after 'time'
             app.permanent_session_lifetime = time
+            
+            try:
+                return redirect(last_url[-1])
+            except:
+                return redirect(url_for('index'))
 
-            return redirect(url_for('index'))
         else:
             return redirect(url_for('loginfail'))
 
