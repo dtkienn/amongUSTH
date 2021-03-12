@@ -26,8 +26,15 @@
                       {
                         document.getElementById('upvote_count').innerHTML = response;
                         // console.log("Up!!!")
-                        if (document.getElementById("down").disable == true){
-                          document.getElementById("down").disable == false
+                        if (document.getElementById("upvote_status").innerHTML.valueOf() == 'true'){
+                          document.getElementById("down").disable == false;
+                          document.getElementById("up").scr = "static/images/up.png";
+
+                        }
+                        else if (document.getElementById("upvote_status").innerHTML.valueOf() == "false" && document.getElementById("downvote_status").innerHTML.valueOf() == "false"){
+                          document.getElementById("up").scr = "static/images/up_active.png";
+                          document.getElementById("down").disable = true;
+                          console.log("Hiii")
                         }
                       }
                       else if (input.id == "down"){
