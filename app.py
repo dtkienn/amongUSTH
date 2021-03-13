@@ -450,7 +450,23 @@ def downvote():
 
     return str(len(mongoBook.get_down(file_id)))
 
-
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if request.method== 'POST':
+        form = request.form
+        search_value = form['search_string']
+        # type_book = form['filter-type_book'].target.value
+        # subject_book = form['filter-type_subject'].target.value
+        # author_book = form['filter-type_author'].target.value
+        search = "{0}".format(search_value)
+        # result = mongoBook.get_book_search(book_name=search,type_=type_book,subject=subject_book,author=author_book)
+        check_db = book.find()
+        for mongoBook in check_db:
+            if(mongoBook['book_name']==search):
+                print(mongoBook['_id'])
+                return render_template('browse.html',display_navbar="inline")
+            else:
+                return render_template('browse.html',text="Book not found")
 @app.route('/content/download/<string:bID>', methods=["GET", "POST"])
 @login_required
 def download(bID):
