@@ -361,14 +361,19 @@ def content_detail(bID):
     comment_time.reverse()
     comment_user_profilepic.reverse()
 
-    up_status = down_status = 'true'
-
+    up_icon = down_icon = ''
+    
     if id_ in mongoBook.get_up(file_id):
-        down_status = 'false'
+        up_icon = '/static/images/up_active.png'
+        down_icon = '/static/images/down_disabled.png'
     elif id_ in mongoBook.get_down(file_id):
-        up_status = 'false'
+        up_icon = '/static/images/up_disabled.png'
+        down_icon = '/static/images/down_active.png'
+    else:
+        up_icon = '/static/images/up.png'
+        down_icon = '/static/images/down.png'
 
-    return render_template("content.html", comment_numb=len(comment_content), content=comment_content, time=comment_time, cusername=comment_user_name, cprofile_pic=comment_user_profilepic, display_navbar="inline", title=title, name=first_Name, picture=profile_pic, upvote_count=upvote, downvote_count=downvote, download_count=download_count, Author=Author, file_link=file_link, image_link=image_link, page_num=page_num, description=description, file_id=bID, up_status = up_status, down_status = down_status)
+    return render_template("content.html", comment_numb=len(comment_content), content=comment_content, time=comment_time, cusername=comment_user_name, cprofile_pic=comment_user_profilepic, display_navbar="inline", title=title, name=first_Name, picture=profile_pic, upvote_count=upvote, downvote_count=downvote, download_count=download_count, Author=Author, file_link=file_link, image_link=image_link, page_num=page_num, description=description, file_id=bID, up_icon = up_icon, down_icon = down_icon)
 
 
 @app.route('/upload_dup')
