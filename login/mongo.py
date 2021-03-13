@@ -111,7 +111,7 @@ class Book():
                 book.insert_one(mdict)
             except:
                 print("Insert failed")
-
+             
     def count_download(id_):
         return book.update_one({'_id': id_}, {'$inc': {'download': 1}})
 
@@ -295,7 +295,6 @@ class Admin():
             if Admin.is_online(id_) == 'Active':
                 num += 1
         return num
-
 
 if __name__ == "__main__":
     # a = book.find()
