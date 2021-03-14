@@ -22,9 +22,3 @@ var $form = $('.drag-box');
   if (isAdvancedUpload) {
     $form.addClass('has-advanced-upload');
   }
-    
-
-function check_vote(){
-  a = document.getElementById('upvote_status').innerHTML.valueOf();
-
-}
