@@ -61,14 +61,18 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 bcrypt = Bcrypt(app)
 
-
+global last_url
+last_url = []
 @login_manager.unauthorized_handler
 def unauthorized():
+    last_url.append(request.url)
+    print(last_url[-1])
     return render_template("login.html", display_navbar="none", text="You need to login!")
 
 
 # OAuth2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
+
 
 
 # Flask-Login helper to retrieve a user from our db
@@ -122,7 +126,10 @@ def login():
             first_Name = name.split(' ', 1)[0]
             profile_pic = mongoUsr.get_profile_pic(id_)
             login_user(user)
-            return redirect(url_for("index"))
+            try:
+                return redirect(last_url[-1])
+            except: 
+                return redirect(url_for("index"))
         else:
             print("login failed")
 
@@ -210,8 +217,12 @@ def callback():
             time = timedelta(minutes=60)
             # User will automagically kicked from session after 'time'
             app.permanent_session_lifetime = time
+            
+            try:
+                return redirect(last_url[-1])
+            except:
+                return redirect(url_for('index'))
 
-            return redirect(url_for('index'))
         else:
             return redirect(url_for('loginfail'))
 
@@ -306,7 +317,7 @@ def admin():
 
 #     return render_template("content.html", display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description)
 
-@app.route("/content/<string:bID>")
+@app.route("/content/<string:bID>", methods = ['POST', 'GET'])
 @login_required
 def content_detail(bID):
     global file_id
@@ -350,14 +361,19 @@ def content_detail(bID):
     comment_time.reverse()
     comment_user_profilepic.reverse()
 
-    up_status = down_status = 'block'
-
+    up_icon = down_icon = ''
+    
     if id_ in mongoBook.get_up(file_id):
-        down_status = 'none'
+        up_icon = '/static/images/up_active.png'
+        down_icon = '/static/images/down_disabled.png'
     elif id_ in mongoBook.get_down(file_id):
-        up_status = 'none'
+        up_icon = '/static/images/up_disabled.png'
+        down_icon = '/static/images/down_active.png'
+    else:
+        up_icon = '/static/images/up.png'
+        down_icon = '/static/images/down.png'
 
-    return render_template("content.html", comment_numb=len(comment_content), content=comment_content, time=comment_time, cusername=comment_user_name, cprofile_pic=comment_user_profilepic, display_navbar="inline", title=title, name=first_Name, picture=profile_pic, upvote_count=upvote, downvote_count=downvote, download_count=download_count, Author=Author, file_link=file_link, image_link=image_link, page_num=page_num, description=description, file_id=bID, up_status = up_status, down_status = down_status)
+    return render_template("content.html", comment_numb=len(comment_content), content=comment_content, time=comment_time, cusername=comment_user_name, cprofile_pic=comment_user_profilepic, display_navbar="inline", title=title, name=first_Name, picture=profile_pic, upvote_count=upvote, downvote_count=downvote, download_count=download_count, Author=Author, file_link=file_link, image_link=image_link, page_num=page_num, description=description, file_id=bID, up_icon = up_icon, down_icon = down_icon)
 
 
 @app.route('/upload_dup')
@@ -415,8 +431,8 @@ def upvote():
     elif user_id not in mongoBook.get_up(file_id) and user_id not in mongoBook.get_down(file_id):
         mongoBook.upvote(file_id, user_id)
         print('up')
-    elif user_id in mongoBook.get_down(file_id):
-        return "You already downvoted!"
+    # elif user_id in mongoBook.get_down(file_id):
+    #     return "You already downvoted!"
 
     return str(len(mongoBook.get_up(file_id)))
 
@@ -434,8 +450,8 @@ def downvote():
     elif user_id not in mongoBook.get_down(file_id) and user_id not in mongoBook.get_up(file_id):
         mongoBook.downvote(file_id, user_id)
         print('down')
-    elif user_id in mongoBook.get_up(file_id):
-        return "You already upvoted!"
+    # elif user_id in mongoBook.get_up(file_id):
+    #     return "You already upvoted!"
 
     return str(len(mongoBook.get_down(file_id)))
 
