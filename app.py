@@ -26,7 +26,7 @@ from flask_bcrypt import Bcrypt
 from forms.forms import Password,BookPost
 from login.mail import gmail
 from tool.pdf_tool import PDF
-from googledrive_api.fs import uploadFile
+from googledrive_api.fs import uploadFile, uploadFile_duplicate
 from werkzeug.utils import secure_filename
 
 # Configuration
@@ -346,7 +346,11 @@ def content_detail(bID):
 
     return render_template("content.html", comment_numb = len(comment_content), content = comment_content, time = comment_time, cusername = comment_user_name, cprofile_pic = comment_user_profilepic, display_navbar="inline", title = title, name=first_Name, picture=profile_pic, upvote_count = upvote, downvote_count = downvote, download_count = download_count, Author = Author, file_link = file_link, image_link = image_link, page_num = page_num, description = description, file_id=bID)       
 
-@app.route('/content/get_file', methods = ['GET', 'POST'])
+@app.route('/upload_dup')
+def upload_dup():
+    return render_template('upload_duplicate.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="none", uploadNoti="Successfully uploaded to AmongUSTH")
+
+@app.route('/upload_dup/get_file', methods = ['GET', 'POST'])
 def getfile():
     if request.method == 'GET':
         return redirect(url_for('upload'))
@@ -358,14 +362,16 @@ def getfile():
         print(new_file)
         if '.pdf' in new_file:
             try:
-                new_file_id = uploadFile(new_file, mongoBook.get_file_name(file_id))
-                print("successfully uploaded")
+                new_file_id = uploadFile_duplicate(new_file, mongoBook.get_file_name(file_id))
                 
                 mongoBook.append_link(file_id, new_file_id)
+                print("successfully uploaded")
+                return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block", uploadNoti="Successfully uploaded to AmongUSTH")
+                
             except Exception:
                 print (Exception)
                 print('Cannot upload file!')
-        return redirect(url_for('upload'))
+        return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block", uploadNoti="Upload failed! Please try again or contact us!")
 
 @app.route("/content/comment/<string:bID>", methods = ['POST'])
 @login_required

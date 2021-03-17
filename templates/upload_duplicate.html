@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'head.html' %}
+    <style>
+        header{
+            background: url(https://thewritelife.com/wp-content/uploads/2019/08/How-to-format-a-book.jpg) 50% 50%;
+       }
+       body{
+        background-color: #659dbd;
+    }
+    </style>    
+</head>
+<body>
+    {% include 'navbar.html' %}
+    {% include 'warning.html' %}
+
+    <form class="box">
+        <div class="drag-box-container">
+            <h2 class="drag-box-title">Upload your book now!</h2>
+        </div>
+    </form>
+    <div class="upload-body">
+        <div class="upload-info">
+            <form action="upload_dup/get_file" method="POST" enctype="multipart/form-data">
+            <div class="upload-info-pic">
+                <img src="https://images-na.ssl-images-amazon.com/images/I/61ZKNw0xixL.jpg" alt="">
+            </div>
+            <div class="upload-info-detail">
+                <div class="">
+                    <input type="file" name='file' class="upload-btn">
+                </div>
+                <div class="">
+                    <button type="submit">Submit!</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    
+    </div>
+    <div class="login-noti" id="upload-noti" style="display: {{display_upload}};">
+        <div class="login-noti-content">
+            <span>
+                <img src="static/images/error.png"></img>
+            </span>
+            <p>{{uploadNoti}}</p>
+            <div>
+                <button class="retry-btn" type="">
+                    <a href="/browse"><img src="static/images/retry.png" alt=""></a>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>
