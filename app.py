@@ -495,6 +495,8 @@ def get_file():
 
                 mongoBook.post_book(file_id, form['Name'], form['Type'], form['Subject'],
                                     form['Author'], form['Description'], page_count, front)
+                
+                os.remove(new_file)
                 return render_template('upload.html', display_navbar="inline", name=first_Name, picture=profile_pic, display_upload="block", uploadNoti="Successfully uploaded to AmongUSTH")
             except Exception as e:
                 print(e)
