@@ -267,9 +267,9 @@ def homepage():
 @login_required
 def browse():
     books = list(book for book in mongoBook.get_all_materials("Book"))
-    docs = list(doc for docs in mongoBook.get_all_materials("Document"))
+    documents = list(doc for docs in mongoBook.get_all_materials("Document"))
     slides = list(slide for slides in mongoBook.get_all_materials("Slide"))
-    return render_template("browse.html", display_navbar="inline", name=first_Name, picture=profile_pic, books=books, docs=docs, slides=slides)
+    return render_template("browse.html", display_navbar="inline", name=first_Name, picture=profile_pic, books=books, docs=documents, slides=slides)
 
 
 @app.route('/admin')
