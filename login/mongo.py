@@ -158,7 +158,7 @@ class Book():
         return book.find_one({"_id": id_})
 
     def get_all_materials(type_of_material="Book"):
-        mdict = book.find({"Type": type_of_material})
+        mdict = book.find({"type": type_of_material})
         return mdict
 
     def append_link(id_, new_file_id):
